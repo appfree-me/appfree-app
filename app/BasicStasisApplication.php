@@ -169,7 +169,7 @@ class BasicStasisApplication
 
 }
 
-$basicAriClient = new BasicStasisApplication("hello-world");
+$basicAriClient = new BasicStasisApplication("appfree");
 
 $basicAriClient->stasisLogger->info("Starting Stasis Program... Waiting for handshake...");
 $basicAriClient->StasisAppEventHandler();

@@ -1,0 +1,2 @@
+php artisan app:call-route /asterisk
+
