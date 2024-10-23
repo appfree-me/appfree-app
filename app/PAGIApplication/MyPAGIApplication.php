@@ -1,4 +1,7 @@
 <?php
+
+namespace AppFree\PAGIApplication;
+
 /**
  * PAGI basic use example. Please see run.sh in this same directory for an
  * example of how to actually run this from your dialplan.
@@ -38,10 +41,8 @@
  * limitations under the License.
  *
  */
-use PAGI\Application\PAGIApplication;
-use PAGI\Client\ChannelStatus;
-use PAGI\CallSpool\CallFile;
-use PAGI\CallSpool\Impl\CallSpoolImpl;
+use phpari;
+
 declare(ticks=1);
 /**
  * PAGI basic use example. Please see run.sh in this same directory for an

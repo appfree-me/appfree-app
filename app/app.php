@@ -8,8 +8,48 @@
 //echo "Active Channels: " . json_encode($ariConnector->channels()->channel_list()) . "\n";
 //echo "Ending ARI Connection\n";
 
+//function setupGlobals() {
+//
+//    function returnWarn()
+//}
+//
+//
+//##### global helper functions
+//
+//setupGlobals();
+//
+//#####
+
+
+use AppFree\MvgRadStasisApp;
+
 require("MvgRadApi.php");
 require("MvgRadStasisApp.php");
+global $app;
 $app = new MvgRadStasisApp("appfree");
 
+
+pcntl_async_signals(true);
+
+// signal handler function
+function sig_handler($signo, $siginfo)
+{
+    global $app;
+    switch ($signo) {
+        case SIGINT:
+            // handle shutdown tasks
+            echo "SIGINT caught\n";
+            $app->endHandler();
+            exit;
+            break;
+        default:
+            // handle all other signals
+    }
+
+}
+
+// setup signal handlers
+$res = pcntl_signal(SIGINT, "sig_handler");
+
+$app->init();
 $app->execute();

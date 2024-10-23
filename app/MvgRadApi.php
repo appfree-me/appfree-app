@@ -1,6 +1,6 @@
 <?php
 
-
+namespace  AppFree;
 class MvgRadApi{
     function __construct($connObject = NULL)
     {

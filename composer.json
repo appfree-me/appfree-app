@@ -5,6 +5,7 @@
     "license": "MIT",
     "require": {
         "php": ">=8.2",
+        "ext-pcntl": "*",
         "devristo/phpws": "dev-master",
         "educoder/pest": "1.0.0",
         "greenfieldtech-nirs/phpari": "dev-master"
@@ -21,6 +22,11 @@
         "allow-plugins": {
             "pestphp/pest-plugin": true,
             "php-http/discovery": true
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "AppFree\\": "app/"
         }
     },
     "minimum-stability": "dev",
