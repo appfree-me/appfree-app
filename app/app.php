@@ -38,8 +38,9 @@ function sig_handler($signo, $siginfo)
     switch ($signo) {
         case SIGINT:
             // handle shutdown tasks
-            echo "SIGINT caught\n";
-            $app->endHandler();
+            echo "SIGINT caught, endHandler, closing Websocket\n";
+//            $app->endHandler();
+            $app->stasisClient->close();
             exit;
             break;
         default:
@@ -52,4 +53,6 @@ function sig_handler($signo, $siginfo)
 $res = pcntl_signal(SIGINT, "sig_handler");
 
 $app->init();
-$app->execute();
+$app->stasisClient->open();
+$app->stasisLoop->run();
+//$app->execute();

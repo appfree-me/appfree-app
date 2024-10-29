@@ -18,10 +18,10 @@ class MvgRadApi{
         }
     }
 
-    public function doAusleihe(string $radnummer)
+    public function doAusleihe(string $radnummer): string
     {
 
-        return;
+        return "1234";
         try {
             $result = FALSE;
 
@@ -37,5 +37,10 @@ class MvgRadApi{
             $this->phpariObject->lasttrace = $e->getTraceAsString();
             return FALSE;
         }
+    }
+
+    public function hasLastPin(): bool
+    {
+        return true;
     }
 }
