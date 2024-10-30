@@ -24,7 +24,7 @@
 use AppFree\MvgRadStasisApp;
 
 require("MvgRadApi.php");
-require("MvgRadStasisApp.php");
+require("MvgRadStasisAppController.php");
 global $app;
 $app = new MvgRadStasisApp("appfree");
 

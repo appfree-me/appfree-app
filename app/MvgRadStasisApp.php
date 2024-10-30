@@ -19,7 +19,7 @@ class MvgRadStasisApp
     private phpari $phpariObject;
     private array $stasisChannelIDs = [];
     private array $dtmfSequence;
-    private MvgRadApi $mvgRadApi;
+    private MvgRadModule $mvgRadApi;
     public Logger $stasisLogger;
     private EventEmitter $stasisEvents;
 
@@ -33,7 +33,7 @@ class MvgRadStasisApp
         $this->stasisLogger = $this->phpariObject->stasisLogger;
         $this->stasisEvents = $this->phpariObject->stasisEvents;
 
-        $this->mvgRadApi = new MvgRadApi();
+        $this->mvgRadApi = new MvgRadModule();
     }
 
     public function init(): void
