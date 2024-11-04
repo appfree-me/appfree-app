@@ -8,7 +8,8 @@
         "ext-pcntl": "*",
         "devristo/phpws": "dev-master",
         "educoder/pest": "1.0.0",
-        "greenfieldtech-nirs/phpari": "dev-master"
+        "greenfieldtech-nirs/phpari": "dev-master",
+        "yohang/finite": "^1.3"
     },
     "extra": {
         "laravel": {

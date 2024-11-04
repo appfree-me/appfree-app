@@ -1,38 +1,12 @@
 <?php
+//declare(strict_types = 1);
 
-//namespace app;
-
-
-//echo "Starting ARI Connection\n";
-//$ariConnector = new phpari();
-//echo "Active Channels: " . json_encode($ariConnector->channels()->channel_list()) . "\n";
-//echo "Ending ARI Connection\n";
-
-//function setupGlobals() {
-//
-//    function returnWarn()
-//}
-//
-//
-//##### global helper functions
-//
-//setupGlobals();
-//
-//#####
-
-
-use AppFree\MvgRadStasisApp;
-
-require("MvgRadApi.php");
-require("MvgRadStasisAppController.php");
-global $app;
-$app = new MvgRadStasisApp("appfree");
-
+namespace AppFree;
 
 pcntl_async_signals(true);
 
 // signal handler function
-function sig_handler($signo, $siginfo)
+function handler(int $signo, mixed $siginfo):void
 {
     global $app;
     switch ($signo) {
@@ -50,9 +24,11 @@ function sig_handler($signo, $siginfo)
 }
 
 // setup signal handlers
-$res = pcntl_signal(SIGINT, "sig_handler");
+$res = pcntl_signal(SIGINT, "handler");
 
-$app->init();
-$app->stasisClient->open();
-$app->stasisLoop->run();
-//$app->execute();
+
+$sm = new StateMachineSample("appfree");
+
+$sm->init();
+$sm->stasisClient->open();
+$sm->stasisLoop->run();
