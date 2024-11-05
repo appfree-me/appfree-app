@@ -23,25 +23,19 @@ class Begin extends MvgRadState implements MvgRadStateInterface
         sleep(1);
         $controller->phpariObject->channels()->channel_answer($controller->getChannelID());
         $controller->stasisLogger->notice("channel_playback() play1 " . $controller->getChannelID());
-//        $controller->phpariObject->channels()->channel_playback($controller->getChannelID(), 'sound:demo-thanks', NULL, NULL, NULL, 'play1');
-
-//        $controller->phpariObject->channels()->channel_playback($controller->getChannelID(), 'sound:demo-thanks', NULL, NULL, NULL, "play1");
-//        if ($controller->hasLastPin()) {
-//            $controller->phpariObject->channels()->channel_playback($controller->getChannelID(), 'sound:mvg-last-pin-is', NULL, NULL, null, "play2");
-//        }
         $controller->phpariObject->channels()->channel_playback($controller->getChannelID(), 'sound:mvg-greeting', null, null, null, "play2");
+
         if ($controller->mvgRadApi->hasLastPin()) {
             $controller->phpariObject->channels()->channel_playback($controller->getChannelID(), 'sound:mvg-last-pin-is', null, null, null, "play3");
             MvgRadModule::sayDigits("123", $controller);
         }
         $controller->phpariObject->channels()->channel_playback($controller->getChannelID(), 'sound:mvg-pin-prompt', null, null, null, "play4");
 
-return         $this->stateMachineSample->done(Begin::class);
-
+        return $this->stateMachineSample->done(Begin::class);
     }
 
-    public function event($event): mixed
+    public function onEvent(\stdClass $eventData): mixed
     {
-
+        return null;
     }
 }

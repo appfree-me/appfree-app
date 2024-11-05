@@ -10,5 +10,5 @@ interface MvgRadStateInterface
     public function vorbedingung(): bool;
     public function begin(): mixed;
 
-    public function event($event): mixed;
+    public function onEvent(\stdClass $eventData): mixed;
 }

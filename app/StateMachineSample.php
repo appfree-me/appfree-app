@@ -9,7 +9,9 @@ use AppFree\MvgRad\States\MvgRadStateInterface;
 use AppFree\MvgRad\States\OutputPin;
 use AppFree\MvgRad\States\ReadBikeNumber;
 use Devristo\Phpws\Client\WebSocket;
+use Devristo\Phpws\Messaging\WebSocketMessage;
 use Evenement\EventEmitter;
+use Finite\StatefulInterface;
 use Finite\StateMachine\StateMachine;
 use Finite\State\State;
 use Finite\State\StateInterface;
@@ -21,7 +23,7 @@ use Zend\Log\Logger;
 
 // $document = retrieve your stateful object
 
-class StateMachineSample
+class StateMachineSample implements StatefulInterface
 {
     public WebSocket $stasisClient;
     public LoopInterface $stasisLoop;
@@ -34,6 +36,7 @@ class StateMachineSample
     private EventEmitter $stasisEvents;
     private MvgRadStateInterface $registeredState;
     private StateMachineInterface $sm;
+    private string $state;
 
     public function __construct(string $appname)
     {
@@ -105,10 +108,10 @@ class StateMachineSample
         });
 
         $this->stasisClient->on("message", function ($message) {
-            $event = json_decode($message->getData());
-            $this->stasisLogger->notice('Received message: ' . $event->type . ", data: " . $message->getData());
-            $this->stasisEvents->emit($event->type, array($event));
-            $this->myEvents($event->type, $event); // todo nur relevante messages als event weiterleiten?
+            $eventData = json_decode($message->getData());
+            $this->stasisLogger->notice('Received message: ' . $eventData->type . ", data: " . $message->getData());
+            $this->stasisEvents->emit($eventData->type, array($eventData));
+            $this->myEvents($eventData->type, $eventData); // todo nur relevante messages als event weiterleiten?
         });
     }
 
@@ -120,7 +123,19 @@ class StateMachineSample
         $this->stasisLogger->info("Initializing Handlers... Waiting for handshake...");
         $this->StasisAppConnectionHandlers();
     }
+    public  function handler(int $signo, mixed $siginfo):void
+    {
+        switch ($signo) {
+            case SIGINT:
+                // handle shutdown tasks
+                echo "SIGINT caught, endHandler, closing Websocket\n";
+                $this->stasisClient->close();
+                exit;
+            default:
+                // handle all other signals
+        }
 
+    }
     public function start()
     {
         $this->sm = new StateMachine();
@@ -133,21 +148,23 @@ class StateMachineSample
 
 //s1.to(s2).to(s3).to(s4)
 
-        $object = "hallo";
         $mvgRadApi = new MvgRadApi();
-        $mvgRadStasisController = new MvgRadStasisAppController("appfree");
+//        $mvgRadStasisController = new MvgRadStasisAppController("appfree");
 
         $begin = new Begin(Begin::class, $mvgRadApi, $this, StateInterface::TYPE_INITIAL);
-        $ReadBikeNumber = new ReadBikeNumber(ReadBikeNumber::class, $mvgRadApi, $this, $mvgRadStasisController);
+        $ReadBikeNumber = new ReadBikeNumber(ReadBikeNumber::class, $mvgRadApi, $this);
         $outputPin = new OutputPin(OutputPin::class, $mvgRadApi, $this, StateInterface::TYPE_FINAL);
+
+        $this->sm->setObject(new SampleObject());
 
         $this->sm->addState($begin);
         $this->sm->addState($ReadBikeNumber);
         $this->sm->addState($outputPin);
 
-        $this->sm->addTransition("BeginRead", $begin, $ReadBikeNumber);
-        $this->sm->addTransition("ReadOutput", $ReadBikeNumber, $outputPin);
+        $this->sm->addTransition("BeginRead", Begin::class, $ReadBikeNumber::class);
+        $this->sm->addTransition("ReadOutput", $ReadBikeNumber::class, $outputPin::class);
 
+        $this->sm->initialize();
 
 //
 //            $sm = new StateMachine();
@@ -181,24 +198,39 @@ class StateMachineSample
 //
     }
 
-    private function myEvents($type, mixed $event)
+    private function myEvents($type, \stdClass $eventData)
     {
         // Initial State
-        if ($event->name === "StasisStart") {
+        if ($eventData->type === "StasisStart") {
+            $this->stasisLogger->notice("Begin() BeginState");
             $this->sm->getState(Begin::class)->begin();
         }
 
-        $this->sm->getCurrentState()->event($event);
+        $this->stasisLogger->notice("onEvent " . json_encode($eventData));
+        $this->sm->getCurrentState()->onEvent($eventData);
     }
+
 
     public function done(string $stateName): mixed
     {
         if ($this->sm->getCurrentState()->getName() === Begin::class) {
+            $this->stasisLogger->notice("Apply BeginRead");
             return $this->sm->apply("BeginRead");
         } elseif ($this->sm->getCurrentState()->getName() === ReadBikeNumber::class) {
+            $this->stasisLogger->notice("Apply ReadOutput");
             return $this->sm->apply("ReadOutput");
         }
 
         return null;
+    }
+
+    public function getFiniteState()
+    {
+        return $this->state;
+    }
+
+    public function setFiniteState($state)
+    {
+        $this->state = $state;
     }
 }
