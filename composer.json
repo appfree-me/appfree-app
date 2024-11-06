@@ -6,6 +6,7 @@
     "require": {
         "php": ">=8.2",
         "ext-pcntl": "*",
+        "asantibanez/laravel-eloquent-state-machines": "^6.0",
         "devristo/phpws": "dev-master",
         "educoder/pest": "1.0.0",
         "greenfieldtech-nirs/phpari": "dev-master",

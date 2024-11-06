@@ -166,6 +166,12 @@ class StateMachineSample implements StatefulInterface
 
         $this->sm->initialize();
 
+//        $def = [
+//            "states" => [
+//                Begin::class =>
+//            ]
+//        ];
+
 //
 //            $sm = new StateMachine();
 //
