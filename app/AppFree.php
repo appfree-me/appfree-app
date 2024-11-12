@@ -12,7 +12,6 @@ class AppFree
 
         $sm = new StateMachineSample("appfree");
 
-
         pcntl_signal(SIGINT, function ($signal, $info) use ($sm) {
             $sm->handler($signal, $info);
         });

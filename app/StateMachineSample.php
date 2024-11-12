@@ -152,7 +152,7 @@ class StateMachineSample implements StatefulInterface
 //
 //];
 
-//s1.to(s2).to(s3).to(s4)
+    //s1.to(s2).to(s3).to(s4)
 
         $mvgRadApi = new MvgRadApi();
 //        $mvgRadStasisController = new MvgRadStasisAppController("appfree");
