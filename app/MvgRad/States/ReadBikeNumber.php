@@ -5,12 +5,10 @@ declare (strict_types=1);
 namespace AppFree\MvgRad\States;
 
 use AppFree\MvgRadModule;
-use AppFree\MvgRadStasisAppController;
-use AppFree\StateMachineSample;
-use Devristo\Phpws\Messaging\WebSocketMessage;
-use Finite\State\State;
+use stdClass;
 
-class ReadBikeNumber  extends MvgRadState implements MvgRadStateInterface{
+class ReadBikeNumber extends MvgRadState implements MvgRadStateInterface
+{
     private array $dtmfSequence = [];
 
     public function handleAusleihe(): void
@@ -44,11 +42,11 @@ class ReadBikeNumber  extends MvgRadState implements MvgRadStateInterface{
         return true;
     }
 
-    public function onEvent(\stdClass $event): mixed
+    public function onEvent(stdClass $eventData): mixed
     {
-        print(__CLASS__ . "->onEvent(".json_encode($event));
-        if ($event->type === "ChannelDtmfReceived"){
-            $this->addDtmf($event->digit);
+        print(__CLASS__ . "->onEvent(" . json_encode($eventData));
+        if ($eventData->type === "ChannelDtmfReceived") {
+            $this->addDtmf($eventData->digit);
         }
         if (count($this->dtmfSequence) === 5) {
             $this->handleAusleihe();
@@ -56,6 +54,7 @@ class ReadBikeNumber  extends MvgRadState implements MvgRadStateInterface{
 
         return null;
     }
+
     public function addDtmf(string $digit): void
     {
         $this->dtmfSequence[] = $digit;

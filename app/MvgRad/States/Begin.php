@@ -4,8 +4,7 @@ declare(strict_types=1);
 namespace AppFree\MvgRad\States;
 
 use AppFree\MvgRadModule;
-use AppFree\MvgRadStasisAppController;
-use Finite\State\State;
+use stdClass;
 
 class Begin extends MvgRadState implements MvgRadStateInterface
 {
@@ -34,7 +33,7 @@ class Begin extends MvgRadState implements MvgRadStateInterface
         return $this->stateMachineSample->done(Begin::class);
     }
 
-    public function onEvent(\stdClass $eventData): mixed
+    public function onEvent(stdClass $eventData): mixed
     {
         return null;
     }

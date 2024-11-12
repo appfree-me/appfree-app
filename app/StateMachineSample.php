@@ -8,35 +8,34 @@ use AppFree\MvgRad\States\Begin;
 use AppFree\MvgRad\States\MvgRadStateInterface;
 use AppFree\MvgRad\States\OutputPin;
 use AppFree\MvgRad\States\ReadBikeNumber;
-use Devristo\Phpws\Client\WebSocket;
-use Devristo\Phpws\Messaging\WebSocketMessage;
 use Evenement\EventEmitter;
+use Finite\State\StateInterface;
 use Finite\StatefulInterface;
 use Finite\StateMachine\StateMachine;
-use Finite\State\State;
-use Finite\State\StateInterface;
 use Finite\StateMachine\StateMachineInterface;
-use Pest;
 use phpari;
+use Ratchet\Client\WebSocket;
+use Ratchet\RFC6455\Messaging\DataInterface;
 use React\EventLoop\LoopInterface;
+use stdClass;
 use Zend\Log\Logger;
 
 // $document = retrieve your stateful object
 
 class StateMachineSample implements StatefulInterface
 {
-    public WebSocket $stasisClient;
+    public $stasisClient;
     public LoopInterface $stasisLoop;
     public Logger $stasisLogger;
-    protected PEST $ariEndpoint;
+//    protected Browser $ariEndpoint;
+    protected $ariEndpoint;
     public phpari $phpariObject;
     private array $stasisChannelIDs = [];
-    private array $dtmfSequence;
-    public MvgRadModule $mvgRadApi;
     private EventEmitter $stasisEvents;
     private MvgRadStateInterface $registeredState;
     private StateMachineInterface $sm;
     private string $state;
+    public MvgRadModule $mvgRadApi;
 
     public function __construct(string $appname)
     {
@@ -97,21 +96,25 @@ class StateMachineSample implements StatefulInterface
         });
     }
 
-
     public function StasisAppConnectionHandlers(): void
     {
-        $this->stasisClient->on("request", function ($headers) {
-            $this->stasisLogger->notice("Request received!");
+        $this->stasisClient->then(function ($conn) {
+            $conn->on("request", function (DataInterface $message) {
+                $this->stasisLogger->notice("Request received!");
+            });
         });
-        $this->stasisClient->on("handshake", function () {
-            $this->stasisLogger->notice("Handshake received!");
+        $this->stasisClient->then(function ($conn) {
+            $conn->on("handshake", function (DataInterface $message) {
+                $this->stasisLogger->notice("Handshake received!");
+            });
         });
-
-        $this->stasisClient->on("message", function ($message) {
-            $eventData = json_decode($message->getData());
-            $this->stasisLogger->notice('Received message: ' . $eventData->type . ", data: " . $message->getData());
-            $this->stasisEvents->emit($eventData->type, array($eventData));
-            $this->myEvents($eventData->type, $eventData); // todo nur relevante messages als event weiterleiten?
+        $this->stasisClient->then(function ($conn) {
+            $conn->on("message", function (DataInterface $message) {
+                $eventData = json_decode($message->getPayload());
+                $this->stasisLogger->notice('Received message: ' . $eventData->type . ", data: " . $message->getPayload());
+                $this->stasisEvents->emit($eventData->type, array($eventData));
+                $this->myEvents($eventData->type, $eventData); // todo nur relevante messages als event weiterleiten?
+            });
         });
     }
 
@@ -123,19 +126,22 @@ class StateMachineSample implements StatefulInterface
         $this->stasisLogger->info("Initializing Handlers... Waiting for handshake...");
         $this->StasisAppConnectionHandlers();
     }
-    public  function handler(int $signo, mixed $siginfo):void
+
+    public function handler(int $signo, mixed $siginfo): void
     {
         switch ($signo) {
             case SIGINT:
                 // handle shutdown tasks
                 echo "SIGINT caught, endHandler, closing Websocket\n";
-                $this->stasisClient->close();
-                exit;
+                $this->stasisClient->then(function (WebSocket $conn) {
+                    $conn->close();
+                    exit;
+                });
             default:
                 // handle all other signals
         }
-
     }
+
     public function start()
     {
         $this->sm = new StateMachine();
@@ -204,7 +210,7 @@ class StateMachineSample implements StatefulInterface
 //
     }
 
-    private function myEvents($type, \stdClass $eventData)
+    private function myEvents($type, stdClass $eventData)
     {
         // Initial State
         if ($eventData->type === "StasisStart") {
@@ -215,7 +221,6 @@ class StateMachineSample implements StatefulInterface
         $this->stasisLogger->notice("onEvent " . json_encode($eventData));
         $this->sm->getCurrentState()->onEvent($eventData);
     }
-
 
     public function done(string $stateName): mixed
     {

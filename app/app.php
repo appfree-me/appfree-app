@@ -15,5 +15,5 @@ pcntl_signal(SIGINT, function($signal, $info) use ($sm) {
 
 $sm->start();
 $sm->init();
-$sm->stasisClient->open();
+//$sm->stasisClient->open();
 $sm->stasisLoop->run();

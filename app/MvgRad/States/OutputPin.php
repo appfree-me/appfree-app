@@ -18,7 +18,7 @@ class OutputPin extends MvgRadState implements MvgRadStateInterface {
         return null;
     }
 
-    public function onEvent(\stdClass $event): mixed
+    public function onEvent(\stdClass $eventData): mixed
     {
         // TODO: Implement event() method.
         return null;
