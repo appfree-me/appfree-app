@@ -1,3 +1,2 @@
 export XDEBUG_SESSION=1
-# php artisan serve --host=0.0.0.0
-php public/index.php
+bin/artisan app:run-appfree
