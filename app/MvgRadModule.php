@@ -15,7 +15,7 @@ class MvgRadModule
     public static function sayDigits(string $digitString, StateMachineSample $instance): void
     {
         foreach (str_split($digitString) as $digit) {
-            $instance->phpariObject->channels()->channel_playback($instance->getChannelID(), "sound:digits/$digit", null, null, null);
+            $instance->phpariObject->channels()->play($instance->getChannelID(), ["sound:digits/$digit"], null, null, null);
         }
     }
 

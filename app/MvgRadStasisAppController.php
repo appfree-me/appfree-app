@@ -7,7 +7,7 @@ use Devristo\Phpws\Client\WebSocket;
 use Evenement\EventEmitter;
 use Exception;
 use Pest;
-use phpari;
+use PhpAri;
 use React\EventLoop\LoopInterface;
 use Zend\Log\Logger;
 
@@ -17,7 +17,7 @@ class MvgRadStasisAppController
     public LoopInterface $stasisLoop;
     public Logger $stasisLogger;
     protected PEST $ariEndpoint;
-    public phpari $phpariObject;
+    public PhpAri $phpariObject;
     private array $stasisChannelIDs = [];
     private array $dtmfSequence;
     public MvgRadModule $mvgRadApi;
@@ -25,7 +25,7 @@ class MvgRadStasisAppController
 
     public function __construct(string $appname)
     {
-        $this->phpariObject = new phpari($appname);
+        $this->phpariObject = new PhpAri($appname);
 
         $this->ariEndpoint = $this->phpariObject->ariEndpoint;
         $this->stasisClient = $this->phpariObject->stasisClient;

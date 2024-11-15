@@ -9,7 +9,8 @@
         "ext-pcntl": "*",
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9",
-        "le-laurent/phpari3": "dev-appfree",
+        "le-laurent/phpari3": "dev-master@dev",
+        "lelaurent/phpari-swagger": "@dev",
         "yohang/finite": "^1.3"
     },
     "require-dev": {
@@ -25,8 +26,15 @@
     },
     "repositories": [
         {
-            "type": "vcs",
+            "type": "path",
             "url": "/home/kali/proto/repos/phpari3",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "/home/kali/proto/repos/swagger-codegen/gen/out/asterisk-rest-api4/SwaggerClient-php",
             "options": {
                 "symlink": true
             }

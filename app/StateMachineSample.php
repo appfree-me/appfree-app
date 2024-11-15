@@ -13,7 +13,7 @@ use Finite\State\StateInterface;
 use Finite\StatefulInterface;
 use Finite\StateMachine\StateMachine;
 use Finite\StateMachine\StateMachineInterface;
-use phpari;
+use phpari3\PhpAri;
 use Ratchet\Client\WebSocket;
 use Ratchet\RFC6455\Messaging\DataInterface;
 use React\EventLoop\LoopInterface;
@@ -29,7 +29,7 @@ class StateMachineSample implements StatefulInterface
     public Logger $stasisLogger;
 //    protected Browser $ariEndpoint;
     protected $ariEndpoint;
-    public phpari $phpariObject;
+    public PhpAri $phpariObject;
     private array $stasisChannelIDs = [];
     private EventEmitter $stasisEvents;
     private MvgRadStateInterface $registeredState;
@@ -39,13 +39,12 @@ class StateMachineSample implements StatefulInterface
 
     public function __construct(string $appname)
     {
-        $this->phpariObject = new phpari($appname);
+        $this->phpariObject = new PhpAri($appname);
 
         $this->ariEndpoint = $this->phpariObject->ariEndpoint;
         $this->stasisClient = $this->phpariObject->stasisClient;
         $this->stasisLoop = $this->phpariObject->stasisLoop;
         $this->stasisLogger = $this->phpariObject->stasisLogger;
-        $this->stasisEvents = $this->phpariObject->stasisEvents;
 
         $this->mvgRadApi = new MvgRadModule($this);
     }
@@ -79,21 +78,23 @@ class StateMachineSample implements StatefulInterface
 
     public function StasisAppEventHandler(): void
     {
-        $this->stasisEvents->on('StasisStart', function ($event) {
-            $this->addChannel($event->channel->id);
-        });
-        $this->stasisEvents->on('StasisEnd', function ($event) {
-            $this->removeChannel($event->channel->id);
-        });
-        $this->stasisEvents->on('ChannelChangeState', function ($event) {
-            $this->stasisLogger->notice("+++ ChannelChangeState +++ " . json_encode($event) . "\n");
-        });
-        $this->stasisEvents->on('PlaybackStarted', function ($event) {
-            $this->stasisLogger->notice("+++ PlaybackStarted +++ " . json_encode($event->playback) . "\n");
-        });
-        $this->stasisEvents->on('PlaybackFinished', function ($event) {
-//            $this->stasisLogger->notice("+++ PlaybackFinished +++ " . json_encode($event->playback->id) . "\n");
-        });
+        // sollte nicht mehr gebraucht werden, da alles subtypen von message
+//
+//        $this->stasisEvents->on('StasisStart', function ($event) {
+//            $this->addChannel($event->channel->id);
+//        });
+//        $this->stasisEvents->on('StasisEnd', function ($event) {
+//            $this->removeChannel($event->channel->id);
+//        });
+//        $this->stasisEvents->on('ChannelChangeState', function ($event) {
+//            $this->stasisLogger->notice("+++ ChannelChangeState +++ " . json_encode($event) . "\n");
+//        });
+//        $this->stasisEvents->on('PlaybackStarted', function ($event) {
+//            $this->stasisLogger->notice("+++ PlaybackStarted +++ " . json_encode($event->playback) . "\n");
+//        });
+//        $this->stasisEvents->on('PlaybackFinished', function ($event) {
+////            $this->stasisLogger->notice("+++ PlaybackFinished +++ " . json_encode($event->playback->id) . "\n");
+//        });
     }
 
     public function StasisAppConnectionHandlers(): void
@@ -112,7 +113,6 @@ class StateMachineSample implements StatefulInterface
             $conn->on("message", function (DataInterface $message) {
                 $eventData = json_decode($message->getPayload());
                 $this->stasisLogger->notice('Received message: ' . $eventData->type . ", data: " . $message->getPayload());
-                $this->stasisEvents->emit($eventData->type, array($eventData));
                 $this->myEvents($eventData->type, $eventData); // todo nur relevante messages als event weiterleiten?
             });
         });
@@ -215,6 +215,11 @@ class StateMachineSample implements StatefulInterface
         // Initial State
         if ($eventData->type === "StasisStart") {
             $this->stasisLogger->notice("Begin() BeginState");
+
+            // this belongs into the framework, setup part
+            $this->addChannel($eventData->channel->id);
+
+
             $this->sm->getState(Begin::class)->begin();
         }
 

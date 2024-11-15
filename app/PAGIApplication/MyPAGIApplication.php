@@ -41,7 +41,7 @@ namespace AppFree\PAGIApplication;
  * limitations under the License.
  *
  */
-use phpari;
+use PhpAri;
 
 declare(ticks=1);
 /**
