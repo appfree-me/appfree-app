@@ -161,7 +161,7 @@ class StateMachineSample implements StatefulInterface
         $ReadBikeNumber = new ReadBikeNumber(ReadBikeNumber::class, $mvgRadApi, $this);
         $outputPin = new OutputPin(OutputPin::class, $mvgRadApi, $this, StateInterface::TYPE_FINAL);
 
-        $this->sm->setObject(new SampleObject());
+        $this->sm->setObject($this);
 
         $this->sm->addState($begin);
         $this->sm->addState($ReadBikeNumber);

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace AppFree;
+namespace appfree-app-app;
 
 use Devristo\Phpws\Client\WebSocket;
 use Evenement\EventEmitter;

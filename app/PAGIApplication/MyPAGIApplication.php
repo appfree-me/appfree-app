@@ -1,6 +1,6 @@
 <?php
 
-namespace AppFree\PAGIApplication;
+namespace appfree-app\PAGIApplication;
 
 /**
  * PAGI basic use example. Please see run.sh in this same directory for an

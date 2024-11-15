@@ -2,7 +2,7 @@
 
 namespace AppFree\MvgRad\States;
 
-use AppFree\MvgRadStasisAppController;
+use app\MvgRadStasisAppController;
 
 interface MvgRadStateInterface
 {
