@@ -1,6 +1,8 @@
 <?php
 
 namespace AppFree;
+use Swagger\Client\Api\ChannelsApi;
+
 class MvgRadModule
 {
     private AppController $app;
@@ -12,10 +14,10 @@ class MvgRadModule
         $this->app = $app;
     }
 
-    public static function sayDigits(string $digitString, AppController $instance): void
+    public static function sayDigits(string $digitString, $channelID, ChannelsApi $channelsApi): void
     {
         foreach (str_split($digitString) as $digit) {
-            $instance->phpariObject->channels()->play($instance->getChannelID(), ["sound:digits/$digit"], null, null, null);
+            $channelsApi->play($channelID, ["sound:digits/$digit"], null, null, null);
         }
     }
 

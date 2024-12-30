@@ -30,7 +30,7 @@ class AppController implements StatefulInterface, EventReceiverInterface
     private array $stasisChannelIDs = [];
     private EventEmitter $stasisEvents;
     private MvgRadStateInterface $registeredState;
-    private StateMachineInterface $sm;
+    public StateMachineInterface $sm;
     private string $state;
     public MvgRadModule $mvgRadApi;
     private string $appName;
@@ -48,9 +48,9 @@ class AppController implements StatefulInterface, EventReceiverInterface
     private function denyChannel(string $channelId): void
     {
         $this->stasisLogger->err("Channel $channelId denied");
-        $this->phpariObject->channels()->play($channelId, ['media:please-try-call-later'], null, null, null, "channel-denied");
+        $this->sm->phpariObject->channels()->play($channelId, ['media:please-try-call-later'], null, null, null, "channel-denied");
         sleep(2);
-        $this->phpariObject->channels()->continueInDialplan($channelId);
+        $this->sm->phpariObject->channels()->continueInDialplan($channelId);
     }
 
     /**
@@ -87,6 +87,9 @@ class AppController implements StatefulInterface, EventReceiverInterface
                 $eventData = json_decode($message->getPayload());
                 if ($eventData->type == "StasisStart") {
                     $this->addChannel($eventData->channel->id);
+                }
+                if ($eventData->type == "StasisEnd") {
+                    $this->removeChannel($eventData->channel->id);
                 }
             });
         });
