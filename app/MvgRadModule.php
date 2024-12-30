@@ -3,16 +3,16 @@
 namespace AppFree;
 class MvgRadModule
 {
-    private StateMachineSample $app;
+    private AppController $app;
     private MvgRadApi $mvgRadApi;
 
-    function __construct(StateMachineSample $app)
+    function __construct(AppController $app)
     {
         $this->mvgRadApi = new MvgRadApi();
         $this->app = $app;
     }
 
-    public static function sayDigits(string $digitString, StateMachineSample $instance): void
+    public static function sayDigits(string $digitString, AppController $instance): void
     {
         foreach (str_split($digitString) as $digit) {
             $instance->phpariObject->channels()->play($instance->getChannelID(), ["sound:digits/$digit"], null, null, null);
