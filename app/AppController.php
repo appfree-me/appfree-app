@@ -5,13 +5,11 @@ declare(strict_types=1);
 namespace AppFree;
 
 
-use Evenement\EventEmitter;
 use Finite\Exception\ObjectException;
 use Finite\Exception\TransitionException;
 use Finite\StatefulInterface;
 use Finite\StateMachine\StateMachineInterface;
 use MvgRad\Loader;
-use MvgRad\States\Begin;
 use PhpAri3\Interfaces\EventReceiverInterface;
 use phpari3\PhpAri;
 use Ratchet\Client\WebSocket;
@@ -28,18 +26,13 @@ class AppController implements StatefulInterface, EventReceiverInterface
     public Logger $stasisLogger;
     protected $ariEndpoint;
     private array $stasisChannelIDs = [];
-    private EventEmitter $stasisEvents;
-    private MvgRadStateInterface $registeredState;
     public StateMachineInterface $sm;
     private string $state;
-    public MvgRadModule $mvgRadApi;
     private string $appName;
 
     public function __construct(string $appName)
     {
         $this->appName = $appName;
-
-        $this->mvgRadApi = new MvgRadModule($this);
     }
 
     /**
@@ -77,36 +70,19 @@ class AppController implements StatefulInterface, EventReceiverInterface
 
     public function StasisAppEventHandler(): void
     {
-        // New call coming on, new channel being created - register a new State Machine for this call
-//        $this->stasisEvents->on('StasisStart', function ($event) {
-//            $this->addChannel($event->channel->id);
-//        });
-
         $this->stasisClient->then(function ($conn) {
             $conn->on("message", function (DataInterface $message) {
                 $eventData = json_decode($message->getPayload());
                 if ($eventData->type == "StasisStart") {
                     $this->addChannel($eventData->channel->id);
                 }
+
                 if ($eventData->type == "StasisEnd") {
                     $this->removeChannel($eventData->channel->id);
                 }
             });
         });
 
-
-//        $this->stasisEvents->on('StasisEnd', function ($event) {
-//            $this->removeChannel($event->channel->id);
-//        });
-//        $this->stasisEvents->on('ChannelChangeState', function ($event) {
-//            $this->stasisLogger->notice("+++ ChannelChangeState +++ " . json_encode($event) . "\n");
-//        });
-//        $this->stasisEvents->on('PlaybackStarted', function ($event) {
-//            $this->stasisLogger->notice("+++ PlaybackStarted +++ " . json_encode($event->playback) . "\n");
-//        });
-//        $this->stasisEvents->on('PlaybackFinished', function ($event) {
-////            $this->stasisLogger->notice("+++ PlaybackFinished +++ " . json_encode($event->playback->id) . "\n");
-//        });
     }
 
     public function StasisAppConnectionHandlers(): void
@@ -168,19 +144,6 @@ class AppController implements StatefulInterface, EventReceiverInterface
         $this->StasisAppConnectionHandlers();
     }
 
-    public function done(string $stateName): mixed
-    {
-        if ($this->sm->getCurrentState()->getName() === Begin::class) {
-            $this->stasisLogger->notice("Apply BeginRead");
-            return $this->sm->apply("BeginRead");
-        } elseif ($this->sm->getCurrentState()->getName() === ReadBikeNumber::class) {
-            $this->stasisLogger->notice("Apply ReadOutput");
-            return $this->sm->apply("ReadOutput");
-        }
-
-        return null;
-    }
-
     public function getFiniteState()
     {
         return $this->state;
@@ -198,13 +161,12 @@ class AppController implements StatefulInterface, EventReceiverInterface
     public function receive(string $eventName, stdClass $eventData): void
     {
         // Initial State
-        if ($eventData->type === "StasisStart") {
-            $this->stasisLogger->notice("Begin() BeginState");
+        if ($eventData->type === EventTypes::EVENT_STASIS_START) {
+            $channelId = $eventData->channel->id;
 
-            // this belongs into the framework, setup part
-            $this->addChannel($eventData->channel->id);
-
-//            $this->sm->getState(Begin::class)->begin();
+            $this->stasisLogger->notice("AddChannel " . $channelId);
+            $this->addChannel($channelId);
+            return;
         }
 
         $this->stasisLogger->notice("onEvent " . json_encode($eventData));
