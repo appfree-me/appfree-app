@@ -22,6 +22,10 @@ class AppFree
             $app->handler($signal, $info);
         });
 
+        register_shutdown_function(function () use ($app) {
+            $app->handler(SIGINT, []);
+        });
+
         $app->start();
         $app->stasisLoop->run();
     }
