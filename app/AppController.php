@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace AppFree;
 
 
+use AppFreeCommands\Stasis\Events\V1\ChannelHangupRequest;
+use AppFreeCommands\Stasis\Events\V1\ChannelHangupRequst;
 use AppFreeCommands\Stasis\Events\V1\StasisEnd;
 use AppFreeCommands\Stasis\Events\V1\StasisStart;
 use Finite\Exception\ObjectException;
@@ -16,7 +18,6 @@ use MvgRad\Loader;
 use PhpAri3\Interfaces\EventReceiverInterface;
 use phpari3\PhpAri;
 use Ratchet\Client\WebSocket;
-use Ratchet\RFC6455\Messaging\DataInterface;
 use React\EventLoop\LoopInterface;
 use stdClass;
 use Swagger\Client\ApiException;
@@ -71,26 +72,6 @@ class AppController implements StatefulInterface, EventReceiverInterface
         $this->stasisChannelIDs = array_diff($this->stasisChannelIDs, [$id]);
     }
 
-    public function StasisAppEventHandler(): void
-    {
-        $this->stasisClient->then(function ($conn) {
-            $conn->on("message", function (DataInterface $message) {
-                $eventData = json_decode($message->getPayload());
-                if ($eventData->type == "StasisStart") {
-                    $this->addChannel($eventData->channel->id);
-                }
-
-                if ($eventData->type == "StasisEnd") {
-                    $this->removeChannel($eventData->channel->id);
-                }
-            });
-        });
-    }
-
-
-
-
-
     public function handler(int $signo, mixed $siginfo): void
     {
         switch ($signo) {
@@ -122,12 +103,6 @@ class AppController implements StatefulInterface, EventReceiverInterface
         $this->ariEndpoint = $this->sm->phpariObject->ariEndpoint;
         $this->stasisClient = $this->sm->phpariObject->stasisClient;
         $this->stasisLoop = $this->sm->phpariObject->stasisLoop;
-
-//        $this->stasisLogger->info("Starting Stasis Program... Waiting for handshake...");
-//        $this->StasisAppEventHandler();
-//
-//        $this->stasisLogger->info("Initializing Handlers... Waiting for handshake...");
-//        $this->StasisAppConnectionHandlers();
     }
 
     public function getFiniteState()
@@ -157,14 +132,16 @@ class AppController implements StatefulInterface, EventReceiverInterface
 
     private function myEvents($eventDto): void
     {
-//        $dto = MakeDto::make($eventData);
-
-
         if ($eventDto instanceof StasisStart) {
             $this->addChannel($eventDto->channel->id);
         }
 
         if ($eventDto instanceof StasisEnd) {
+            $this->removeChannel($eventDto->channel->id);
+        }
+
+
+        if ($eventDto instanceof ChannelHangupRequest) {
             $this->removeChannel($eventDto->channel->id);
         }
 
@@ -175,18 +152,4 @@ class AppController implements StatefulInterface, EventReceiverInterface
 
         $state->onEvent($eventDto);
     }
-
-    public function StasisAppConnectionHandlers(): void
-    {
-        $this->stasisClient->then(function ($conn) {
-            $conn->on("message", function (DataInterface $message) {
-                $eventData = json_decode($message->getPayload());
-                $this->stasisLogger->notice(__FILE__ . 'StasisAppConnectionHandlers ' . $eventData->type . ", data: (redacted)" );
-                $eventDto = MakeDto::make($eventData);
-
-                $this->myEvents($eventDto); // todo nur relevante messages als event weiterleiten?
-            });
-        });
-    }
-
 }
