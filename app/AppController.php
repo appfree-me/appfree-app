@@ -87,30 +87,9 @@ class AppController implements StatefulInterface, EventReceiverInterface
         });
     }
 
-    public function StasisAppConnectionHandlers(): void
-    {
-        $this->stasisClient->then(function ($conn) {
-            $conn->on("message", function (DataInterface $message) {
-                $eventData = json_decode($message->getPayload());
-                $this->stasisLogger->notice(__FILE__ . 'Received message: ' . $eventData->type . ", data: " . $message->getPayload());
-                $eventDto = MakeDto::make($eventData);
 
-                $this->myEvents($eventDto); // todo nur relevante messages als event weiterleiten?
-            });
-        });
-    }
 
-    private function myEvents($eventDto): void
-    {
-//        $dto = MakeDto::make($eventData);
 
-        // Initial State
-        /** @var \MvgRad\States\MvgRadStateInterface $state */
-        $state = $this->sm->getCurrentState();
-        $this->stasisLogger->debug("State " . $state->getName() . "::onEvent(" . json_encode($eventDto) . ")");
-
-        $state->onEvent($eventDto);
-    }
 
     public function handler(int $signo, mixed $siginfo): void
     {
@@ -144,11 +123,11 @@ class AppController implements StatefulInterface, EventReceiverInterface
         $this->stasisClient = $this->sm->phpariObject->stasisClient;
         $this->stasisLoop = $this->sm->phpariObject->stasisLoop;
 
-        $this->stasisLogger->info("Starting Stasis Program... Waiting for handshake...");
-        $this->StasisAppEventHandler();
-
-        $this->stasisLogger->info("Initializing Handlers... Waiting for handshake...");
-        $this->StasisAppConnectionHandlers();
+//        $this->stasisLogger->info("Starting Stasis Program... Waiting for handshake...");
+//        $this->StasisAppEventHandler();
+//
+//        $this->stasisLogger->info("Initializing Handlers... Waiting for handshake...");
+//        $this->StasisAppConnectionHandlers();
     }
 
     public function getFiniteState()
@@ -172,17 +151,42 @@ class AppController implements StatefulInterface, EventReceiverInterface
     {
         $eventDto = MakeDto::make($eventData);
 
+        $this->stasisLogger->notice("receive " . serialize($eventDto));
+        $this->myEvents($eventDto);
+    }
+
+    private function myEvents($eventDto): void
+    {
+//        $dto = MakeDto::make($eventData);
+
+
         if ($eventDto instanceof StasisStart) {
             $this->addChannel($eventDto->channel->id);
-            return;
         }
 
         if ($eventDto instanceof StasisEnd) {
             $this->removeChannel($eventDto->channel->id);
-            return;
         }
 
-        $this->stasisLogger->notice("onEvent " . json_encode($eventData));
-        $this->myEvents($eventDto);
+        // Initial State
+        /** @var \MvgRad\States\MvgRadStateInterface $state */
+        $state = $this->sm->getCurrentState();
+        $this->stasisLogger->debug("myEvents State " . $state->getName() . "::onEvent(" . json_encode($eventDto) . ")");
+
+        $state->onEvent($eventDto);
     }
+
+    public function StasisAppConnectionHandlers(): void
+    {
+        $this->stasisClient->then(function ($conn) {
+            $conn->on("message", function (DataInterface $message) {
+                $eventData = json_decode($message->getPayload());
+                $this->stasisLogger->notice(__FILE__ . 'StasisAppConnectionHandlers ' . $eventData->type . ", data: (redacted)" );
+                $eventDto = MakeDto::make($eventData);
+
+                $this->myEvents($eventDto); // todo nur relevante messages als event weiterleiten?
+            });
+        });
+    }
+
 }

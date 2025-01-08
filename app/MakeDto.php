@@ -26,15 +26,18 @@ class MakeDto {
             "ApplicationReplaced" => ApplicationReplaced::class,
         ];
 
-        if (isset($data->channel_id)) {
-            $channel = new Channel($data->channel_id);
+        if (isset($data->channel->id)) {
+            $channel = new Channel($data->channel->id);
 
             $var = new $mapping[$data->type]($channel, $data->digit ?? null);
-            print("Made DTO" .  $var);
+            print("Made DTO" .  serialize($var));
 
             return $var;
+         } else {
+            return new ApplicationReplaced([]);
+
         }
-        return new ApplicationReplaced([]);
+
 
 
 

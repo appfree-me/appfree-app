@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "599c72fe06af87d97192d9d8fcd057c5",
+    "content-hash": "4453e87c28b8fd05e7a9af5eec45740e",
     "packages": [
         {
             "name": "brick/math",
@@ -2058,7 +2058,7 @@
             "dist": {
                 "type": "path",
                 "url": "/home/kali/proto/repos/lelaurent/appfree-commands",
-                "reference": "3e50cde320788cf6be5f2108d6649b50c4f1042f"
+                "reference": "a35f810527ac4af7ac31a53dec3bfe4f213845d0"
             },
             "type": "project",
             "autoload": {
@@ -2078,7 +2078,7 @@
             "dist": {
                 "type": "path",
                 "url": "/home/kali/proto/repos/lelaurent/appfree-mvgrad",
-                "reference": "c5f758ed2226104d71c006c3b239949ef18f97d0"
+                "reference": "6203b1abc337065cee4441ee68fb03119748a232"
             },
             "require": {
                 "lelaurent/appfree-commands": "dev-master",
@@ -2157,7 +2157,7 @@
             "dist": {
                 "type": "path",
                 "url": "/home/kali/proto/repos/lelaurent/phpari3",
-                "reference": "c18e3d3ab1ebc30d54a075ed21cfea8d22950dca"
+                "reference": "cf525548f3733f95a55d8ae5d345d1e14a39b8b4"
             },
             "require": {
                 "guzzlehttp/guzzle": "^7.9",
@@ -10222,7 +10222,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "lelaurent/appfree-commands": 20,
         "lelaurent/appfree-mvgrad": 20,
         "lelaurent/phpari3": 20
     },

@@ -12,7 +12,6 @@
         "ext-pcntl": "*",
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9",
-        "lelaurent/appfree-commands": "dev-master",
         "lelaurent/appfree-mvgrad": "dev-master",
         "lelaurent/phpari3": "dev-master@dev",
         "yohang/finite": "^1.3"
