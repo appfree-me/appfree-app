@@ -6,6 +6,7 @@ use AppFree\AppFreeCommands\Stasis\Events\V1\StasisStart;
 use AppFree\AppFreeCommands\Stasis\Objects\V1\Channel;
 use AppFree\Ari\PhpAri;
 use AppFree\MvgRad\Loader;
+use Illuminate\Support\Facades\App;
 use Swagger\Client\Api\ChannelsApi;
 
 describe("appfree-mvgrad sample flow", function () {
@@ -30,6 +31,9 @@ describe("appfree-mvgrad sample flow", function () {
             ];
         };
 
+//        $x =app()->getBindings();
+//$app = App::make(AppController::class);
+//        $app = resolve(AppController::class);
         $app = new AppController("appfree");
         $channelsApiMock = Mockery::mock(ChannelsApi::class);
 

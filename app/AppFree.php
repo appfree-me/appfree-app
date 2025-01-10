@@ -8,18 +8,18 @@ use AppFree\Ari\PhpAri;
 use AppFree\MvgRad\Loader;
 use Finite\Exception\ObjectException;
 
-require("vendor/lelaurent/appfree-mvgrad/vendor/autoload.php");
+//require("vendor/lelaurent/appfree-mvgrad/vendor/autoload.php");
 class AppFree
 {
     /**
      * @throws ObjectException
      */
-    public static function app(): void
+        public static function app(PhpAri $phpAri, AppController $app): void
     {
         pcntl_async_signals(true);
 
         $appName = "appfree";
-        $app = new AppController($appName);
+//        $app = new AppController($appName);
 
         pcntl_signal(SIGINT, function ($signal, $info) use ($app) {
             $app->handler($signal, $info);
@@ -30,7 +30,7 @@ class AppFree
         });
 
         $sm = Loader::load($app);
-        $app->start(new PhpAri($appName, $app), $sm);
+        $app->start($phpAri, $sm);
         $app->stasisLoop->run();
     }
 }

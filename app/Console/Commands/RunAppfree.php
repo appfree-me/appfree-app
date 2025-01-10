@@ -2,7 +2,9 @@
 
 namespace AppFree\Console\Commands;
 
+use AppFree\AppController;
 use AppFree\AppFree;
+use AppFree\Ari\PhpAri;
 use Illuminate\Console\Command;
 
 class RunAppfree extends Command
@@ -24,8 +26,8 @@ class RunAppfree extends Command
     /**
      * Execute the console command.
      */
-    public function handle(): void
+    public function handle(PhpAri $phpAri, AppController $app): void
     {
-        AppFree::app();
+        AppFree::app($phpAri,  $app);
     }
 }

@@ -11,6 +11,7 @@
         "php": "^8.2",
         "ext-pcntl": "*",
         "evenement/evenement": "^3.0",
+        "guzzlehttp/guzzle": "^7.9",
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9",
         "lelaurent/php-asterisk-swagger-api": "dev-master",

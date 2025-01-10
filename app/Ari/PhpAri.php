@@ -7,6 +7,7 @@ use AppFree\Ari\Interfaces\EventReceiverInterface;
 use AppFree\MakeDto;
 use Exception;
 use GuzzleHttp\Client;
+use GuzzleHttp\GuClient;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Ratchet\Client\WebSocket;
@@ -77,8 +78,6 @@ class PhpAri
             $config = $this->config;
             $config_asterisk = $config->asterisk_ari;
             $this->setupLogging();
-
-
             $client = new \GuzzleHttp\Client([
                 'auth' => [$config_asterisk["username"], $config_asterisk["password"]
                     //    [$config_asterisk["host"], $config_asterisk["port"]
