@@ -19,7 +19,7 @@ class ReadBikeNumber extends MvgRadState implements MvgRadStateInterface
         $radnummer = implode($this->dtmfSequence);
 
         $channelID = $this->appController->getChannelID();
-        $channelsApi = $this->sm->phpariObject->channels();
+        $channelsApi = $this->sm->ari->channels();
         MvgRadModule::sayDigits($radnummer, $channelID, $channelsApi);
         $pin = $this->mvgRadApi->doAusleihe($radnummer);
         MvgRadModule::sayDigits($pin, $channelID, $channelsApi);

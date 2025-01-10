@@ -10,7 +10,7 @@ use Finite\StateMachine\StateMachine;
 
 class MyStateMachine extends StateMachine
 {
-    public PhpAri $phpariObject;
+    public PhpAri $ari;
 
     public function done(StateInterface $state): void
     {

@@ -34,7 +34,8 @@ describe("appfree-mvgrad sample flow", function () {
 //        $x =app()->getBindings();
 //$app = App::make(AppController::class);
 //        $app = resolve(AppController::class);
-        $app = new AppController("appfree");
+//        $app = new AppController();
+        $app = resolve(AppController::class);
         $channelsApiMock = Mockery::mock(ChannelsApi::class);
 
 

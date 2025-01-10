@@ -44,16 +44,18 @@ class PhpAri
     private EventReceiverInterface $eventReceiver;
 //    public $i = 0;
 
-    public function __construct(string $appName, EventReceiverInterface $eventReceiver, string $config = __DIR__ . '/../../phpari.ini')
+    public function __construct(string $appName, EventReceiverInterface $eventReceiver, PhpAriConfig $phpAriConfig, Client $client, Logger $logger)
     {
         try {
             /* Get our configuration */
-            $this->config = new PhpAriConfig($config);
+            $this->config = $phpAriConfig;
+            $this->logger = $logger;
 
             /* Some general information */
             $this->isDebug = (bool)$this->config->general['debug'];
             $this->logfile = $this->config->general['logfile'];
             $this->eventReceiver = $eventReceiver;
+            $this->ariEndpoint = $client;
 
             $this->appName = $appName;
 
@@ -77,12 +79,6 @@ class PhpAri
         try {
             $config = $this->config;
             $config_asterisk = $config->asterisk_ari;
-            $this->setupLogging();
-            $client = new \GuzzleHttp\Client([
-                'auth' => [$config_asterisk["username"], $config_asterisk["password"]
-                    //    [$config_asterisk["host"], $config_asterisk["port"]
-                ]]);
-            $this->ariEndpoint = $client;
 
             if ($this->isDebug) {
                 $this->logger->debug("Initializing WebSocket Information");
@@ -133,18 +129,7 @@ class PhpAri
 //        });
     }
 
-    private function setupLogging(): void
-    {
-        $this->logger = new \Monolog\Logger("appfree");
 
-        if ($this->config->general['logfile'] == "console") {
-            $logWriter = new StreamHandler("php://stdout");
-        } else {
-            $logWriter = new StreamHandler($this->config->general['logfile']);
-        }
-
-        $this->logger->pushHandler($logWriter);
-    }
 
     private function initApi(string $fqcn)
     {

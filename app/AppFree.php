@@ -19,7 +19,6 @@ class AppFree
         pcntl_async_signals(true);
 
         $appName = "appfree";
-//        $app = new AppController($appName);
 
         pcntl_signal(SIGINT, function ($signal, $info) use ($app) {
             $app->handler($signal, $info);
@@ -29,8 +28,7 @@ class AppFree
             $app->handler(SIGINT, []);
         });
 
-        $sm = Loader::load($app);
-        $app->start($phpAri, $sm);
+        $app->start();
         $app->stasisLoop->run();
     }
 }

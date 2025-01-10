@@ -27,16 +27,18 @@ class AppController implements StatefulInterface, EventReceiverInterface
 {
     public PromiseInterface $stasisClient;
     public LoopInterface $stasisLoop;
-    public Logger $stasisLogger;
-    protected Client $ariEndpoint;
+    public Logger $logger;
+    protected Client $client;
     private array $stasisChannelIDs = [];
     public StateMachineInterface $sm;
     private ?string $state = null;
-    private string $appName;
-
-    public function __construct(string $appName)
+    public function __construct(StateMachineInterface $sm, PhpAri $phpAri, Logger $stasisLogger, Client $client)
     {
-        $this->appName = $appName;
+        $this->sm = $sm;
+        $this->sm->ari = $phpAri;
+        $this->logger = $this->sm->ari->logger;
+        $this->client = $client;
+
     }
 
     /**
@@ -44,10 +46,10 @@ class AppController implements StatefulInterface, EventReceiverInterface
      */
     private function denyChannel(string $channelId): void
     {
-        $this->stasisLogger->error("Channel $channelId denied");
-        $this->sm->phpariObject->channels()->play($channelId, ['media:please-try-call-later'], null, null, null, "channel-denied");
+        $this->logger->error("Channel $channelId denied");
+        $this->sm->ari->channels()->play($channelId, ['media:please-try-call-later'], null, null, null, "channel-denied");
         sleep(2);
-        $this->sm->phpariObject->channels()->continueInDialplan($channelId);
+        $this->sm->ari->channels()->continueInDialplan($channelId);
     }
 
     /**
@@ -60,7 +62,7 @@ class AppController implements StatefulInterface, EventReceiverInterface
             return;
         }
         $this->stasisChannelIDs[] = $channelId;
-        $this->stasisLogger->notice("Added Channel", [$channelId]);
+        $this->logger->notice("Added Channel", [$channelId]);
     }
 
     public function getChannelID(): ?string
@@ -92,17 +94,12 @@ class AppController implements StatefulInterface, EventReceiverInterface
     /**
      * @throws ObjectException
      */
-    public function start(PhpAri $phpAri, $sm): void
+    public function start(): void
     {
-        $this->sm = $sm;
         $this->sm->initialize();
 
-        $this->sm->phpariObject = $phpAri;
-        $this->stasisLogger = $this->sm->phpariObject->logger;
-
-        $this->ariEndpoint = $this->sm->phpariObject->ariEndpoint;
-        $this->stasisClient = $this->sm->phpariObject->stasisClient;
-        $this->stasisLoop = $this->sm->phpariObject->stasisLoop;
+        $this->stasisClient = $this->sm->ari->stasisClient;
+        $this->stasisLoop = $this->sm->ari->stasisLoop;
     }
 
     public function getFiniteState(): ?string
@@ -124,7 +121,7 @@ class AppController implements StatefulInterface, EventReceiverInterface
      */
     public function receive(AppFreeDto|ModelInterface $eventDto): void
     {
-        $this->stasisLogger->notice("receive " . serialize($eventDto));
+        $this->logger->notice("receive " . serialize($eventDto));
         $this->myEvents($eventDto);
     }
 
@@ -146,7 +143,7 @@ class AppController implements StatefulInterface, EventReceiverInterface
         // Initial State
         /** @var \AppFree\MvgRad\States\MvgRadStateInterface $state */
         $state = $this->sm->getCurrentState();
-        $this->stasisLogger->debug("myEvents State " . $state->getName() . "::onEvent(" . json_encode($eventDto) . ")");
+        $this->logger->debug("myEvents State " . $state->getName() . "::onEvent(" . json_encode($eventDto) . ")");
 
         $state->onEvent($eventDto);
     }

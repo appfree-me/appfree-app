@@ -26,7 +26,7 @@ class OutputPin extends MvgRadState implements MvgRadStateInterface
     public function onEvent(AppFreeDto|ModelInterface $dto): mixed
     {
         $channelID = $this->appController->getChannelID();
-        $channelsApi = $this->sm->phpariObject->channels();
+        $channelsApi = $this->sm->ari->channels();
         MvgRadModule::sayDigits("7777", $channelID, $channelsApi);
 
         $channelsApi->hangup($channelID);
