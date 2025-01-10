@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace AppFree;
 
 
+use AppFreeCommands\AppFreeDto;
 use AppFreeCommands\Stasis\Events\V1\ChannelHangupRequest;
-use AppFreeCommands\Stasis\Events\V1\ChannelHangupRequst;
 use AppFreeCommands\Stasis\Events\V1\StasisEnd;
 use AppFreeCommands\Stasis\Events\V1\StasisStart;
 use Finite\Exception\ObjectException;
@@ -19,8 +19,8 @@ use PhpAri3\Interfaces\EventReceiverInterface;
 use phpari3\PhpAri;
 use Ratchet\Client\WebSocket;
 use React\EventLoop\LoopInterface;
-use stdClass;
 use Swagger\Client\ApiException;
+use Swagger\Client\Model\ModelInterface;
 
 class AppController implements StatefulInterface, EventReceiverInterface
 {
@@ -91,13 +91,12 @@ class AppController implements StatefulInterface, EventReceiverInterface
     /**
      * @throws ObjectException
      */
-    public function start(): void
+    public function start(PhpAri $phpAri, $sm): void
     {
-        $this->sm = Loader::load($this);
+        $this->sm = $sm;
         $this->sm->initialize();
 
-        $this->sm->phpariObject = new PhpAri($this->appName, $this);
-        //  $this->sm->phpariObject->init();
+        $this->sm->phpariObject = $phpAri;
         $this->stasisLogger = $this->sm->phpariObject->logger;
 
         $this->ariEndpoint = $this->sm->phpariObject->ariEndpoint;
@@ -122,10 +121,8 @@ class AppController implements StatefulInterface, EventReceiverInterface
      * @throws TransitionException
      * @throws ApiException
      */
-    public function receive(string $eventName, stdClass $eventData): void
+    public function receive(AppFreeDto|ModelInterface $eventDto): void
     {
-        $eventDto = MakeDto::make($eventData);
-
         $this->stasisLogger->notice("receive " . serialize($eventDto));
         $this->myEvents($eventDto);
     }

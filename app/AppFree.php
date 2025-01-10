@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace AppFree;
 
 use Finite\Exception\ObjectException;
+use MvgRad\Loader;
+use phpari3\PhpAri;
 
 require("vendor/lelaurent/appfree-mvgrad/vendor/autoload.php");
 class AppFree
@@ -16,7 +18,8 @@ class AppFree
     {
         pcntl_async_signals(true);
 
-        $app = new AppController("appfree");
+        $appName = "appfree";
+        $app = new AppController($appName);
 
         pcntl_signal(SIGINT, function ($signal, $info) use ($app) {
             $app->handler($signal, $info);
@@ -26,7 +29,8 @@ class AppFree
             $app->handler(SIGINT, []);
         });
 
-        $app->start();
+        $sm = Loader::load($app);
+        $app->start(new PhpAri($appName, $app), $sm);
         $app->stasisLoop->run();
     }
 }
