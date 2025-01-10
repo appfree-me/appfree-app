@@ -1,16 +1,16 @@
 <?php
 
 use AppFree\AppController;
-use AppFreeCommands\Stasis\Events\V1\ChannelDtmfReceived;
-use AppFreeCommands\Stasis\Events\V1\StasisStart;
-use AppFreeCommands\Stasis\Objects\V1\Channel;
-use MvgRad\Loader;
-use phpari3\PhpAri;
+use AppFree\AppFreeCommands\Stasis\Events\V1\ChannelDtmfReceived;
+use AppFree\AppFreeCommands\Stasis\Events\V1\StasisStart;
+use AppFree\AppFreeCommands\Stasis\Objects\V1\Channel;
+use AppFree\Ari\PhpAri;
+use AppFree\MvgRad\Loader;
 use Swagger\Client\Api\ChannelsApi;
 
-describe("appfree-mvgrad", function () {
+describe("appfree-mvgrad sample flow", function () {
 //    it('state advances until OutputPin State', function () {
-    it('state Begin plays greeting, last pin and pin prompt and calls done()', function () {
+    it('state Begin plays greeting, last pin and pin prompt and transitions to ReadBikeNumber, receives Bike Number, repeats it and does ausleihe and plays pin', function () {
         $channel = new Channel("testchannel");
 
         $getMvgRadAusleiheTestDtos = function () use ($channel) {
@@ -40,8 +40,9 @@ describe("appfree-mvgrad", function () {
         $stasisLoopMock = Mockery::mock('overload:React\EventLoop\LoopInterface');
 
         // Setup 2.
-        $mvgRadApiMock = Mockery::mock('overload:MvgRad\Api\MvgRadApi');
-        $mvgRadApiMock->shouldReceive("doAusleihe")->once()->andReturn("999");
+        $mvgRadApiMock = Mockery::mock('overload:AppFree\MvgRad\Api\MvgRadApi');
+        $mockedReturnedPin = "999";
+        $mvgRadApiMock->shouldReceive("doAusleihe")->once()->andReturn($mockedReturnedPin);
         /////
 
         $phpAriMock = Mockery::mock(PhpAri::class);
@@ -60,15 +61,15 @@ describe("appfree-mvgrad", function () {
         $channelsApiMock->shouldReceive("answer")->once();
 
         $channelsApiMock->shouldReceive("play")->withArgs(function ($arg1, $arg) {
-            return $arg === [\MvgRad\States\Begin::SOUND_MVG_GREETING];
+            return $arg === [\AppFree\MvgRad\States\Begin::SOUND_MVG_GREETING];
         });
 
         $channelsApiMock->shouldReceive("play")->withArgs(function ($arg1, $arg) {
-            return $arg === [\MvgRad\States\Begin::SOUND_MVG_LAST_PIN_IS];
+            return $arg === [\AppFree\MvgRad\States\Begin::SOUND_MVG_LAST_PIN_IS];
         });
 
         $channelsApiMock->shouldReceive("play")->withArgs(function ($arg1, $arg) {
-            return $arg === [\MvgRad\States\Begin::SOUND_MVG_PIN_PROMPT];
+            return $arg === [\AppFree\MvgRad\States\Begin::SOUND_MVG_PIN_PROMPT];
         });
 
 

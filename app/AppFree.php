@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace AppFree;
 
+use AppFree\Ari\PhpAri;
+use AppFree\MvgRad\Loader;
 use Finite\Exception\ObjectException;
-use MvgRad\Loader;
-use phpari3\PhpAri;
 
 require("vendor/lelaurent/appfree-mvgrad/vendor/autoload.php");
 class AppFree
@@ -14,7 +14,7 @@ class AppFree
     /**
      * @throws ObjectException
      */
-    public static function app()
+    public static function app(): void
     {
         pcntl_async_signals(true);
 

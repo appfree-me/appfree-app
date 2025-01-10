@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace AppFree;
 
 
-use AppFreeCommands\AppFreeDto;
-use AppFreeCommands\Stasis\Events\V1\ChannelDtmfReceived;
-use AppFreeCommands\Stasis\Events\V1\ChannelStateChange;
-use AppFreeCommands\Stasis\Events\V1\StasisEnd;
-use AppFreeCommands\Stasis\Events\V1\StasisStart;
-use AppFreeCommands\Stasis\Objects\V1\Channel;
+use AppFree\AppFreeCommands\AppFreeDto;
+use AppFree\AppFreeCommands\Stasis\Events\V1\ChannelDtmfReceived;
+use AppFree\AppFreeCommands\Stasis\Events\V1\ChannelStateChange;
+use AppFree\AppFreeCommands\Stasis\Events\V1\StasisEnd;
+use AppFree\AppFreeCommands\Stasis\Events\V1\StasisStart;
+use AppFree\AppFreeCommands\Stasis\Objects\V1\Channel;
 use Swagger\Client\Model\ApplicationReplaced;
 use Swagger\Client\Model\ModelInterface;
 

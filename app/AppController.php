@@ -5,29 +5,30 @@ declare(strict_types=1);
 namespace AppFree;
 
 
-use AppFreeCommands\AppFreeDto;
-use AppFreeCommands\Stasis\Events\V1\ChannelHangupRequest;
-use AppFreeCommands\Stasis\Events\V1\StasisEnd;
-use AppFreeCommands\Stasis\Events\V1\StasisStart;
+use AppFree\AppFreeCommands\AppFreeDto;
+use AppFree\AppFreeCommands\Stasis\Events\V1\ChannelHangupRequest;
+use AppFree\AppFreeCommands\Stasis\Events\V1\StasisEnd;
+use AppFree\AppFreeCommands\Stasis\Events\V1\StasisStart;
+use AppFree\Ari\Interfaces\EventReceiverInterface;
+use AppFree\Ari\PhpAri;
 use Finite\Exception\ObjectException;
 use Finite\Exception\TransitionException;
 use Finite\StatefulInterface;
 use Finite\StateMachine\StateMachineInterface;
+use GuzzleHttp\Client;
 use Monolog\Logger;
-use MvgRad\Loader;
-use PhpAri3\Interfaces\EventReceiverInterface;
-use phpari3\PhpAri;
 use Ratchet\Client\WebSocket;
 use React\EventLoop\LoopInterface;
+use React\Promise\PromiseInterface;
 use Swagger\Client\ApiException;
 use Swagger\Client\Model\ModelInterface;
 
 class AppController implements StatefulInterface, EventReceiverInterface
 {
-    public $stasisClient;
+    public PromiseInterface $stasisClient;
     public LoopInterface $stasisLoop;
     public Logger $stasisLogger;
-    protected $ariEndpoint;
+    protected Client $ariEndpoint;
     private array $stasisChannelIDs = [];
     public StateMachineInterface $sm;
     private ?string $state = null;
@@ -67,7 +68,7 @@ class AppController implements StatefulInterface, EventReceiverInterface
         return $this->stasisChannelIDs[0] ?? null;
     }
 
-    private function removeChannel($id)
+    private function removeChannel($id): void
     {
         $this->stasisChannelIDs = array_diff($this->stasisChannelIDs, [$id]);
     }
@@ -104,12 +105,12 @@ class AppController implements StatefulInterface, EventReceiverInterface
         $this->stasisLoop = $this->sm->phpariObject->stasisLoop;
     }
 
-    public function getFiniteState()
+    public function getFiniteState(): ?string
     {
         return $this->state;
     }
 
-    public function setFiniteState($state)
+    public function setFiniteState($state): void
     {
         $this->state = $state;
     }
@@ -143,7 +144,7 @@ class AppController implements StatefulInterface, EventReceiverInterface
         }
 
         // Initial State
-        /** @var \MvgRad\States\MvgRadStateInterface $state */
+        /** @var \AppFree\MvgRad\States\MvgRadStateInterface $state */
         $state = $this->sm->getCurrentState();
         $this->stasisLogger->debug("myEvents State " . $state->getName() . "::onEvent(" . json_encode($eventDto) . ")");
 
