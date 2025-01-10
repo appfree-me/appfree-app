@@ -11,27 +11,5 @@ use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 abstract class TestCase extends BaseTestCase
 {
 
-
-    public function getMvgRadAusleiheTestDtos() {
-
-        $channel = new Channel("testchannel");
-
-        return [
-            new StasisStart($channel),
-            new ChannelDtmfReceived($channel, "1"),
-            new ChannelDtmfReceived($channel, "2"),
-            new ChannelDtmfReceived($channel, "3"),
-            new ChannelDtmfReceived($channel, "4"),
-            new ChannelDtmfReceived($channel, "5"),
-            new StasisEnd($channel),
-        ];
-    }
-
-    public function mvgRadTest() {
-        expect(2).toBe(2);
-    }
-
-
-
     //
 }
