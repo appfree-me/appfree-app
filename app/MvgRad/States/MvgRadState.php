@@ -4,14 +4,14 @@ namespace AppFree\MvgRad\States;
 
 use AppFree\AppController;
 use AppFree\MvgRad\Api\MvgRadApi;
-use AppFree\MvgRad\MyStateMachine;
+use AppFree\MvgRad\MvgRadStateMachine;
 use Finite\State\State;
 
 class MvgRadState extends State
 {
     protected MvgRadApi $mvgRadApi;
-    protected MyStateMachine $sm;
-    protected AppController $appController;
+    protected MvgRadStateMachine $sm;
+//    protected AppController $appController;
 
     public function __construct($name, $type = self::TYPE_NORMAL, array $transitions = array(), array $properties = array())
     {
@@ -19,9 +19,8 @@ class MvgRadState extends State
         parent::__construct($name, $type, $transitions, $properties);
     }
 
-    public function init(MyStateMachine $stateMachineSample, MvgRadApi $mvgRadApi, AppController $appController): void {
+    public function init(MvgRadStateMachine $stateMachineSample, MvgRadApi $mvgRadApi): void {
         $this->mvgRadApi = $mvgRadApi;
         $this->sm = $stateMachineSample;
-        $this->appController = $appController;
     }
 }

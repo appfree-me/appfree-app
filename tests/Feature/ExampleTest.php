@@ -5,8 +5,7 @@ use AppFree\AppFreeCommands\Stasis\Events\V1\ChannelDtmfReceived;
 use AppFree\AppFreeCommands\Stasis\Events\V1\StasisStart;
 use AppFree\AppFreeCommands\Stasis\Objects\V1\Channel;
 use AppFree\Ari\PhpAri;
-use AppFree\MvgRad\Loader;
-use Illuminate\Support\Facades\App;
+use AppFree\MvgRad\Api\MvgRadApi;
 use Swagger\Client\Api\ChannelsApi;
 
 describe("appfree-mvgrad sample flow", function () {
@@ -15,7 +14,6 @@ describe("appfree-mvgrad sample flow", function () {
         $channel = new Channel("testchannel");
 
         $getMvgRadAusleiheTestDtos = function () use ($channel) {
-
             return [
                 new StasisStart($channel),
             ];
@@ -35,47 +33,58 @@ describe("appfree-mvgrad sample flow", function () {
 //$app = App::make(AppController::class);
 //        $app = resolve(AppController::class);
 //        $app = new AppController();
-        $app = resolve(AppController::class);
+        $mvgRadApiMock = Mockery::mock(MvgRadApi::class);
+        $phpAriMock = Mockery::mock(PhpAri::class);
         $channelsApiMock = Mockery::mock(ChannelsApi::class);
+        $loopMock = Mockery::mock('overload:React\EventLoop\Loop')->shouldIgnoreMissing();
+        $promiseMock = Mockery::mock('overload:React\Promise\PromiseInterface')->shouldIgnoreMissing();
 
 
-        $monologMock = Mockery::mock('overload:Monolog\Logger')->shouldIgnoreMissing();
-        $ariEndpointMock = Mockery::mock('overload:GuzzleHttp\Client');
-        $stasisClientMock = Mockery::mock('overload:React\Promise\PromiseInterface');
-        $stasisLoopMock = Mockery::mock('overload:React\EventLoop\LoopInterface');
+        $this->instance(ChannelsApi::class, $channelsApiMock);
+        $this->instance(\React\Promise\PromiseInterface::class, $promiseMock);
+        $this->instance(\React\EventLoop\Loop::class, $loopMock);
+        $this->instance(MvgRadApi::class, $mvgRadApiMock);
+        $this->instance(PhpAri::class, $phpAriMock);
+
+        $app = resolve(AppController::class);
+        $app->start();
+//        $monologMock = Mockery::mock('overload:Monolog\Logger')->shouldIgnoreMissing();
+//        $ariEndpointMock = Mockery::mock('overload:GuzzleHttp\Client');
+//        $stasisClientMock = Mockery::mock('overload:React\Promise\PromiseInterface');
+//        $stasisLoopMock = Mockery::mock('overload:React\EventLoop\LoopInterface');
 
         // Setup 2.
-        $mvgRadApiMock = Mockery::mock('overload:AppFree\MvgRad\Api\MvgRadApi');
         $mockedReturnedPin = "999";
+
+        // OKASSERT
         $mvgRadApiMock->shouldReceive("doAusleihe")->once()->andReturn($mockedReturnedPin);
         /////
-
-        $phpAriMock = Mockery::mock(PhpAri::class);
-        $phpAriMock->logger = $monologMock;
-        $phpAriMock->ariEndpoint = $ariEndpointMock;
-        $phpAriMock->stasisClient = $stasisClientMock;
-        $phpAriMock->stasisLoop = $stasisLoopMock;
+//        $phpAriMock->logger = $monologMock;
+//        $phpAriMock->ariEndpoint = $ariEndpointMock;
+//        $phpAriMock->stasisClient = $stasisClientMock;
+//        $phpAriMock->stasisLoop = $stasisLoopMock;
 
         $phpAriMock->shouldReceive('channels')->andReturn($channelsApiMock);
 
-        $sm = Loader::load($app);
+//        $sm = MvgRadStateMachineLoader::load($app);
 
-        $app->start($phpAriMock, $sm);
+
+        $app->start($phpAriMock);
 
         $channelsApiMock->shouldReceive("ring");
         $channelsApiMock->shouldReceive("answer")->once();
 
         $channelsApiMock->shouldReceive("play")->withArgs(function ($arg1, $arg) {
             return $arg === [\AppFree\MvgRad\States\Begin::SOUND_MVG_GREETING];
-        });
+        })->ordered();
 
         $channelsApiMock->shouldReceive("play")->withArgs(function ($arg1, $arg) {
             return $arg === [\AppFree\MvgRad\States\Begin::SOUND_MVG_LAST_PIN_IS];
-        });
+        })->ordered();
 
         $channelsApiMock->shouldReceive("play")->withArgs(function ($arg1, $arg) {
             return $arg === [\AppFree\MvgRad\States\Begin::SOUND_MVG_PIN_PROMPT];
-        });
+        })->ordered();
 
 
         // should transition to ... / enter state ...
@@ -86,52 +95,49 @@ describe("appfree-mvgrad sample flow", function () {
         }
 
 
-
-
         // 2. Test Ausleihe
 
 
         // Vorlesen der eingegebenen Radnummer
+        //fixme reihenfolge
         $channelsApiMock->shouldReceive("play")->withArgs(function ($arg1, $arg) {
             return $arg === ["sound:digits/1"];
-        });
+        })->ordered();
 
         $channelsApiMock->shouldReceive("play")->withArgs(function ($arg1, $arg) {
             return $arg === ["sound:digits/2"];
-        });
+        })->ordered();
 
         $channelsApiMock->shouldReceive("play")->withArgs(function ($arg1, $arg) {
             return $arg === ["sound:digits/3"];
-        });
+        })->ordered();
 
         $channelsApiMock->shouldReceive("play")->withArgs(function ($arg1, $arg) {
             return $arg === ["sound:digits/4"];
-        });
+        })->ordered();
 
         $channelsApiMock->shouldReceive("play")->withArgs(function ($arg1, $arg) {
             return $arg === ["sound:digits/5"];
-        });
+        })->ordered();
 
 
         // PIN-Ausgabe
         $channelsApiMock->shouldReceive("play")->withArgs(function ($arg1, $arg) {
             return $arg === ["sound:digits/9"];
-        });
+        })->ordered();
         $channelsApiMock->shouldReceive("play")->withArgs(function ($arg1, $arg) {
             return $arg === ["sound:digits/9"];
-        });
+        })->ordered();
         $channelsApiMock->shouldReceive("play")->withArgs(function ($arg1, $arg) {
             return $arg === ["sound:digits/9"];
-        });
+        })->ordered();
 
 
         foreach ($getMvgRadAusleiheBikeNumberEntryDtos() as $dto) {
             print(serialize($dto) . "\n");
             $app->receive($dto);
         }
-
         // 3. Test PIN Ausgabe (entfällt weil ReadBikeNumber auch OutputPin miterledigt)
-
 
 
     });

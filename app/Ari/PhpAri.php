@@ -5,6 +5,7 @@ namespace AppFree\Ari;
 
 use AppFree\Ari\Interfaces\EventReceiverInterface;
 use AppFree\MakeDto;
+use Evenement\EventEmitterInterface;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\GuClient;
@@ -26,12 +27,15 @@ use Swagger\Client\Api\PlaybacksApi;
 use Swagger\Client\Api\RecordingsApi;
 use Swagger\Client\Api\SoundsApi;
 
+
 /**
  * phpari - A PHP Class Library for interfacing with Asterisk(R) ARI
  * by Laurent Pichler, based on work by Nir Simionovich
  */
 class PhpAri
 {
+    public const EVENT_NAME_MESSAGE = 'message';
+
     private PhpAriConfig $config;
     public Logger $logger;
     public LoopInterface $stasisLoop;
@@ -41,10 +45,10 @@ class PhpAri
     public Client $ariEndpoint;
     public string $baseUri;
     private string $appName;
-    private EventReceiverInterface $eventReceiver;
+    private EventEmitterInterface $emitter;
 //    public $i = 0;
 
-    public function __construct(string $appName, EventReceiverInterface $eventReceiver, PhpAriConfig $phpAriConfig, Client $client, Logger $logger)
+    public function __construct(string $appName, EventEmitterInterface $emitter, PhpAriConfig $phpAriConfig, Client $client, Logger $logger)
     {
         try {
             /* Get our configuration */
@@ -54,7 +58,7 @@ class PhpAri
             /* Some general information */
             $this->isDebug = (bool)$this->config->general['debug'];
             $this->logfile = $this->config->general['logfile'];
-            $this->eventReceiver = $eventReceiver;
+            $this->emitter = $emitter;
             $this->ariEndpoint = $client;
 
             $this->appName = $appName;
@@ -84,7 +88,7 @@ class PhpAri
                 $this->logger->debug("Initializing WebSocket Information");
             }
 
-            $promise = \Ratchet\Client\connect($config_asterisk["transport"] . "://" . $config_asterisk["host"] . ":" . $config_asterisk["port"] . $config_asterisk["endpoint"] . "/events?api_key=" . $config_asterisk["username"] . ":" . $config_asterisk["password"] . "&app=" . $this->appName, [], [], Loop::get());
+            $promise = resolve(PromiseInterface::class);
             $promise->catch(function (Exception $err) {
                 $this->logger->error($err->getCode() . $err->getMessage());
             });
@@ -110,7 +114,7 @@ class PhpAri
                 $payload = json_decode($message->getPayload());
                 $eventDto = MakeDto::make($payload);
 
-                $this->eventReceiver->receive($eventDto);
+                $this->emitter->emit(self::EVENT_NAME_MESSAGE, $eventDto);
             });
         });
 

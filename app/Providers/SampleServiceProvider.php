@@ -4,7 +4,7 @@ namespace AppFree\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
-class AppServiceProvider extends ServiceProvider
+class SampleServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.

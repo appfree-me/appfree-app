@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace AppFree\MvgRad\States;
 
+use AppFree\AppController;
 use AppFree\AppFreeCommands\AppFreeDto;
 use Finite\Event\TransitionEvent;
 use Swagger\Client\Model\ModelInterface;
@@ -26,14 +27,13 @@ class Begin extends MvgRadState implements MvgRadStateInterface
 // später auch als library
 //
 //
-    public function onEvent(AppFreeDto|ModelInterface $dto): mixed
+    public function onEvent(AppController $appController,  AppFreeDto|ModelInterface $dto): mixed
     {
-        $controller = $this->appController;
-        $ari = $this->sm->ari;
+        $ari = $appController->ari;
 
-        $channel_id = $controller->getChannelID();
+        $channel_id = $appController->getChannelID();
         if ($channel_id === null) {
-            $controller->logger->alert(__CLASS__ . ": ignored, channel id not set ");
+            $appController->logger->alert(__CLASS__ . ": ignored, channel id not set ");
             return null;
         }
 
@@ -42,7 +42,7 @@ class Begin extends MvgRadState implements MvgRadStateInterface
         $channelsApi->ring($channel_id);
         sleep(1);
         $channelsApi->answer($channel_id);
-        $controller->logger->notice("channel_playback() play1 " . $channel_id);
+        $appController->logger->notice("channel_playback() play1 " . $channel_id);
         $channelsApi->play($channel_id, [self::SOUND_MVG_GREETING], null, null, null, "play2");
 
 //        if ($controller->mvgRadApi->hasLastPin()) {

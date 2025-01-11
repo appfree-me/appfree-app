@@ -4,6 +4,7 @@ declare (strict_types=1);
 
 namespace AppFree\MvgRad\States;
 
+use AppFree\AppController;
 use AppFree\AppFreeCommands\AppFreeDto;
 use AppFree\AppFreeCommands\Stasis\Events\V1\ChannelDtmfReceived;
 use AppFree\MvgRad\Api\MvgRadModule;
@@ -14,12 +15,12 @@ class ReadBikeNumber extends MvgRadState implements MvgRadStateInterface
 {
     private array $dtmfSequence = [];
 
-    public function handleAusleihe(): void
+    public function handleAusleihe(AppController $appController): void
     {
         $radnummer = implode($this->dtmfSequence);
 
-        $channelID = $this->appController->getChannelID();
-        $channelsApi = $this->sm->ari->channels();
+        $channelID = $appController->getChannelID();
+        $channelsApi = $appController->ari->channels();
         MvgRadModule::sayDigits($radnummer, $channelID, $channelsApi);
         $pin = $this->mvgRadApi->doAusleihe($radnummer);
         MvgRadModule::sayDigits($pin, $channelID, $channelsApi);
@@ -32,7 +33,7 @@ class ReadBikeNumber extends MvgRadState implements MvgRadStateInterface
         return true;
     }
 
-    public function onEvent(AppFreeDto|ModelInterface $dto): mixed
+    public function onEvent(AppController $appController, AppFreeDto|ModelInterface $dto): mixed
     {
         print(__CLASS__ . "->onEvent(" . json_encode($dto));
         if ($dto instanceof ChannelDtmfReceived) {
@@ -40,7 +41,7 @@ class ReadBikeNumber extends MvgRadState implements MvgRadStateInterface
         }
 
         if (count($this->dtmfSequence) === 5) {
-            $this->handleAusleihe();
+            $this->handleAusleihe($appController);
         }
 
         return null;

@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace AppFree;
 
 
+use AllowDynamicProperties;
 use AppFree\AppFreeCommands\AppFreeDto;
 use AppFree\AppFreeCommands\Stasis\Events\V1\ChannelHangupRequest;
 use AppFree\AppFreeCommands\Stasis\Events\V1\StasisEnd;
 use AppFree\AppFreeCommands\Stasis\Events\V1\StasisStart;
 use AppFree\Ari\Interfaces\EventReceiverInterface;
 use AppFree\Ari\PhpAri;
+use Evenement\EventEmitterInterface;
 use Finite\Exception\ObjectException;
 use Finite\Exception\TransitionException;
 use Finite\StatefulInterface;
@@ -23,20 +25,23 @@ use React\Promise\PromiseInterface;
 use Swagger\Client\ApiException;
 use Swagger\Client\Model\ModelInterface;
 
-class AppController implements StatefulInterface, EventReceiverInterface
+#[AllowDynamicProperties] class AppController implements StatefulInterface, EventReceiverInterface
 {
+    public PhpAri $ari;
     public PromiseInterface $stasisClient;
-    public LoopInterface $stasisLoop;
     public Logger $logger;
     protected Client $client;
     private array $stasisChannelIDs = [];
     public StateMachineInterface $sm;
     private ?string $state = null;
-    public function __construct(StateMachineInterface $sm, PhpAri $phpAri, Logger $stasisLogger, Client $client)
+    private EventEmitterInterface $emitter;
+
+    public function __construct(StateMachineInterface $sm, EventEmitterInterface $emitter, PhpAri $phpAri, Logger $stasisLogger, Client $client)
     {
         $this->sm = $sm;
-        $this->sm->ari = $phpAri;
-        $this->logger = $this->sm->ari->logger;
+        $this->emitter = $emitter;
+        $this->ari = $phpAri;
+        $this->logger = $stasisLogger;
         $this->client = $client;
 
     }
@@ -47,9 +52,9 @@ class AppController implements StatefulInterface, EventReceiverInterface
     private function denyChannel(string $channelId): void
     {
         $this->logger->error("Channel $channelId denied");
-        $this->sm->ari->channels()->play($channelId, ['media:please-try-call-later'], null, null, null, "channel-denied");
+        $this->ari->channels()->play($channelId, ['media:please-try-call-later'], null, null, null, "channel-denied");
         sleep(2);
-        $this->sm->ari->channels()->continueInDialplan($channelId);
+        $this->ari->channels()->continueInDialplan($channelId);
     }
 
     /**
@@ -96,10 +101,14 @@ class AppController implements StatefulInterface, EventReceiverInterface
      */
     public function start(): void
     {
+        $this->sm->setObject($this);
         $this->sm->initialize();
 
-        $this->stasisClient = $this->sm->ari->stasisClient;
-        $this->stasisLoop = $this->sm->ari->stasisLoop;
+        $this->stasisClient = resolve(PromiseInterface::class);
+
+        $this->emitter->on(PhpAri::EVENT_NAME_MESSAGE, function (AppFreeDto|ModelInterface $dto) {
+            $this->receive($dto);
+        });
     }
 
     public function getFiniteState(): ?string
@@ -145,6 +154,6 @@ class AppController implements StatefulInterface, EventReceiverInterface
         $state = $this->sm->getCurrentState();
         $this->logger->debug("myEvents State " . $state->getName() . "::onEvent(" . json_encode($eventDto) . ")");
 
-        $state->onEvent($eventDto);
+        $state->onEvent($this, $eventDto);
     }
 }

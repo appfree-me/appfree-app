@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace AppFree\MvgRad\States;
 
+use AppFree\AppController;
 use AppFree\AppFreeCommands\AppFreeDto;
 use AppFree\MvgRad\Api\MvgRadModule;
 use Finite\Event\TransitionEvent;
@@ -23,10 +24,10 @@ class OutputPin extends MvgRadState implements MvgRadStateInterface
         return null;
     }
 
-    public function onEvent(AppFreeDto|ModelInterface $dto): mixed
+    public function onEvent(AppController $appController, AppFreeDto|ModelInterface $dto): mixed
     {
-        $channelID = $this->appController->getChannelID();
-        $channelsApi = $this->sm->ari->channels();
+        $channelID = $appController->getChannelID();
+        $channelsApi = $appController->ari->channels();
         MvgRadModule::sayDigits("7777", $channelID, $channelsApi);
 
         $channelsApi->hangup($channelID);

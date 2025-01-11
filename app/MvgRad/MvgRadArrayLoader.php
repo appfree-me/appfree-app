@@ -19,7 +19,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  * @author Yohan Giarelli <yohan@giarel.li>
  */
-class MyArrayLoader implements LoaderInterface
+class MvgRadArrayLoader implements LoaderInterface
 {
     private array $config;
     private ?CallbackHandler $callbackHandler;

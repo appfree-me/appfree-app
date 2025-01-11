@@ -7,18 +7,19 @@ namespace AppFree\Providers;
 
 use AppFree\AppController;
 use AppFree\Ari\PhpAri;
+use AppFree\Ari\PhpAriConfig;
+use Evenement\EventEmitter;
+use GuzzleHttp\Client;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
+use Monolog\Logger;
 
 class PhpAriServiceProvider extends ServiceProvider
 {
-
     public function register(): void
     {
         $this->app->singleton(PhpAri::class, function (Application $app) {
-
-            return new PhpAri("appfree", $app->get(AppController::class)); //fixme
-//            return new Connection(config('riak'));
+            return new PhpAri("appfree", $app->get(EventEmitter::class), $app->get(PhpAriConfig::class), $app->get(Client::class), $app->get(Logger::class)); //fixme
         });
     }
 }

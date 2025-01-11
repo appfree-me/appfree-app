@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace AppFree\MvgRad\States;
 
 
+use AppFree\AppController;
 use AppFree\AppFreeCommands\AppFreeDto;
 use Finite\Event\TransitionEvent;
 use Swagger\Client\Model\ModelInterface;
@@ -33,7 +34,7 @@ class ReadDtmfState extends MvgRadState implements MvgRadStateInterface {
         // TODO: Implement after() method.
     }
 
-    public function onEvent(AppFreeDto|ModelInterface $dto): mixed
+    public function onEvent(AppController $appController, AppFreeDto|ModelInterface $dto): mixed
     {
 
 

@@ -8,10 +8,8 @@ use AppFree\Ari\PhpAri;
 use Finite\State\StateInterface;
 use Finite\StateMachine\StateMachine;
 
-class MyStateMachine extends StateMachine
+class MvgRadStateMachine extends StateMachine
 {
-    public PhpAri $ari;
-
     public function done(StateInterface $state): void
     {
         $this->apply($this->getNextTransition($state)); // nächste transition finden

@@ -2,6 +2,7 @@
 
 namespace AppFree\MvgRad\States;
 
+use AppFree\AppController;
 use AppFree\AppFreeCommands\AppFreeDto;
 use Finite\Event\TransitionEvent;
 use Finite\State\StateInterface;
@@ -14,5 +15,5 @@ interface MvgRadStateInterface extends StateInterface
     public function before(TransitionEvent $event): mixed;
     public function after(TransitionEvent $event): mixed;
 
-    public function onEvent(AppFreeDto|ModelInterface $dto): mixed;
+    public function onEvent(AppController $appController, AppFreeDto|ModelInterface $dto): mixed;
 }

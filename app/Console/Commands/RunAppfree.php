@@ -26,8 +26,8 @@ class RunAppfree extends Command
     /**
      * Execute the console command.
      */
-    public function handle(PhpAri $phpAri, AppController $app): void
+    public function handle(AppController $app): void
     {
-        AppFree::app($phpAri,  $app);
+        AppFree::app($app);
     }
 }
