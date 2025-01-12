@@ -6,19 +6,18 @@ namespace AppFree;
 
 
 use AppFree\AppFreeCommands\AppFreeDto;
+use AppFree\AppFreeCommands\Stasis\Events\V1\ApplicationReplaced;
 use AppFree\AppFreeCommands\Stasis\Events\V1\ChannelDtmfReceived;
 use AppFree\AppFreeCommands\Stasis\Events\V1\ChannelStateChange;
 use AppFree\AppFreeCommands\Stasis\Events\V1\StasisEnd;
 use AppFree\AppFreeCommands\Stasis\Events\V1\StasisStart;
 use AppFree\AppFreeCommands\Stasis\Objects\V1\Channel;
-use Swagger\Client\Model\ApplicationReplaced;
-use Swagger\Client\Model\ModelInterface;
 
 class MakeDto {
 
 
 /*todo test schreiben der korrektheit eingabe=> ausgabe prüft */
-    public static function make(\stdClass $data): AppFreeDto|ModelInterface {
+    public static function make(\stdClass $data): AppFreeDto {
 
         $mapping = [
             "StasisStart" => StasisStart::class,
@@ -29,14 +28,15 @@ class MakeDto {
         ];
 
         if (isset($data->channel->id)) {
-            $channel = new Channel($data->channel->id);
+            $channel = $data?->chanel?->id ? new Channel($data->channel->id) : null;
+            $digit = $data?->digit;
 
-            $var = new $mapping[$data->type]($channel, $data->digit ?? null); //todo fixme
+            $var = new $mapping[$data->type](...[$channel, $digit]); //todo fixme: it must be defined how each dto is instantiated
             print("Made DTO" .  serialize($var));
 
             return $var;
          } else {
-            return new ApplicationReplaced([]); //todo fixme
+            throw new \Exception("Unknown Event: ". json_encode($data)); //todo fixme: every valid message must result in valid dto
 
         }
 

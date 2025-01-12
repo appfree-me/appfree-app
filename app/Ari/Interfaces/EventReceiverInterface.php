@@ -10,5 +10,5 @@ use Swagger\Client\Model\ModelInterface;
 interface EventReceiverInterface {
 
 
-    public function receive(AppFreeDto|ModelInterface $eventDto): void;
+    public function receive(AppFreeDto $eventDto): void;
 }

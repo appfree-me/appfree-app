@@ -10,7 +10,7 @@ use Finite\Event\TransitionEvent;
 use Monolog\Logger;
 use Swagger\Client\Model\ModelInterface;
 
-class Begin extends MvgRadState implements MvgRadStateInterface
+class Begin extends MvgRadState
 {
     const SOUND_MVG_GREETING = 'sound:mvg-greeting';
     const SOUND_MVG_LAST_PIN_IS = 'sound:mvg-last-pin-is';
@@ -29,7 +29,7 @@ class Begin extends MvgRadState implements MvgRadStateInterface
 // später auch als library
 //
 //
-    public function onEvent(AppController $appController,  AppFreeDto|ModelInterface $dto): void
+    public function onEvent(AppController $appController,  AppFreeDto $dto): void
     {
         $ari = resolve(PhpAri::class);
         $logger = resolve(Logger::class);

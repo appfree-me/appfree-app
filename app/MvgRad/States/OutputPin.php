@@ -10,7 +10,7 @@ use Finite\Event\TransitionEvent;
 use Swagger\Client\Model\ModelInterface;
 
 
-class OutputPin extends MvgRadState implements MvgRadStateInterface
+class OutputPin extends MvgRadState
 {
     public function vorbedingung(): bool
     {
@@ -24,7 +24,7 @@ class OutputPin extends MvgRadState implements MvgRadStateInterface
         return null;
     }
 
-    public function onEvent(AppController $appController, AppFreeDto|ModelInterface $dto): void
+    public function onEvent(AppController $appController, AppFreeDto $dto): void
     {
         $channelID = $appController->getChannelID();
         $channelsApi = $appController->ari->channels();

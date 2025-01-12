@@ -11,7 +11,7 @@ use AppFree\MvgRad\Api\MvgRadModule;
 use Finite\Event\TransitionEvent;
 use Swagger\Client\Model\ModelInterface;
 
-class ReadBikeNumber extends MvgRadState implements MvgRadStateInterface
+class ReadBikeNumber extends MvgRadState
 {
     private array $dtmfSequence = [];
 
@@ -33,7 +33,7 @@ class ReadBikeNumber extends MvgRadState implements MvgRadStateInterface
         return true;
     }
 
-    public function onEvent(AppController $appController, AppFreeDto|ModelInterface $dto): void
+    public function onEvent(AppController $appController, AppFreeDto $dto): void
     {
         print(__CLASS__ . "->onEvent(" . json_encode($dto));
         if ($dto instanceof ChannelDtmfReceived) {

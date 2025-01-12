@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace AppFree\MvgRad;
 
+use AppFree\MvgRad\Interfaces\LoaderInterface;
+use AppFree\MvgRad\Interfaces\MvgRadStateInterface;
 use Finite\Event\Callback\CallbackBuilderFactory;
 use Finite\Event\Callback\CallbackBuilderFactoryInterface;
 use Finite\Event\CallbackHandler;
@@ -113,6 +115,7 @@ class MvgRadArrayLoader implements LoaderInterface
             $config = $resolver->resolve($config);
 
             // initialize correct state class by given definition
+            /** @var MvgRadStateInterface $state */
             $state1 = new $state($state, $config['type'], [], $config['properties']);
             $state1->init(...$this->config['init']);
 

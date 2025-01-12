@@ -104,7 +104,7 @@ use Swagger\Client\Model\ModelInterface;
 
         $this->stasisClient = resolve(PromiseInterface::class);
 
-        $this->emitter->on(PhpAri::EVENT_NAME_MESSAGE, function (AppFreeDto|ModelInterface $dto) {
+        $this->emitter->on(PhpAri::EVENT_NAME_MESSAGE, function (AppFreeDto $dto) {
             $this->receive($dto);
         });
     }
@@ -126,7 +126,7 @@ use Swagger\Client\Model\ModelInterface;
      * @throws TransitionException
      * @throws ApiException
      */
-    public function receive(AppFreeDto|ModelInterface $eventDto): void
+    public function receive(AppFreeDto $eventDto): void
     {
         $this->logger->notice("receive " . serialize($eventDto));
         $this->myEvents($eventDto);
@@ -148,7 +148,7 @@ use Swagger\Client\Model\ModelInterface;
         }
 
         // Initial State
-        /** @var \AppFree\MvgRad\States\MvgRadStateInterface $state */
+        /** @var \AppFree\MvgRad\Interfaces\MvgRadStateInterface $state */
         $state = $this->sm->getCurrentState();
         $this->logger->debug("myEvents State " . $state->getName() . "::onEvent(" . json_encode($eventDto) . ")");
 

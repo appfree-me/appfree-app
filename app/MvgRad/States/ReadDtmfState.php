@@ -9,7 +9,7 @@ use AppFree\AppFreeCommands\AppFreeDto;
 use Finite\Event\TransitionEvent;
 use Swagger\Client\Model\ModelInterface;
 
-class ReadDtmfState extends MvgRadState implements MvgRadStateInterface {
+class ReadDtmfState extends MvgRadState  {
 
     private array $dtmfSequence = [];
 
@@ -34,7 +34,7 @@ class ReadDtmfState extends MvgRadState implements MvgRadStateInterface {
         // TODO: Implement after() method.
     }
 
-    public function onEvent(AppController $appController, AppFreeDto|ModelInterface $dto): void
+    public function onEvent(AppController $appController, AppFreeDto $dto): void
     {
 
 
