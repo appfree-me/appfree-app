@@ -33,7 +33,7 @@ class ReadBikeNumber extends MvgRadState implements MvgRadStateInterface
         return true;
     }
 
-    public function onEvent(AppController $appController, AppFreeDto|ModelInterface $dto): mixed
+    public function onEvent(AppController $appController, AppFreeDto|ModelInterface $dto): void
     {
         print(__CLASS__ . "->onEvent(" . json_encode($dto));
         if ($dto instanceof ChannelDtmfReceived) {
@@ -44,7 +44,7 @@ class ReadBikeNumber extends MvgRadState implements MvgRadStateInterface
             $this->handleAusleihe($appController);
         }
 
-        return null;
+        return;
     }
 
     public function addDtmf(string $digit): void

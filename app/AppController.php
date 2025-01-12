@@ -20,7 +20,6 @@ use Finite\StateMachine\StateMachineInterface;
 use GuzzleHttp\Client;
 use Monolog\Logger;
 use Ratchet\Client\WebSocket;
-use React\EventLoop\LoopInterface;
 use React\Promise\PromiseInterface;
 use Swagger\Client\ApiException;
 use Swagger\Client\Model\ModelInterface;
@@ -43,7 +42,6 @@ use Swagger\Client\Model\ModelInterface;
         $this->ari = $phpAri;
         $this->logger = $stasisLogger;
         $this->client = $client;
-
     }
 
     /**

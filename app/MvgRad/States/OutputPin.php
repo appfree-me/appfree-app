@@ -24,7 +24,7 @@ class OutputPin extends MvgRadState implements MvgRadStateInterface
         return null;
     }
 
-    public function onEvent(AppController $appController, AppFreeDto|ModelInterface $dto): mixed
+    public function onEvent(AppController $appController, AppFreeDto|ModelInterface $dto): void
     {
         $channelID = $appController->getChannelID();
         $channelsApi = $appController->ari->channels();
@@ -33,7 +33,7 @@ class OutputPin extends MvgRadState implements MvgRadStateInterface
         $channelsApi->hangup($channelID);
 
         // TODO: Implement event() method.
-        return null;
+        return ;
     }
 
     public function after(TransitionEvent $event): mixed

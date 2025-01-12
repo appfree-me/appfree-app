@@ -34,7 +34,7 @@ class ReadDtmfState extends MvgRadState implements MvgRadStateInterface {
         // TODO: Implement after() method.
     }
 
-    public function onEvent(AppController $appController, AppFreeDto|ModelInterface $dto): mixed
+    public function onEvent(AppController $appController, AppFreeDto|ModelInterface $dto): void
     {
 
 
