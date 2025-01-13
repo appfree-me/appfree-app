@@ -99,7 +99,6 @@ describe("appfree-mvgrad sample flow", function () {
 
 
         // Vorlesen der eingegebenen Radnummer
-        //fixme reihenfolge
         $channelsApiMock->shouldReceive("play")->withArgs(function ($arg1, $arg) {
             return $arg === ["sound:digits/1"];
         })->ordered();
@@ -121,7 +120,7 @@ describe("appfree-mvgrad sample flow", function () {
         })->ordered();
 
 
-        // PIN-Ausgabe
+        // 3. PIN-Ausgabe
         $channelsApiMock->shouldReceive("play")->withArgs(function ($arg1, $arg) {
             return $arg === ["sound:digits/9"];
         })->ordered();
@@ -132,12 +131,18 @@ describe("appfree-mvgrad sample flow", function () {
             return $arg === ["sound:digits/9"];
         })->ordered();
 
+
+        // Auflegen
+        $channelsApiMock->shouldReceive("hangup")
+//            ->withArgs(function ($arg1, $arg) {
+//            return $arg === ["sound:digits/9"];
+//        })
+            ->ordered();
 
         foreach ($getMvgRadAusleiheBikeNumberEntryDtos() as $dto) {
             print(serialize($dto) . "\n");
             $app->receive($dto);
         }
-        // 3. Test PIN Ausgabe (entfällt weil ReadBikeNumber auch OutputPin miterledigt)
 
 
     });

@@ -5,6 +5,7 @@ namespace AppFree\MvgRad\States;
 
 use AppFree\AppController;
 use AppFree\AppFreeCommands\AppFreeDto;
+use AppFree\AppFreeCommands\Stasis\Events\V1\StasisStart;
 use AppFree\Ari\PhpAri;
 use Finite\Event\TransitionEvent;
 use Monolog\Logger;
@@ -31,6 +32,13 @@ class Begin extends MvgRadState
 //
     public function onEvent(AppController $appController,  AppFreeDto $dto): void
     {
+
+        // fixme: onEvent soll nicht für jeden Event neu aufgerufen werden, sondern immer nur einmal pro State enter. (onEnter?)
+        // Events während man im State ist vll bei onEvent geben?
+        // Aber besser mit unterbrochener Coroutine
+
+        if (!$dto instanceof StasisStart) { return; }
+
         $ari = resolve(PhpAri::class);
         $logger = resolve(Logger::class);
 
@@ -54,7 +62,7 @@ class Begin extends MvgRadState
 //        }
         $channelsApi->play($channel_id, [self::SOUND_MVG_PIN_PROMPT], null, null, null, "play4");
 
-        $this->sm->done($this);
+        $this->sm->done(ReadBikeNumber::class, null);
     }
 
     public function before(TransitionEvent $event): mixed

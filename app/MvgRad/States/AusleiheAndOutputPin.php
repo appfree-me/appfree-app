@@ -5,16 +5,15 @@ namespace AppFree\MvgRad\States;
 
 use AppFree\AppController;
 use AppFree\AppFreeCommands\AppFreeDto;
+use AppFree\AppFreeCommands\MvgRad\Commands\V1\MvgRadAusleiheCommand;
 use AppFree\MvgRad\Api\MvgRadModule;
 use Finite\Event\TransitionEvent;
-use Swagger\Client\Model\ModelInterface;
 
 
-class OutputPin extends MvgRadState
+class AusleiheAndOutputPin extends MvgRadState
 {
     public function vorbedingung(): bool
     {
-        // TODO: Implement vorbedingung() method.
         return true;
     }
 
@@ -28,7 +27,9 @@ class OutputPin extends MvgRadState
     {
         $channelID = $appController->getChannelID();
         $channelsApi = $appController->ari->channels();
-        MvgRadModule::sayDigits("7777", $channelID, $channelsApi);
+        /** @var MvgRadAusleiheCommand $dto */
+        $pin = $this->mvgRadApi->doAusleihe($dto->radnummer);
+        MvgRadModule::sayDigits($pin, $channelID, $channelsApi);
 
         $channelsApi->hangup($channelID);
 

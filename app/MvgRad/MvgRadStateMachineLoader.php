@@ -7,7 +7,7 @@ namespace AppFree\MvgRad;
 use AppFree\AppController;
 use AppFree\MvgRad\Api\MvgRadApi;
 use AppFree\MvgRad\States\Begin;
-use AppFree\MvgRad\States\OutputPin;
+use AppFree\MvgRad\States\AusleiheAndOutputPin;
 use AppFree\MvgRad\States\ReadBikeNumber;
 use Finite\State\StateInterface;
 use Finite\StateMachine\StateMachineInterface;
@@ -18,6 +18,8 @@ class MvgRadStateMachineLoader
 //    private ?Closure $afterFn = null;
 //
 
+public const  DTO = "dto";
+
     public static function definition(StateMachineInterface $myStateMachine, MvgRadApi $mvgRadApi)
     {
         // https://github.com/yohang/Finite/blob/master/docs/usage/symfony.rst
@@ -27,12 +29,12 @@ class MvgRadStateMachineLoader
             'states' => [
                 Begin::class => ['type' => StateInterface::TYPE_INITIAL,],
                 ReadBikeNumber::class => [],
-                OutputPin::class => ['type' => StateInterface::TYPE_FINAL,],
+                AusleiheAndOutputPin::class => ['type' => StateInterface::TYPE_FINAL,],
             ],
 
             'transitions' => [
-                self::nameTransition(Begin::class, ReadBikeNumber::class) => ['from' => [Begin::class], 'to' => ReadBikeNumber::class],
-                self::nameTransition(ReadBikeNumber::class, OutputPin::class) => ['from' => [ReadBikeNumber::class], 'to' => OutputPin::class],
+                self::nameTransition(Begin::class, ReadBikeNumber::class) => ['from' => [Begin::class], 'to' => ReadBikeNumber::class, "properties" => [self::DTO => null]],
+                self::nameTransition(ReadBikeNumber::class, AusleiheAndOutputPin::class) => ['from' => [ReadBikeNumber::class], 'to' => AusleiheAndOutputPin::class,  "properties" => [self::DTO => null]],
 
 
 //                self::nameTransition(ReadBikeNumber::class, ReadDtmfState::class) => ['from' => [ReadBikeNumber::class], 'to' => ReadDtmfState::class],
