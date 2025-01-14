@@ -37,14 +37,14 @@ class ReadDtmfState extends MvgRadState  {
         return null;
     }
 
-    public function onEvent(AppController $appController, AppFreeDto $dto): void
+    public function onEvent(AppFreeDto $dto): void
     {
 
 
         // TODO: Implement onEvent() method.
     }
 
-    public function run(AppController $appController): \Generator
+    public function run(): \Generator
     {
         // TODO: Implement run() method.
         yield;

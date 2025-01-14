@@ -21,7 +21,7 @@ class ReadBikeNumber extends MvgRadState
         return true;
     }
 
-    public function onEvent(AppController $appController, AppFreeDto $dto): void
+    public function onEvent(AppFreeDto $dto): void
     {
         print(__CLASS__ . "->onEvent(" . json_encode($dto));
         if ($dto instanceof ChannelDtmfReceived) {
@@ -50,7 +50,7 @@ class ReadBikeNumber extends MvgRadState
         return null;
     }
 
-    public function run(AppController $appController): \Generator
+    public function run(): \Generator
     {
         // TODO: Implement run() method.
         yield;

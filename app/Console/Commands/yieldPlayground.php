@@ -35,34 +35,35 @@ class yieldPlayground extends Command
     {
         $generator = $this->direct_generator("b");
         print $generator->current();
-        $generator->next();
-        print $generator->current();
+//        $generator->send("x");
+//        print $generator->current();
 
-        $generator1 = $this->direct_generator("c");
-        print $generator1->current();
-
-        $generator->send("hi");
-        $generator1 = $generator->current();
-        var_dump($generator1);
-
-        $generator->send("hi");
-
-        print json_encode($generator->current());
-        print json_encode($generator->next());
-        print json_encode($generator->current());
-        print json_encode($generator->valid());
+//        $generator->next();
+//        print $generator->current();
+//        print $generator->current();
+//
+//        $generator1 = $this->direct_generator("c");
+//        print $generator1->current();
+//
+//        $generator->send("hi");
+//        $generator1 = $generator->current();
+//        var_dump($generator1);
+//
+//        $generator->send("hi");
+//
+//        print json_encode($generator->current());
+//        print json_encode($generator->next());
+//        print json_encode($generator->current());
+//        print json_encode($generator->valid());
     }
 
     function direct_generator($b): \Generator
     {
-        print "-gen-";
-        yield "$b";
-        $a = yield "1";
+//        print "-gen-";
+        $a = yield "$b";
 
-        yield from $this->gen2();
-        yield $a;
-        yield `date`;
-        yield ["a" => "x"];
+        print ("->$a");
+        yield "c";
     }
 
     function gen2() {

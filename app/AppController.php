@@ -152,6 +152,6 @@ use Swagger\Client\Model\ModelInterface;
         $state = $this->sm->getCurrentState();
         $this->logger->debug("myEvents State " . $state->getName() . "::onEvent(" . json_encode($eventDto) . ")");
 
-        $state->onEvent($this, $eventDto);
+        $state->onEvent($eventDto);
     }
 }

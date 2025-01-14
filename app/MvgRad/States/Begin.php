@@ -26,7 +26,7 @@ class Begin extends MvgRadState
     }
 
 
-    public function run(AppController $appController): \Generator {
+    public function run(): \Generator {
         $ari = resolve(PhpAri::class);
         $logger = resolve(Logger::class);
 

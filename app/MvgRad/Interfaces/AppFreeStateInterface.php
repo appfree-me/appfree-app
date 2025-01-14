@@ -15,7 +15,7 @@ interface AppFreeStateInterface extends StateInterface
 
     public function after(TransitionEvent $event): mixed;
 
-    public function onEvent(AppController $appController, AppFreeDto $dto): void;
+    public function onEvent(AppFreeDto $dto): void;
 
-    public function run(AppController $appController): \Generator;
+    public function run(): \Generator;
 }

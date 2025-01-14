@@ -23,8 +23,9 @@ class AusleiheAndOutputPin extends MvgRadState
         return null;
     }
 
-    public function onEvent(AppController $appController, AppFreeDto $dto): void
+    public function onEvent(AppFreeDto $dto): void
     {
+        $appController = resolve(AppController::class);
         $channelID = $appController->getChannelID();
         $channelsApi = $appController->ari->channels();
         /** @var MvgRadAusleiheCommand $dto */
@@ -43,7 +44,7 @@ class AusleiheAndOutputPin extends MvgRadState
         return null;
     }
 
-    public function run(AppController $appController): \Generator
+    public function run(): \Generator
     {
         // TODO: Implement run() method.
         yield;
