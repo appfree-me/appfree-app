@@ -4,6 +4,7 @@ use AppFree\AppController;
 use AppFree\AppFreeCommands\Stasis\Events\V1\ChannelDtmfReceived;
 use AppFree\AppFreeCommands\Stasis\Events\V1\StasisStart;
 use AppFree\AppFreeCommands\Stasis\Objects\V1\Channel;
+use AppFree\AppFreeCommands\Stasis\Objects\V1\Playback;
 use AppFree\Ari\PhpAri;
 use AppFree\MvgRad\Api\MvgRadApi;
 use Swagger\Client\Api\ChannelsApi;
@@ -16,6 +17,8 @@ describe("appfree-mvgrad sample flow", function () {
         $getMvgRadAusleiheTestDtos = function () use ($channel) {
             return [
                 new StasisStart($channel),
+                new ChannelDtmfReceived($channel, "#"),
+                new \AppFree\AppFreeCommands\Stasis\Events\V1\PlaybackFinished(new Playback("play4"))
             ];
         };
         $getMvgRadAusleiheBikeNumberEntryDtos = function () use ($channel) {
