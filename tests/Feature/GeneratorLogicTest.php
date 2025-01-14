@@ -8,7 +8,7 @@ use AppFree\MvgRad\States\AppFreeState;
 
 describe("appfree generator logic", function () {
 //    it('state advances until OutputPin State', function () {
-    it('has correct logic when calling the generator', function () {
+    it('expect works as first statement and yield "call" works as last statement', function () {
         global $calledExitFn;
         $calledExitFn = false;
 
@@ -30,26 +30,18 @@ describe("appfree generator logic", function () {
 
             public function run(): \Generator
             {
-                $dto = yield;
-                expect($dto)->toBeInstanceOf(StasisStart::class);
-
                 $dto = yield "expect" => StasisEnd::class;
                 expect($dto)->toBeInstanceOf(StasisEnd::class);
                 yield "call" => function () {
-                    global $calledExitFn;
-                    $calledExitFn = true;
+                    global $calledProvidedFn;
+                    $calledProvidedFn = true;
                 };
-//            yield;
-//            expect(true)->toBeFalse("After returning the exit function, the generator should not be called again.");
             }
         };
 
         $channel = new Channel("testchannel");
         $inputDtos = [
             new StasisStart($channel),
-            new ChannelDtmfReceived($channel, "*"),
-            new ChannelDtmfReceived($channel, "2"),
-            new ChannelDtmfReceived($channel, "2"),
             new ChannelDtmfReceived($channel, "#"),
             new StasisEnd($channel),
         ];
@@ -58,6 +50,6 @@ describe("appfree generator logic", function () {
             $class->onEvent($dto);
         }
 
-        expect($calledExitFn)->toBeTrue("AppFreeState should call the exit function provided by the generator.");
+        expect($calledExitFn)->toBeTrue("AppFreeState should call the function provided by the generator.");
     });
 });

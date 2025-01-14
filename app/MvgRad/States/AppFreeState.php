@@ -13,13 +13,7 @@ abstract class AppFreeState extends State implements AppFreeStateInterface
 {
     protected ?\Generator $generator = null;
     protected $ret = null;
-    //DSL:
-    //es muss auf events gewartet werden können
-// waitFor(PlaybackFinishedEvent::class)->then()->then()->...
-// subzustände / ad-hoc-zustände zur wiederverwendung von funktionalität
-// später auch als library
-//
-//
+    protected bool $firstRun = true;
 
     public function onEvent(AppFreeDto $dto): void
     {
@@ -30,9 +24,14 @@ abstract class AppFreeState extends State implements AppFreeStateInterface
         if (!$this->generator) {
             $this->generator = $this->run();
         }
-//
+
         if (!$this->generator->valid()) {
-            throw new \Exception("State generator is not valid but has not transitioned away from state");
+            throw new \Exception("State generator is exhausted but has not transitioned away from state");
+        }
+
+        if ($this->firstRun) {
+            $this->ret = $this->generator->current();
+            $this->firstRun = false;
         }
 
         if ($this->generator->key() === "expect") {
@@ -52,33 +51,5 @@ abstract class AppFreeState extends State implements AppFreeStateInterface
         if (!$skip && !$sent) {
             $this->ret = $this->generator->send($dto);
         }
-//
-//
-//        if ($this->generator->valid()) {
-//            if (!$this->ret) {
-//                $logger->debug("Sending DTO to generator: " . $dto::class);
-//                $this->ret = $this->generator->send($dto);
-//            } else if ($this->generator->key() === "expect" && $this->ret === $dto::class) {
-//                $logger->debug("Sending DTO to generator: " . $dto::class);
-//                $this->ret = $this->generator->send($dto);
-//            } else if ($this->generator->key() !== "expect") {
-//                $logger->debug("Sending DTO to generator: " . $dto::class);
-//                $this->ret = $this->generator->send($dto);
-//                $skipped = true;
-//            } else {
-//                $logger->debug("Skipped DTO => " . $dto::class . " (expected: $this->ret )");
-//            }
-//
-//            if (is_callable($this->ret)) {
-//                $logger->debug("Calling callable from run function");
-//                $x = $this->ret;
-//                $x();
-//                $this->ret = null;
-//            }
-//            //else if ($this->generator->key() == "expected") {
-//        } else {
-//            throw new \Exception("State generator is not valid but has not transitioned away from state");
-////            resolve(Logger::class)->error("State generator is not valid but has not transitioned away from state");
-//        }
     }
 }
