@@ -49,4 +49,10 @@ class ReadBikeNumber extends MvgRadState
         // TODO: Implement begin() method.
         return null;
     }
+
+    public function run(AppController $appController): \Generator
+    {
+        // TODO: Implement run() method.
+        yield;
+    }
 }

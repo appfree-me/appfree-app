@@ -148,7 +148,7 @@ use Swagger\Client\Model\ModelInterface;
         }
 
         // Initial State
-        /** @var \AppFree\MvgRad\Interfaces\MvgRadStateInterface $state */
+        /** @var \AppFree\MvgRad\Interfaces\AppFreeStateInterface $state */
         $state = $this->sm->getCurrentState();
         $this->logger->debug("myEvents State " . $state->getName() . "::onEvent(" . json_encode($eventDto) . ")");
 

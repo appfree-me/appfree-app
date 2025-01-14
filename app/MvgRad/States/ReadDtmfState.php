@@ -22,16 +22,19 @@ class ReadDtmfState extends MvgRadState  {
     public function vorbedingung(): bool
     {
         // TODO: Implement vorbedingung() method.
+        return true;
     }
 
     public function before(TransitionEvent $event): mixed
     {
         // TODO: Implement before() method.
+        return null;
     }
 
     public function after(TransitionEvent $event): mixed
     {
         // TODO: Implement after() method.
+        return null;
     }
 
     public function onEvent(AppController $appController, AppFreeDto $dto): void
@@ -39,5 +42,11 @@ class ReadDtmfState extends MvgRadState  {
 
 
         // TODO: Implement onEvent() method.
+    }
+
+    public function run(AppController $appController): \Generator
+    {
+        // TODO: Implement run() method.
+        yield;
     }
 }

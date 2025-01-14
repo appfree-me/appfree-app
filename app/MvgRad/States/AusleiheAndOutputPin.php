@@ -42,4 +42,10 @@ class AusleiheAndOutputPin extends MvgRadState
         // TODO: Implement after() method.
         return null;
     }
+
+    public function run(AppController $appController): \Generator
+    {
+        // TODO: Implement run() method.
+        yield;
+    }
 }

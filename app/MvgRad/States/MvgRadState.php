@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AppFree\MvgRad\States;
 
 use AppFree\MvgRad\Api\MvgRadApi;
-use AppFree\MvgRad\Interfaces\MvgRadStateInterface;
+use AppFree\MvgRad\Interfaces\AppFreeStateInterface;
 use AppFree\MvgRad\MvgRadStateMachine;
 use Finite\State\State;
 
-abstract class MvgRadState extends State implements MvgRadStateInterface
+abstract class MvgRadState extends AppFreeState implements AppFreeStateInterface
 {
     protected MvgRadApi $mvgRadApi;
     protected MvgRadStateMachine $sm;
