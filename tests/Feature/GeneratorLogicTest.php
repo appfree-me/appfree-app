@@ -9,8 +9,8 @@ use AppFree\MvgRad\States\AppFreeState;
 describe("appfree generator logic", function () {
 //    it('state advances until OutputPin State', function () {
     it('expect works as first statement and yield "call" works as last statement', function () {
-        global $calledExitFn;
-        $calledExitFn = false;
+        global $calledProvidedFn;
+        $calledProvidedFn = false;
 
         $class = new class("testname") extends AppFreeState {
             public function vorbedingung(): bool
@@ -50,6 +50,6 @@ describe("appfree generator logic", function () {
             $class->onEvent($dto);
         }
 
-        expect($calledExitFn)->toBeTrue("AppFreeState should call the function provided by the generator.");
+        expect($calledProvidedFn)->toBeTrue("AppFreeState should call the function provided by the generator.");
     });
 });
