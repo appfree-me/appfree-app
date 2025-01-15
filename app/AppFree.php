@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace AppFree;
 
 use Finite\Exception\ObjectException;
+use React\EventLoop\Loop;
 
 //require("vendor/lelaurent/appfree-mvgrad/vendor/autoload.php");
 class AppFree
@@ -25,6 +26,6 @@ class AppFree
         });
 
         $app->start();
-        $app->stasisLoop->run();
+        Loop::get()->run();
     }
 }

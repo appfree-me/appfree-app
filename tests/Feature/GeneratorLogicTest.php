@@ -13,20 +13,7 @@ describe("appfree generator logic", function () {
         $calledProvidedFn = false;
 
         $class = new class("testname") extends AppFreeState {
-            public function vorbedingung(): bool
-            {
-                // TODO: Implement vorbedingung() method.
-            }
 
-            public function before(\Finite\Event\TransitionEvent $event): mixed
-            {
-                // TODO: Implement before() method.
-            }
-
-            public function after(\Finite\Event\TransitionEvent $event): mixed
-            {
-                // TODO: Implement after() method.
-            }
 
             public function run(): \Generator
             {
@@ -55,20 +42,6 @@ describe("appfree generator logic", function () {
     });
     it('processing works after call', function () {
         $class = new class("testname") extends AppFreeState {
-            public function vorbedingung(): bool
-            {
-                // TODO: Implement vorbedingung() method.
-            }
-
-            public function before(\Finite\Event\TransitionEvent $event): mixed
-            {
-                // TODO: Implement before() method.
-            }
-
-            public function after(\Finite\Event\TransitionEvent $event): mixed
-            {
-                // TODO: Implement after() method.
-            }
 
             public function run(): \Generator
             {
