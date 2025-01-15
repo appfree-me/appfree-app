@@ -5,6 +5,8 @@ namespace AppFree\appfree\modules\MvgRad\States;
 
 use AppFree\appfree\modules\Generic\States\ReadDtmfString;
 use AppFree\appfree\modules\MvgRad\Api\MvgRadModule;
+use AppFree\AppFreeCommands\AppFree\Commands\V1\ReadDtmfStringFunctionCommand;
+use AppFree\AppFreeCommands\MvgRad\Commands\V1\MvgRadAusleiheCommand;
 use AppFree\AppFreeCommands\Stasis\Events\V1\PlaybackFinished;
 use AppFree\Ari\PhpAri;
 use Finite\Event\TransitionEvent;
@@ -36,7 +38,6 @@ class Begin extends MvgRadState
             return;
         }
 
-
         $channelsApi = $ari->channels();
 
         $channelsApi->ring($channel_id);
@@ -46,7 +47,7 @@ class Begin extends MvgRadState
         $channelsApi->play($channel_id, [self::SOUND_MVG_GREETING], null, null, null, "play2");
 
         if ($this->mvgRadModule->hasLastPin()) {
-        $channelsApi->play($channel_id, [self::SOUND_MVG_LAST_PIN_IS], null, null, null, "play3");
+            $channelsApi->play($channel_id, [self::SOUND_MVG_LAST_PIN_IS], null, null, null, "play3");
             MvgRadModule::sayDigits("123", $channel_id, $channelsApi);
         }
         $channelsApi->play($channel_id, [self::SOUND_MVG_PIN_PROMPT], null, null, null, "play4");
@@ -54,7 +55,10 @@ class Begin extends MvgRadState
         yield "expect" => PlaybackFinished::class;
 
         yield "call" => function () {
-            $this->sm->done(ReadDtmfString::class, null);
+            $this->sm->done(ReadDtmfString::class,
+                new ReadDtmfStringFunctionCommand(function (array $dtmfSequence) {
+                    $this->sm->done(AusleiheAndOutputPin::class, new MvgRadAusleiheCommand(implode($dtmfSequence)));
+                }));
         };
     }
 
