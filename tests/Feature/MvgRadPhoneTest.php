@@ -37,6 +37,7 @@ describe("appfree-mvgrad sample flow", function () {
 //        $app = resolve(AppController::class);
 //        $app = new AppController();
         $mvgRadApiMock = Mockery::mock(MvgRadApi::class);
+        $mvgRadModuleMock = Mockery::mock(\AppFree\MvgRad\Api\MvgRadModule::class);
         $phpAriMock = Mockery::mock(PhpAri::class);
         $channelsApiMock = Mockery::mock(ChannelsApi::class);
         $loopMock = Mockery::mock('overload:React\EventLoop\Loop')->shouldIgnoreMissing();
@@ -44,6 +45,7 @@ describe("appfree-mvgrad sample flow", function () {
 
 
         $this->instance(ChannelsApi::class, $channelsApiMock);
+        $this->instance(\AppFree\MvgRad\Api\MvgRadModule::class, $mvgRadModuleMock);
         $this->instance(\React\Promise\PromiseInterface::class, $promiseMock);
         $this->instance(\React\EventLoop\Loop::class, $loopMock);
         $this->instance(MvgRadApi::class, $mvgRadApiMock);
@@ -58,6 +60,9 @@ describe("appfree-mvgrad sample flow", function () {
 
         // Setup 2.
         $mockedReturnedPin = "999";
+
+        $mvgRadModuleMock->shouldReceive("sayDigits");
+        $mvgRadModuleMock->shouldReceive("hasLastPin")->andReturn(true);
 
         // OKASSERT
         $mvgRadApiMock->shouldReceive("doAusleihe")->once()->andReturn($mockedReturnedPin);
@@ -77,12 +82,27 @@ describe("appfree-mvgrad sample flow", function () {
         $channelsApiMock->shouldReceive("ring");
         $channelsApiMock->shouldReceive("answer")->once();
 
+
+
+        // BEgrüssung
         $channelsApiMock->shouldReceive("play")->withArgs(function ($arg1, $arg) {
             return $arg === [\AppFree\MvgRad\States\Begin::SOUND_MVG_GREETING];
         })->ordered();
 
         $channelsApiMock->shouldReceive("play")->withArgs(function ($arg1, $arg) {
             return $arg === [\AppFree\MvgRad\States\Begin::SOUND_MVG_LAST_PIN_IS];
+        })->ordered();
+
+        // Letzte Pin
+
+        $channelsApiMock->shouldReceive("play")->withArgs(function ($arg1, $arg) {
+            return $arg === ["sound:digits/1"];
+        })->ordered();
+        $channelsApiMock->shouldReceive("play")->withArgs(function ($arg1, $arg) {
+            return $arg === ["sound:digits/2"];
+        })->ordered();
+        $channelsApiMock->shouldReceive("play")->withArgs(function ($arg1, $arg) {
+            return $arg === ["sound:digits/3"];
         })->ordered();
 
         $channelsApiMock->shouldReceive("play")->withArgs(function ($arg1, $arg) {

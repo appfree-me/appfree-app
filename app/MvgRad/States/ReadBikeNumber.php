@@ -21,19 +21,6 @@ class ReadBikeNumber extends MvgRadState
         return true;
     }
 
-    public function onEvent(AppFreeDto $dto): void
-    {
-        print(__CLASS__ . "->onEvent(" . json_encode($dto));
-        if ($dto instanceof ChannelDtmfReceived) {
-            $this->addDtmf($dto->digit);
-        }
-
-        if (count($this->dtmfSequence) === 5) {
-            $this->sm->done(AusleiheAndOutputPin::class, new MvgRadAusleiheCommand(implode($this->dtmfSequence)));
-        }
-
-        return;
-    }
 
     public function addDtmf(string $digit): void
     {
@@ -52,7 +39,15 @@ class ReadBikeNumber extends MvgRadState
 
     public function run(): \Generator
     {
-        // TODO: Implement run() method.
-        yield;
+        for ($i=0; $i<5;$i++) {
+            /** @var ChannelDtmfReceived $dto */
+            $dto = yield "expect" => ChannelDtmfReceived::class;
+            $this->addDtmf($dto->digit);
+        }
+
+        yield "call" => function () {
+            $this->sm->done(AusleiheAndOutputPin::class, new MvgRadAusleiheCommand(implode($this->dtmfSequence)));
+        };
+
     }
 }

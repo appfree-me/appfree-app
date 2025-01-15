@@ -6,6 +6,7 @@ namespace AppFree\Providers;
 
 use AppFree\AppController;
 use AppFree\MvgRad\Api\MvgRadApi;
+use AppFree\MvgRad\Api\MvgRadModule;
 use AppFree\MvgRad\MvgRadArrayLoader;
 use AppFree\MvgRad\MvgRadStateMachine;
 use AppFree\MvgRad\MvgRadStateMachineLoader;
@@ -21,7 +22,7 @@ class MvgRadStateMachineServiceProvider extends ServiceProvider
         $this->app->singleton(MvgRadStateMachine::class, function (Application $app) {
             /** @var StateMachineInterface $sm */
             $sm = new MvgRadStateMachine();
-            $l = new MvgRadArrayLoader(MvgRadStateMachineLoader::definition($sm, $app->get(MvgRadApi::class)));
+            $l = new MvgRadArrayLoader(MvgRadStateMachineLoader::definition($sm, $app->get(MvgRadApi::class), $app->get(MvgRadModule::class)));
 
 //            $sm->setObject($appController);
             $l->load($sm);

@@ -5,13 +5,6 @@ use Swagger\Client\Api\ChannelsApi;
 
 class MvgRadModule
 {
-//    private AppController $app;
-    private MvgRadApi $mvgRadApi;
-
-    function __construct()
-    {
-        $this->mvgRadApi = new MvgRadApi();
-    }
 
     public static function sayDigits(string $digitString, $channelID, ChannelsApi $channelsApi): void
     {
@@ -20,7 +13,7 @@ class MvgRadModule
         }
     }
 
-    public function hasLastPin(): bool
+    public static function hasLastPin(): bool
     {
         return true;
     }

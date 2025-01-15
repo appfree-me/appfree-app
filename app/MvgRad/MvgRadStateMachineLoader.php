@@ -6,6 +6,7 @@ namespace AppFree\MvgRad;
 
 use AppFree\AppController;
 use AppFree\MvgRad\Api\MvgRadApi;
+use AppFree\MvgRad\Api\MvgRadModule;
 use AppFree\MvgRad\States\Begin;
 use AppFree\MvgRad\States\AusleiheAndOutputPin;
 use AppFree\MvgRad\States\ReadBikeNumber;
@@ -20,12 +21,12 @@ class MvgRadStateMachineLoader
 
 public const  DTO = "dto";
 
-    public static function definition(StateMachineInterface $myStateMachine, MvgRadApi $mvgRadApi)
+    public static function definition(StateMachineInterface $myStateMachine, MvgRadApi $mvgRadApi, MvgRadModule $mvgRadModule)
     {
         // https://github.com/yohang/Finite/blob/master/docs/usage/symfony.rst
 
         return [
-            'init' => [$myStateMachine, $mvgRadApi],
+            'init' => [$myStateMachine, $mvgRadApi, $mvgRadModule],
             'states' => [
                 Begin::class => ['type' => StateInterface::TYPE_INITIAL,],
                 ReadBikeNumber::class => [],

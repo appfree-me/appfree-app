@@ -11,6 +11,7 @@ class MvgRadApi
     public function doAusleihe(string $radnummer): string
     {
 //        $this->stasisLogger->notice("Ausleihe Nummer $radnummer");
-        return "7890";
+        return "999";
     }
+
 }
