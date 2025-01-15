@@ -32,10 +32,11 @@ describe("appfree generator logic", function () {
             {
                 $dto = yield "expect" => StasisEnd::class;
                 expect($dto)->toBeInstanceOf(StasisEnd::class);
-                yield "call" => function () {
+                $dto = yield "call" => function () {
                     global $calledProvidedFn;
                     $calledProvidedFn = true;
                 };
+                expect($dto)->toBeNull();
             }
         };
 
@@ -51,5 +52,42 @@ describe("appfree generator logic", function () {
         }
 
         expect($calledProvidedFn)->toBeTrue("AppFreeState should call the function provided by the generator.");
+    });
+    it('processing works after call', function () {
+        $class = new class("testname") extends AppFreeState {
+            public function vorbedingung(): bool
+            {
+                // TODO: Implement vorbedingung() method.
+            }
+
+            public function before(\Finite\Event\TransitionEvent $event): mixed
+            {
+                // TODO: Implement before() method.
+            }
+
+            public function after(\Finite\Event\TransitionEvent $event): mixed
+            {
+                // TODO: Implement after() method.
+            }
+
+            public function run(): \Generator
+            {
+                $dto = yield "expect" => StasisEnd::class;
+                $dto = yield "call" => function () {
+                };
+                expect($dto)->toBeInstanceOf(ChannelDtmfReceived::class);
+            }
+        };
+
+        $channel = new Channel("testchannel");
+        $inputDtos = [
+            new StasisStart($channel),
+            new StasisEnd($channel),
+            new ChannelDtmfReceived($channel, "*"),
+        ];
+
+        foreach ($inputDtos as $dto) {
+            $class->onEvent($dto);
+        }
     });
 });

@@ -29,18 +29,19 @@ abstract class AppFreeState extends State implements AppFreeStateInterface
 
         if ($this->generator->key() === "expect") {
             if ($this->generator->current() === $dto::class) {
-                $sent = true;
                 $this->generator->send($dto);
+                $sent = true;
             } else {
                 $skip = true;
             }
         }
+
         if ($this->generator->key() === "call") {
             $fn = $this->generator->current();
             $fn();
         }
 
-        if (!$skip && !$sent) {
+        if (!$skip &&!$sent) {
             $this->generator->send($dto);
         }
     }
