@@ -1,7 +1,7 @@
 <?php
 
 declare(strict_types=1);
-namespace AppFree\MvgRad;
+namespace AppFree\appfree\modules\MvgRad;
 class MvgRadApp implements \Finite\StatefulInterface
 {
     private string $state;

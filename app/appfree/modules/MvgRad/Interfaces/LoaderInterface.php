@@ -1,6 +1,6 @@
 <?php
 
-namespace AppFree\MvgRad\Interfaces;
+namespace AppFree\appfree\modules\MvgRad\Interfaces;
 
 use Finite\StateMachine\StateMachineInterface;
 

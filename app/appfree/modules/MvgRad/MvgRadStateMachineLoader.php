@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-namespace AppFree\MvgRad;
+namespace AppFree\appfree\modules\MvgRad;
 
-use AppFree\AppController;
-use AppFree\MvgRad\Api\MvgRadApi;
-use AppFree\MvgRad\Api\MvgRadModule;
-use AppFree\MvgRad\States\Begin;
-use AppFree\MvgRad\States\AusleiheAndOutputPin;
-use AppFree\MvgRad\States\ReadBikeNumber;
+use AppFree\appfree\modules\Generic\States\ReadDtmfString;
+use AppFree\appfree\modules\MvgRad\Api\MvgRadApi;
+use AppFree\appfree\modules\MvgRad\Api\MvgRadModule;
+use AppFree\appfree\modules\MvgRad\States\AusleiheAndOutputPin;
+use AppFree\appfree\modules\MvgRad\States\Begin;
 use Finite\State\StateInterface;
 use Finite\StateMachine\StateMachineInterface;
 
@@ -26,16 +25,20 @@ public const  DTO = "dto";
         // https://github.com/yohang/Finite/blob/master/docs/usage/symfony.rst
 
         return [
+
+            // init function for all states unless otherwise indicated
             'init' => [$myStateMachine, $mvgRadApi, $mvgRadModule],
             'states' => [
                 Begin::class => ['type' => StateInterface::TYPE_INITIAL,],
-                ReadBikeNumber::class => [],
+
+                // init function for this state
+                ReadDtmfString::class => ['init' => [$myStateMachine]],
                 AusleiheAndOutputPin::class => ['type' => StateInterface::TYPE_FINAL,],
             ],
 
             'transitions' => [
-                self::nameTransition(Begin::class, ReadBikeNumber::class) => ['from' => [Begin::class], 'to' => ReadBikeNumber::class, "properties" => [self::DTO => null]],
-                self::nameTransition(ReadBikeNumber::class, AusleiheAndOutputPin::class) => ['from' => [ReadBikeNumber::class], 'to' => AusleiheAndOutputPin::class,  "properties" => [self::DTO => null]],
+                self::nameTransition(Begin::class, ReadDtmfString::class) => ['from' => [Begin::class], 'to' => ReadDtmfString::class, "properties" => [self::DTO => null]],
+                self::nameTransition(ReadDtmfString::class, AusleiheAndOutputPin::class) => ['from' => [ReadDtmfString::class], 'to' => AusleiheAndOutputPin::class,  "properties" => [self::DTO => null]],
 
 
 //                self::nameTransition(ReadBikeNumber::class, ReadDtmfState::class) => ['from' => [ReadBikeNumber::class], 'to' => ReadDtmfState::class],

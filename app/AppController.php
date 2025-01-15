@@ -22,7 +22,6 @@ use Monolog\Logger;
 use Ratchet\Client\WebSocket;
 use React\Promise\PromiseInterface;
 use Swagger\Client\ApiException;
-use Swagger\Client\Model\ModelInterface;
 
 #[AllowDynamicProperties] class AppController implements StatefulInterface, EventReceiverInterface
 {
@@ -148,7 +147,7 @@ use Swagger\Client\Model\ModelInterface;
         }
 
         // Initial State
-        /** @var \AppFree\MvgRad\Interfaces\AppFreeStateInterface $state */
+        /** @var \AppFree\appfree\modules\MvgRad\Interfaces\AppFreeStateInterface $state */
         $state = $this->sm->getCurrentState();
         $this->logger->debug("myEvents State " . $state->getName() . "::onEvent(" . json_encode($eventDto) . ")");
 

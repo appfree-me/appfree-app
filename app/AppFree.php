@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace AppFree;
 
-use AppFree\Ari\PhpAri;
-use AppFree\MvgRad\MvgRadStateMachineLoader;
 use Finite\Exception\ObjectException;
 
 //require("vendor/lelaurent/appfree-mvgrad/vendor/autoload.php");

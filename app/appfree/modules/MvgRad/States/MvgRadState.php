@@ -2,13 +2,12 @@
 
 declare(strict_types=1);
 
-namespace AppFree\MvgRad\States;
+namespace AppFree\appfree\modules\MvgRad\States;
 
-use AppFree\MvgRad\Api\MvgRadApi;
-use AppFree\MvgRad\Api\MvgRadModule;
-use AppFree\MvgRad\Interfaces\AppFreeStateInterface;
-use AppFree\MvgRad\MvgRadStateMachine;
-use Finite\State\State;
+use AppFree\appfree\modules\MvgRad\Api\MvgRadApi;
+use AppFree\appfree\modules\MvgRad\Api\MvgRadModule;
+use AppFree\appfree\modules\MvgRad\Interfaces\AppFreeStateInterface;
+use AppFree\appfree\modules\MvgRad\MvgRadStateMachine;
 
 abstract class MvgRadState extends AppFreeState implements AppFreeStateInterface
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace My\AwesomeBundle\EventListener;
+namespace AppFree\appfree\modules\MvgRad;
 
 use Finite\Event\TransitionEvent;
 

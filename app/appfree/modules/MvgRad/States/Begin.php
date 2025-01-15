@@ -1,11 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace AppFree\MvgRad\States;
+namespace AppFree\appfree\modules\MvgRad\States;
 
+use AppFree\appfree\modules\Generic\States\ReadDtmfString;
+use AppFree\appfree\modules\MvgRad\Api\MvgRadModule;
 use AppFree\AppFreeCommands\Stasis\Events\V1\PlaybackFinished;
 use AppFree\Ari\PhpAri;
-use AppFree\MvgRad\Api\MvgRadModule;
 use Finite\Event\TransitionEvent;
 use Monolog\Logger;
 
@@ -53,7 +54,7 @@ class Begin extends MvgRadState
         yield "expect" => PlaybackFinished::class;
 
         yield "call" => function () {
-            $this->sm->done(ReadBikeNumber::class, null);
+            $this->sm->done(ReadDtmfString::class, null);
         };
     }
 

@@ -1,10 +1,8 @@
 <?php
 
-namespace AppFree\MvgRad\Interfaces;
+namespace AppFree\appfree\modules\MvgRad\Interfaces;
 
-use AppFree\AppController;
 use AppFree\AppFreeCommands\AppFreeDto;
-use Finite\Event\TransitionEvent;
 use Finite\State\StateInterface;
 
 interface AppFreeStateInterface extends StateInterface

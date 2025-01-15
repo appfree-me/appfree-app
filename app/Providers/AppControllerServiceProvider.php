@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace AppFree\Providers;
 
 use AppFree\AppController;
+use AppFree\appfree\modules\MvgRad\MvgRadStateMachine;
 use AppFree\Ari\PhpAri;
-use AppFree\MvgRad\MvgRadStateMachine;
 use Evenement\EventEmitter;
-use Finite\StateMachine\StateMachineInterface;
 use GuzzleHttp\Client;
 use Illuminate\Support\ServiceProvider;
 use Monolog\Logger;

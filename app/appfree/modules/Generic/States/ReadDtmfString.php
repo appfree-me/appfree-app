@@ -2,24 +2,18 @@
 
 declare (strict_types=1);
 
-namespace AppFree\MvgRad\States;
+namespace AppFree\appfree\modules\Generic\States;
 
-use AppFree\AppController;
-use AppFree\AppFreeCommands\AppFreeDto;
+use AppFree\appfree\modules\MvgRad\States\AppFreeState;
+use AppFree\appfree\modules\MvgRad\States\AusleiheAndOutputPin;
+use AppFree\appfree\modules\MvgRad\States\MvgRadState;
 use AppFree\AppFreeCommands\MvgRad\Commands\V1\MvgRadAusleiheCommand;
 use AppFree\AppFreeCommands\Stasis\Events\V1\ChannelDtmfReceived;
 use Finite\Event\TransitionEvent;
 
-class ReadBikeNumber extends MvgRadState
+class ReadDtmfString extends GenericState
 {
     private array $dtmfSequence = [];
-
-
-    public function vorbedingung(): bool
-    {
-        // TODO: Implement vorbedingung() method.
-        return true;
-    }
 
 
     public function addDtmf(string $digit): void
@@ -27,15 +21,6 @@ class ReadBikeNumber extends MvgRadState
         $this->dtmfSequence[] = $digit;
     }
 
-    public function before(TransitionEvent $event): mixed
-    {
-        // TODO: Implement begin() method.
-        return null;
-    }    public function after(TransitionEvent $event): mixed
-    {
-        // TODO: Implement begin() method.
-        return null;
-    }
 
     public function run(): \Generator
     {

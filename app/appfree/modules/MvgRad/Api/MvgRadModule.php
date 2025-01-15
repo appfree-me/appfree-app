@@ -1,6 +1,6 @@
 <?php
 
-namespace AppFree\MvgRad\Api;
+namespace AppFree\appfree\modules\MvgRad\Api;
 use Swagger\Client\Api\ChannelsApi;
 
 class MvgRadModule

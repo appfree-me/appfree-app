@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace AppFree\MvgRad\States;
+namespace AppFree\appfree\modules\MvgRad\States;
 
+use AppFree\appfree\modules\MvgRad\Interfaces\AppFreeStateInterface;
 use AppFree\AppFreeCommands\AppFreeDto;
-use AppFree\MvgRad\Interfaces\AppFreeStateInterface;
 use Finite\State\State;
 use Monolog\Logger;
 

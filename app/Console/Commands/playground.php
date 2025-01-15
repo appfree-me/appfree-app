@@ -26,12 +26,12 @@ class playground extends Command
      */
     public function handle()
     {
-        $callable = $this->makeCallable();
-        $this->callable = $callable;
-        print(is_callable($callable));
-        print(is_callable($this->callable));
-        $callable2 = $this->callable;
-        $callable2();
+
+        $a = null;
+        $b = null;
+        $c = "c";
+        $x = $a ?? $b ?? 4;
+        var_dump($x);
     }
 
     private function makeCallable()

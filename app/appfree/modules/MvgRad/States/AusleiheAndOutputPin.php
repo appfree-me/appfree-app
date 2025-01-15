@@ -1,34 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace AppFree\MvgRad\States;
+namespace AppFree\appfree\modules\MvgRad\States;
 
 use AppFree\AppController;
-use AppFree\AppFreeCommands\AppFreeDto;
+use AppFree\appfree\modules\MvgRad\Api\MvgRadModule;
 use AppFree\AppFreeCommands\MvgRad\Commands\V1\MvgRadAusleiheCommand;
 use AppFree\Ari\PhpAri;
-use AppFree\MvgRad\Api\MvgRadModule;
-use Finite\Event\TransitionEvent;
 
 
 class AusleiheAndOutputPin extends MvgRadState
 {
-    public function vorbedingung(): bool
-    {
-        return true;
-    }
-
-    public function before(TransitionEvent $event): mixed
-    {
-        // TODO: Implement ausfuehren() method.
-        return null;
-    }
-
-    public function after(TransitionEvent $event): mixed
-    {
-        // TODO: Implement after() method.
-        return null;
-    }
 
     public function run(): \Generator
     {
