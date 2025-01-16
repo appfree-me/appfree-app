@@ -34,7 +34,7 @@ use Swagger\Client\Api\SoundsApi;
  */
 class PhpAri
 {
-    public const EVENT_NAME_MESSAGE = 'message';
+    public const EVENT_NAME_APPFREE_MESSAGE = 'appfreedto.message';
 
     private PhpAriConfig $config;
     public Logger $logger;
@@ -114,7 +114,7 @@ class PhpAri
                 $payload = json_decode($message->getPayload());
                 $eventDto = MakeDto::make($payload);
 
-                $this->emitter->emit(self::EVENT_NAME_MESSAGE, $eventDto);
+                $this->emitter->emit(self::EVENT_NAME_APPFREE_MESSAGE, [$eventDto]);
             });
         });
 

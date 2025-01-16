@@ -4,10 +4,9 @@ declare(strict_types=1);
 namespace AppFree\AppFreeCommands\Stasis\Events\V1;
 
 use AppFree\AppFreeCommands\AppFreeDto;
-use AppFree\AppFreeCommands\Stasis\Objects\V1\Channel;
 use AppFree\AppFreeCommands\Stasis\Objects\V1\Playback;
 
-class PlaybackFinished extends AppFreeDto
+class PlaybackStarted extends AppFreeDto
 {
     public readonly Playback $playback;
 

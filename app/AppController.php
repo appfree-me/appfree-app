@@ -18,6 +18,7 @@ use Finite\Exception\TransitionException;
 use Finite\StatefulInterface;
 use Finite\StateMachine\StateMachineInterface;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\DB;
 use Monolog\Logger;
 use Ratchet\Client\WebSocket;
 use React\Promise\PromiseInterface;
@@ -101,11 +102,11 @@ use Swagger\Client\ApiException;
         $this->sm->setObject($this);
         $this->sm->initialize();
 
-        $this->stasisClient = resolve(PromiseInterface::class);
-
-        $this->emitter->on(PhpAri::EVENT_NAME_MESSAGE, function (AppFreeDto $dto) {
+        $this->emitter->on(PhpAri::EVENT_NAME_APPFREE_MESSAGE, function (AppFreeDto $dto) {
             $this->receive($dto);
         });
+
+        $this->stasisClient = resolve(PromiseInterface::class);
     }
 
     public function getFiniteState(): ?string
@@ -131,10 +132,26 @@ use Swagger\Client\ApiException;
         $this->myEvents($eventDto);
     }
 
+    private function authenticate(string $number)
+    {
+        $user = DB::table('users')->where('mobilephone', $number)->first();
+
+        // Right now, if the user is available in the database, this counts as authentication
+        return isset($user) && $user->mobilephone === $number;
+    }
+
     private function myEvents($eventDto): void
     {
         if ($eventDto instanceof StasisStart) {
-            $this->addChannel($eventDto->channel->id);
+            if (!config('app.authenticate') || $this->authenticate($eventDto->channel->caller->number)) {
+                $this->addChannel($eventDto->channel->id);
+            } else {
+                // todo: play rejection message
+                // later may throw user to "login" state machine
+                // todo: implement transitions between state machines
+                $this->ari->channels()->hangup($eventDto->channel->id);
+                return;
+            }
         }
 
         if ($eventDto instanceof StasisEnd) {

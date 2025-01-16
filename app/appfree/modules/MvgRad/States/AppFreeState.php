@@ -26,9 +26,15 @@ abstract class AppFreeState extends State implements AppFreeStateInterface
             $this->generator = $this->run();
         }
 
+        // Only final states may implicitly skip events
         if (!$this->generator->valid()) {
-            throw new \Exception("State generator is exhausted but has not transitioned away from state");
+            if ($this->isFinal()) {
+                return;
+            } else {
+                throw new \Exception("State generator is exhausted but has not transitioned away from state");
+            }
         }
+
 
         if (!$this->isValidGeneratorKey($this->generator->key())) {
             throw new \Exception(sprintf("State generator returned invalid key: %s\nAllowed keys: %s", $this->generator->key(), implode(", ", self::VALID_KEYS)));

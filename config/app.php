@@ -123,4 +123,6 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'authenticate' => env('APP_AUTHENTICATE', false)
+
 ];
