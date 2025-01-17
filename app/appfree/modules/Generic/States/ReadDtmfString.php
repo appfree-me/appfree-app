@@ -16,13 +16,6 @@ class ReadDtmfString extends GenericState
 {
     private array $dtmfSequence = [];
 
-
-    public function addDtmf(string $digit): void
-    {
-        $this->dtmfSequence[] = $digit;
-    }
-
-
     public function run(): \Generator
     {
         /** @var ReadDtmfStringFunctionCommand $command */
@@ -31,15 +24,15 @@ class ReadDtmfString extends GenericState
         // *irgendein* nächstes
         $command = yield "expect" => ReadDtmfStringFunctionCommand::class;
 
-        for ($i=0; $i<5;$i++) {
+        for ($i=0; $i<$command->dtmfLength; $i++) {
             /** @var ChannelDtmfReceived $dto */
             $dto = yield "expect" => ChannelDtmfReceived::class;
-            $this->addDtmf($dto->digit);
+            $this->dtmfSequence[] = $dto->digit;
         }
 
         yield "call" => function() use ($command)  {
-            $closure = $command->closure;
-            $closure($this->dtmfSequence);
+            $callback = $command->callback;
+            $callback($this->dtmfSequence);
         };
 
     }

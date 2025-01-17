@@ -9,10 +9,12 @@ use AppFree\AppFreeCommands\AppFreeDto;
 
 class ReadDtmfStringFunctionCommand extends AppFreeDto
 {
-    public readonly \Closure $closure;
+    public readonly \Closure $callback;
+    public int $dtmfLength;
 
-    public function __construct(\Closure $closure) {
-        $this->closure = $closure;
+    public function __construct(int $length, \Closure $callback) {
+        $this->callback = $callback;
+        $this->dtmfLength = $length;
     }
 
     // todo: typprüfung der argumente mit reflection

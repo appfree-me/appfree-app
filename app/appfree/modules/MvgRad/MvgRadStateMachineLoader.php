@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace AppFree\appfree\modules\MvgRad;
 
+use AppFree\appfree\StateMachineContext;
 use AppFree\appfree\modules\Generic\States\ReadDtmfString;
 use AppFree\appfree\modules\MvgRad\Api\MvgRadApi;
 use AppFree\appfree\modules\MvgRad\Api\MvgRadModule;
@@ -14,9 +15,6 @@ use Finite\StateMachine\StateMachineInterface;
 
 class MvgRadStateMachineLoader
 {
-//    private ?Closure $beforeFn = null;
-//    private ?Closure $afterFn = null;
-//
 
 public const  DTO = "dto";
 
@@ -37,42 +35,12 @@ public const  DTO = "dto";
             ],
 
             'transitions' => [
+                // "dto" property will contain the dto to be passed to the next state later
                 self::nameTransition(Begin::class, ReadDtmfString::class) => ['from' => [Begin::class], 'to' => ReadDtmfString::class, "properties" => [self::DTO => null]],
                 self::nameTransition(ReadDtmfString::class, AusleiheAndOutputPin::class) => ['from' => [ReadDtmfString::class], 'to' => AusleiheAndOutputPin::class,  "properties" => [self::DTO => null]],
-
-
-//                self::nameTransition(ReadBikeNumber::class, ReadDtmfState::class) => ['from' => [ReadBikeNumber::class], 'to' => ReadDtmfState::class],
-//                self::nameTransition(ReadDtmfState::class, ReadBikeNumber::class) => ['from' => [ReadDtmfState::class], 'to' => ReadBikeNumber::class],
             ],
-            'callbacks' => [
-//                'before' => [
-//                    [
-//                        'do' => [$this, 'beforeTransition'],
-//                    ],
-//                ],
-//                'after' => [
-//                    [
-//                        'do' => [$this, 'afterTransition'],
-//                    ],
-//                ]
-            ]
         ];
     }
-
-//    public function beforeTransition(StatefulInterface $a, TransitionEvent $e): void
-//    {
-//        echo 'before transition ' . $e->getTransition()->getName(), "\n";
-//
-//        $this->sm->getCurrentState()->before($e);
-//    }
-//
-//    public function afterTransition(StatefulInterface $a, TransitionEvent $e): void
-//    {
-//        echo 'after transition ' . $e->getTransition()->getName(), "\n";
-//
-//        $this->sm->getCurrentState()->after($e);
-//    }
-
 
     public static function nameTransition(string $class1, string $class2): string
     {

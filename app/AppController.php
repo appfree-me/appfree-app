@@ -7,6 +7,7 @@ namespace AppFree;
 
 use AllowDynamicProperties;
 use AppFree\appfree\modules\MvgRad\MvgRadStateMachine;
+use AppFree\appfree\StateMachineContext;
 use AppFree\AppFreeCommands\AppFreeDto;
 use AppFree\AppFreeCommands\Stasis\Events\V1\ChannelHangupRequest;
 use AppFree\AppFreeCommands\Stasis\Events\V1\StasisEnd;
@@ -31,7 +32,7 @@ use Swagger\Client\ApiException;
     public PromiseInterface $stasisClient;
     public Logger $logger;
     protected Client $client;
-    private array $stasisChannelIDs = [];
+    private array $stateMachines = [];
     public ?StateMachineInterface $sm = null;
     private ?string $state = null;
     private EventEmitterInterface $emitter;
@@ -60,26 +61,22 @@ use Swagger\Client\ApiException;
      */
     private function prepareForCall(string $channelId): void
     {
-        if (count($this->stasisChannelIDs)) { // todo: allow multiple channels
+        if (isset($this->stateMachines["$channelId"])) {
+            //todo ist sichergestellt, dass das nicht passieren kann?
+            $this->logger->error("Channel $channelId already has a state machine, this should never happen.");
             $this->denyChannel($channelId);
             return;
         }
 
-        $this->initStateMachine();
+        $sm = $this->initStateMachine(new StateMachineContext($channelId, $this->ari->channels()));
+        $this->stateMachines["$channelId"] = $sm;
 
-        $this->stasisChannelIDs[] = $channelId;
         $this->logger->notice("Added Channel", [$channelId]);
     }
 
-    public function getChannelID(): ?string
+    private function removeStateMachine(string $channelId): void
     {
-        return $this->stasisChannelIDs[0] ?? null;
-    }
-
-    private function removeChannel($id): void
-    {
-        $this->stasisChannelIDs = array_diff($this->stasisChannelIDs, [$id]);
-        $this->uninitStateMachine();
+        unset($this->stateMachines[$channelId]);
     }
 
     public function handler(int $signo, mixed $siginfo): void
@@ -110,17 +107,12 @@ use Swagger\Client\ApiException;
         $this->stasisClient = resolve(PromiseInterface::class);
     }
 
-    public function initStateMachine(): void
+    public function initStateMachine(StateMachineContext $stateMachineContext): StateMachineInterface
     {
-        $this->statefulObject = new StatefulObject();
-        $this->sm = resolve(MvgRadStateMachine::class);
-        $this->sm->setObject($this->statefulObject);
-        $this->sm->initialize();
-    }
-
-    public function uninitStateMachine(): void
-    {
-        $this->sm = null;
+        $sm = resolve(MvgRadStateMachine::class);
+        $sm->setObject($stateMachineContext);
+        $sm->initialize();
+        return $sm;
     }
 
     public function getFiniteState(): ?string
@@ -135,7 +127,7 @@ use Swagger\Client\ApiException;
 
     /**
      *
-     * Called from phpari
+     * Called from PhpAri
      *
      * @throws TransitionException
      * @throws ApiException
@@ -159,6 +151,7 @@ use Swagger\Client\ApiException;
         if ($eventDto instanceof StasisStart) {
             if (!config('app.authenticate') || $this->authenticate($eventDto->channel->caller->number)) {
                 $this->prepareForCall($eventDto->channel->id);
+
             } else {
                 // todo: play rejection message
                 // later may throw user to "login" state machine
@@ -169,12 +162,12 @@ use Swagger\Client\ApiException;
         }
 
         if ($eventDto instanceof StasisEnd) {
-            $this->removeChannel($eventDto->channel->id);
+            $this->removeStateMachine($eventDto->channel->id);
         }
 
 
         if ($eventDto instanceof ChannelHangupRequest) {
-            $this->removeChannel($eventDto->channel->id);
+            $this->removeStateMachine($eventDto->channel->id);
         }
 
         // Initial State

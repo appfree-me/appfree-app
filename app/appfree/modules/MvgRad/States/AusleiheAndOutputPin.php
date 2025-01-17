@@ -17,20 +17,15 @@ class AusleiheAndOutputPin extends MvgRadState
 
     public function run(): \Generator
     {
+        $ctx = $this->sm->getContext();
+
         $dto = yield "expect" => MvgRadAusleiheCommand::class;
 
-        $ari = resolve(PhpAri::class);
-
-        /** @var ChannelsApi $channelsApi */
-        $channelsApi = $ari->channels();
-        $appController = resolve(AppController::class);
-        $channelID = $appController->getChannelID(); //fixme should be specific to this state machine
-        /** @var MvgRadAusleiheCommand $dto */
         $pin = $this->mvgRadApi->doAusleihe($dto->radnummer);
-        $lastPlaybackId = MvgRadModule::sayDigits($pin, $channelID, $channelsApi);
+        $lastPlaybackId = $ctx->sayDigits($pin);
 
         yield "expect" => new PlaybackFinishedExpectation($lastPlaybackId);
 
-        $channelsApi->hangup($channelID);
+        $ctx->hangup();
     }
 }

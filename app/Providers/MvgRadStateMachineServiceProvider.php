@@ -10,6 +10,7 @@ use AppFree\appfree\modules\MvgRad\Api\MvgRadModule;
 use AppFree\appfree\modules\MvgRad\MvgRadArrayLoader;
 use AppFree\appfree\modules\MvgRad\MvgRadStateMachine;
 use AppFree\appfree\modules\MvgRad\MvgRadStateMachineLoader;
+use AppFree\appfree\StateMachineContext;
 use Finite\Event\TransitionEvent;
 use Finite\StateMachine\StateMachineInterface;
 use Illuminate\Contracts\Foundation\Application;
@@ -24,7 +25,6 @@ class MvgRadStateMachineServiceProvider extends ServiceProvider
             $sm = new MvgRadStateMachine();
             $l = new MvgRadArrayLoader(MvgRadStateMachineLoader::definition($sm, $app->get(MvgRadApi::class), $app->get(MvgRadModule::class)));
 
-//            $sm->setObject($appController);
             $l->load($sm);
 
             // Used to give the previous state a way to pass a message to the next state

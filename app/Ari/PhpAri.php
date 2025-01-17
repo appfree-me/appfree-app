@@ -3,13 +3,10 @@ declare(strict_types=1);
 
 namespace AppFree\Ari;
 
-use AppFree\Ari\Interfaces\EventReceiverInterface;
 use AppFree\MakeDto;
 use Evenement\EventEmitterInterface;
 use Exception;
 use GuzzleHttp\Client;
-use GuzzleHttp\GuClient;
-use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Ratchet\Client\WebSocket;
 use Ratchet\RFC6455\Messaging\DataInterface;
@@ -35,7 +32,6 @@ use Swagger\Client\Api\SoundsApi;
 class PhpAri
 {
     public const EVENT_NAME_APPFREE_MESSAGE = 'appfreedto.message';
-
     private PhpAriConfig $config;
     public Logger $logger;
     public LoopInterface $stasisLoop;
@@ -46,7 +42,6 @@ class PhpAri
     public string $baseUri;
     private string $appName;
     private EventEmitterInterface $emitter;
-//    public $i = 0;
 
     public function __construct(string $appName, EventEmitterInterface $emitter, PhpAriConfig $phpAriConfig, Client $client, Logger $logger)
     {
@@ -71,7 +66,7 @@ class PhpAri
     }
 
     /**
-     * This function is connecting and returning a phpari client object which
+     * This function is connecting and returning a PhpAri client object which
      * transferred to any of the interfaces will assist with the connection process
      * to the Asterisk Stasis or to the Asterisk 12 web server (Channels list , End Points list)
      * etc.
@@ -81,9 +76,6 @@ class PhpAri
     public function init(): PromiseInterface
     {
         try {
-            $config = $this->config;
-            $config_asterisk = $config->asterisk_ari;
-
             if ($this->isDebug) {
                 $this->logger->debug("Initializing WebSocket Information");
             }
@@ -108,7 +100,6 @@ class PhpAri
 
     private function setupEvents(PromiseInterface $stasisClient): void
     {
-//        $this->i++;
         $this->stasisClient->then(function (WebSocket $conn) {
             $conn->on("message", function (DataInterface $message) {
                 $payload = json_decode($message->getPayload());
@@ -117,81 +108,69 @@ class PhpAri
                 $this->emitter->emit(self::EVENT_NAME_APPFREE_MESSAGE, [$eventDto]);
             });
         });
-
-        // ?
-//        $this->stasisClient->then(function ($conn) {
-//            $conn->on("request", function (DataInterface $message) {
-//                $this->logger->notice(__FILE__ . "Request received!");
-//            });
-//        });
-
-//        ??
-//        $this->stasisClient->then(function ($conn) {
-//            $conn->on("handshake", function (DataInterface $message) {
-//                $this->logger->notice(__FILE__ . "Handshake received!");
-//            });
-//        });
     }
 
-
-
-    private function initApi(string $fqcn)
+    private function getApi(string $fqcn)
     {
-        return new $fqcn($this->ariEndpoint);
+        if (!isset($this->apis[$fqcn])) {
+            $this->apis[$fqcn] = new $fqcn($this->ariEndpoint);
+        }
+
+        return $this->apis[$fqcn];
     }
 
     public function applications(): ApplicationsApi
     {
-        return $this->initApi(ApplicationsApi::class);
+        return $this->getApi(ApplicationsApi::class);
     }
 
     public function asterisk(): AsteriskApi
     {
-        return $this->initApi(AsteriskApi::class);
+        return $this->getApi(AsteriskApi::class);
     }
 
     public function bridges(): BridgesApi
     {
-        return $this->initApi(BridgesApi::class);
+        return $this->getApi(BridgesApi::class);
     }
 
     public function channels(): ChannelsApi
     {
-        return $this->initApi(ChannelsApi::class);
+        return $this->getApi(ChannelsApi::class);
     }
 
     public function devicestates(): DeviceStatesApi
     {
-        return $this->initApi(DeviceStatesApi::class);
+        return $this->getApi(DeviceStatesApi::class);
     }
 
     public function endpoints(): ?EndpointsApi
     {
-        return $this->initApi(EndpointsApi::class);
+        return $this->getApi(EndpointsApi::class);
     }
 
     public function events(): ?EndpointsApi
     {
-        return $this->initApi(EndpointsApi::class);
+        return $this->getApi(EndpointsApi::class);
     }
 
     public function mailboxes(): ?MailboxesApi
     {
-        return $this->initApi(MailboxesApi::class);
+        return $this->getApi(MailboxesApi::class);
     }
 
     public function recordings(): ?RecordingsApi
     {
-        return $this->initApi(RecordingsApi::class);
+        return $this->getApi(RecordingsApi::class);
     }
 
     public function sounds(): ?SoundsApi
     {
-        return $this->initApi(SoundsApi::class);
+        return $this->getApi(SoundsApi::class);
     }
 
     public function playbacks(): ?PlaybacksApi
     {
-        return $this->initApi(PlaybacksApi::class);
+        return $this->getApi(PlaybacksApi::class);
     }
 }
