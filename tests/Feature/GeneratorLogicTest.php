@@ -1,11 +1,14 @@
 <?php
 
 use AppFree\appfree\modules\MvgRad\States\AppFreeState;
+use AppFree\AppFreeCommands\AppFree\Expectations\PlaybackFinishedExpectation;
 use AppFree\AppFreeCommands\Stasis\Events\V1\ChannelDtmfReceived;
+use AppFree\AppFreeCommands\Stasis\Events\V1\PlaybackFinished;
 use AppFree\AppFreeCommands\Stasis\Events\V1\StasisEnd;
 use AppFree\AppFreeCommands\Stasis\Events\V1\StasisStart;
 use AppFree\AppFreeCommands\Stasis\Objects\V1\Caller;
 use AppFree\AppFreeCommands\Stasis\Objects\V1\Channel;
+use AppFree\AppFreeCommands\Stasis\Objects\V1\Playback;
 
 
 describe("appfree generator logic", function () {
@@ -21,8 +24,6 @@ describe("appfree generator logic", function () {
         $calledProvidedFn = false;
 
         $class = new class("testname") extends AppFreeState {
-
-
             public function run(): \Generator
             {
                 $dto = yield "expect" => StasisEnd::class;
@@ -50,7 +51,6 @@ describe("appfree generator logic", function () {
     });
     it('processing works after call', function () {
         $class = new class("testname") extends AppFreeState {
-
             public function run(): \Generator
             {
                 $dto = yield "expect" => StasisEnd::class;
@@ -70,5 +70,33 @@ describe("appfree generator logic", function () {
         foreach ($inputDtos as $dto) {
             $class->onEvent($dto);
         }
+    });
+
+    it('processing works for Expectation class', function () {
+        global $calledProvidedFn;
+        $calledProvidedFn = false;
+
+        $class = new class("testname") extends AppFreeState {
+            public function run(): \Generator
+            {
+                global $calledProvidedFn;
+
+                $dto = yield "expect" => new PlaybackFinishedExpectation("2");
+                expect($dto)->toBeInstanceOf(PlaybackFinished::class)
+                    ->and($dto->playback->id)->toBe("2");
+                $calledProvidedFn = true;
+            }
+        };
+
+        $channel = new Channel("testchannel", $this->caller);
+        $inputDtos = [
+            new PlaybackFinished(new Playback("1")),
+            new PlaybackFinished(new Playback("2"))
+        ];
+
+        foreach ($inputDtos as $dto) {
+            $class->onEvent($dto);
+        }
+        expect($calledProvidedFn)->toBeTrue();
     });
 });

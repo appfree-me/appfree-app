@@ -6,6 +6,7 @@ namespace AppFree\appfree\modules\MvgRad\States;
 use AppFree\appfree\modules\Generic\States\ReadDtmfString;
 use AppFree\appfree\modules\MvgRad\Api\MvgRadModule;
 use AppFree\AppFreeCommands\AppFree\Commands\V1\ReadDtmfStringFunctionCommand;
+use AppFree\AppFreeCommands\AppFree\Expectations\PlaybackFinishedExpectation;
 use AppFree\AppFreeCommands\MvgRad\Commands\V1\MvgRadAusleiheCommand;
 use AppFree\AppFreeCommands\Stasis\Events\V1\PlaybackFinished;
 use AppFree\Ari\PhpAri;
@@ -51,7 +52,7 @@ class Begin extends MvgRadState
         }
         $channelsApi->play($channel_id, [self::SOUND_MVG_PIN_PROMPT], null, null, null, "play4");
 
-        yield "expect" => PlaybackFinished::class;
+        yield "expect" => new PlaybackFinishedExpectation("play4");
 
         yield "call" => function () {
             $this->sm->done(ReadDtmfString::class,

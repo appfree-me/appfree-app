@@ -6,7 +6,6 @@ namespace AppFree;
 
 
 use AllowDynamicProperties;
-use AppFree\appfree\modules\MvgRad\Interfaces\AppFreeStateInterface;
 use AppFree\appfree\modules\MvgRad\MvgRadStateMachine;
 use AppFree\AppFreeCommands\AppFreeDto;
 use AppFree\AppFreeCommands\Stasis\Events\V1\ChannelHangupRequest;
@@ -20,7 +19,6 @@ use Finite\Exception\TransitionException;
 use Finite\StatefulInterface;
 use Finite\StateMachine\StateMachineInterface;
 use GuzzleHttp\Client;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Monolog\Logger;
 use Ratchet\Client\WebSocket;
@@ -112,14 +110,16 @@ use Swagger\Client\ApiException;
         $this->stasisClient = resolve(PromiseInterface::class);
     }
 
-    public function initStateMachine(): void {
+    public function initStateMachine(): void
+    {
         $this->statefulObject = new StatefulObject();
         $this->sm = resolve(MvgRadStateMachine::class);
         $this->sm->setObject($this->statefulObject);
         $this->sm->initialize();
     }
 
-    public function uninitStateMachine(): void {
+    public function uninitStateMachine(): void
+    {
         $this->sm = null;
     }
 
@@ -187,6 +187,5 @@ use Swagger\Client\ApiException;
         } else {
             $this->logger->error("AppController::myEvents:: (State not initialized)::onEvent(" . json_encode($eventDto) . ")");
         }
-
     }
 }

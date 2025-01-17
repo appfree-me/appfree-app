@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace AppFree\appfree\modules\MvgRad\States;
 
 use AppFree\appfree\modules\MvgRad\Interfaces\AppFreeStateInterface;
+use AppFree\AppFreeCommands\AppFree\Expectations\Expectation;
 use AppFree\AppFreeCommands\AppFreeDto;
 use Finite\State\State;
 use Monolog\Logger;
@@ -29,6 +30,9 @@ abstract class AppFreeState extends State implements AppFreeStateInterface
         // Only final states may implicitly skip events
         if (!$this->generator->valid()) {
             if ($this->isFinal()) {
+                // Ignore rest of events for this state machine.
+                // Could be a problem if a new call comes in and the new state machine is not yet initialized
+                // todo: instead of silently dropping the event, actively refuse it (AppController can re-queue it)
                 return;
             } else {
                 throw new \Exception("State generator is exhausted but has not transitioned away from state");
@@ -37,11 +41,21 @@ abstract class AppFreeState extends State implements AppFreeStateInterface
 
 
         if (!$this->isValidGeneratorKey($this->generator->key())) {
-            throw new \Exception(sprintf("State generator returned invalid key: %s\nAllowed keys: %s", $this->generator->key(), implode(", ", self::VALID_KEYS)));
+            throw new \Exception(sprintf("State generator returned invalid key %s. Allowed keys: %s", $this->generator->key(), implode(", ", self::VALID_KEYS)));
         }
 
+        // Allow Expectation class match or direct class match
         if ($this->generator->key() === self::KEY_EXPECT) {
-            if ($this->generator->current() === $dto::class) {
+            $current = $this->generator->current();
+            if ($current instanceof Expectation) {
+                if ($current->hasMatch($dto)) {
+                    $this->generator->send($dto);
+                    $sent = true;
+                } else {
+                    $skip = true;
+                }
+//                throw new \Exception("State yielded expect, expected value of type " . Expectation::class . ", got " . gettype($current) === "object" ? get_class($current) : serialize($current));
+            } else if ($this->generator->current() === $dto::class) {
                 $this->generator->send($dto);
                 $sent = true;
             } else {
