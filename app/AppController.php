@@ -6,6 +6,8 @@ namespace AppFree;
 
 
 use AllowDynamicProperties;
+use AppFree\appfree\modules\MvgRad\Interfaces\AppFreeStateInterface;
+use AppFree\appfree\modules\MvgRad\MvgRadStateMachine;
 use AppFree\AppFreeCommands\AppFreeDto;
 use AppFree\AppFreeCommands\Stasis\Events\V1\ChannelHangupRequest;
 use AppFree\AppFreeCommands\Stasis\Events\V1\StasisEnd;
@@ -18,6 +20,7 @@ use Finite\Exception\TransitionException;
 use Finite\StatefulInterface;
 use Finite\StateMachine\StateMachineInterface;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Monolog\Logger;
 use Ratchet\Client\WebSocket;
@@ -31,13 +34,12 @@ use Swagger\Client\ApiException;
     public Logger $logger;
     protected Client $client;
     private array $stasisChannelIDs = [];
-    public StateMachineInterface $sm;
+    public ?StateMachineInterface $sm = null;
     private ?string $state = null;
     private EventEmitterInterface $emitter;
 
-    public function __construct(StateMachineInterface $sm, EventEmitterInterface $emitter, PhpAri $phpAri, Logger $stasisLogger, Client $client)
+    public function __construct(EventEmitterInterface $emitter, PhpAri $phpAri, Logger $stasisLogger, Client $client)
     {
-        $this->sm = $sm;
         $this->emitter = $emitter;
         $this->ari = $phpAri;
         $this->logger = $stasisLogger;
@@ -58,12 +60,15 @@ use Swagger\Client\ApiException;
     /**
      * @throws ApiException
      */
-    private function addChannel(string $channelId): void
+    private function prepareForCall(string $channelId): void
     {
         if (count($this->stasisChannelIDs)) { // todo: allow multiple channels
             $this->denyChannel($channelId);
             return;
         }
+
+        $this->initStateMachine();
+
         $this->stasisChannelIDs[] = $channelId;
         $this->logger->notice("Added Channel", [$channelId]);
     }
@@ -76,6 +81,7 @@ use Swagger\Client\ApiException;
     private function removeChannel($id): void
     {
         $this->stasisChannelIDs = array_diff($this->stasisChannelIDs, [$id]);
+        $this->uninitStateMachine();
     }
 
     public function handler(int $signo, mixed $siginfo): void
@@ -99,14 +105,22 @@ use Swagger\Client\ApiException;
      */
     public function start(): void
     {
-        $this->sm->setObject($this);
-        $this->sm->initialize();
-
         $this->emitter->on(PhpAri::EVENT_NAME_APPFREE_MESSAGE, function (AppFreeDto $dto) {
             $this->receive($dto);
         });
 
         $this->stasisClient = resolve(PromiseInterface::class);
+    }
+
+    public function initStateMachine(): void {
+        $this->statefulObject = new StatefulObject();
+        $this->sm = resolve(MvgRadStateMachine::class);
+        $this->sm->setObject($this->statefulObject);
+        $this->sm->initialize();
+    }
+
+    public function uninitStateMachine(): void {
+        $this->sm = null;
     }
 
     public function getFiniteState(): ?string
@@ -144,7 +158,7 @@ use Swagger\Client\ApiException;
     {
         if ($eventDto instanceof StasisStart) {
             if (!config('app.authenticate') || $this->authenticate($eventDto->channel->caller->number)) {
-                $this->addChannel($eventDto->channel->id);
+                $this->prepareForCall($eventDto->channel->id);
             } else {
                 // todo: play rejection message
                 // later may throw user to "login" state machine
@@ -164,10 +178,15 @@ use Swagger\Client\ApiException;
         }
 
         // Initial State
-        /** @var \AppFree\appfree\modules\MvgRad\Interfaces\AppFreeStateInterface $state */
-        $state = $this->sm->getCurrentState();
-        $this->logger->debug("myEvents State " . $state->getName() . "::onEvent(" . json_encode($eventDto) . ")");
 
-        $state->onEvent($eventDto);
+        if (isset($this->sm)) {
+            $state = $this->sm->getCurrentState();
+            $this->logger->debug("AppController::myEvents::" . $state->getName() . "::onEvent(" . json_encode($eventDto) . ")");
+
+            $state->onEvent($eventDto);
+        } else {
+            $this->logger->error("AppController::myEvents:: (State not initialized)::onEvent(" . json_encode($eventDto) . ")");
+        }
+
     }
 }

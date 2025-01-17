@@ -19,13 +19,15 @@ class MvgRadStateMachineServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->app->singleton(MvgRadStateMachine::class, function (Application $app) {
+        $this->app->bind(MvgRadStateMachine::class, function (Application $app) {
             /** @var StateMachineInterface $sm */
             $sm = new MvgRadStateMachine();
             $l = new MvgRadArrayLoader(MvgRadStateMachineLoader::definition($sm, $app->get(MvgRadApi::class), $app->get(MvgRadModule::class)));
 
 //            $sm->setObject($appController);
             $l->load($sm);
+
+            // Used to give the previous state a way to pass a message to the next state
             $sm->getDispatcher()->addListener("finite.post_transition", function (TransitionEvent $e) {
                 /** @var AppController $appController */
                 $appController = resolve(AppController::class);

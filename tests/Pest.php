@@ -14,6 +14,8 @@
 pest()->extend(Tests\TestCase::class)
     ->beforeAll(function () {
 
+        //todo does not work when using PhpStorm "Main" Profile for test debugging
+
         // Disable user checking
         config()->set("app.authenticate", false);
     })

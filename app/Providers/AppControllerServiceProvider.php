@@ -18,7 +18,7 @@ class AppControllerServiceProvider extends ServiceProvider
         $this->app->singleton(AppController::class, function ($app) {
             $emitter = $app->get(EventEmitter::class);
 
-            return new AppController($app->get(MvgRadStateMachine::class), $emitter, $app->get(PhpAri::class), $app->get(Logger::class), $app->get(Client::class));
+            return new AppController($emitter, $app->get(PhpAri::class), $app->get(Logger::class), $app->get(Client::class));
         });
     }
 }
