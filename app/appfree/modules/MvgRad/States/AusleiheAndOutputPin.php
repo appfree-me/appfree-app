@@ -8,6 +8,7 @@ use AppFree\appfree\modules\MvgRad\Api\MvgRadModule;
 use AppFree\AppFreeCommands\MvgRad\Commands\V1\MvgRadAusleiheCommand;
 use AppFree\AppFreeCommands\Stasis\Events\V1\PlaybackFinished;
 use AppFree\Ari\PhpAri;
+use Swagger\Client\Api\ChannelsApi;
 
 
 class AusleiheAndOutputPin extends MvgRadState
@@ -19,6 +20,7 @@ class AusleiheAndOutputPin extends MvgRadState
 
         $ari = resolve(PhpAri::class);
 
+        /** @var ChannelsApi $channelsApi */
         $channelsApi = $ari->channels();
         $appController = resolve(AppController::class);
         $channelID = $appController->getChannelID(); //fixme should be specific to this state machine
