@@ -14,7 +14,6 @@ describe("appfree-mvgrad sample flow", function () {
 //    it('state advances until OutputPin State', function () {
     it('state Begin plays greeting, last pin and pin prompt and transitions to ReadBikeNumber, receives Bike Number, repeats it and does ausleihe and plays pin', function () {
         $channel = new Channel("testchannel", new Caller("12", "12"));
-        config()->set("app.authenticate", false);
 
         $getMvgRadAusleiheTestDtos = function () use ($channel) {
             return [

@@ -4,9 +4,14 @@ use AppFree\appfree\modules\MvgRad\States\AppFreeState;
 use AppFree\AppFreeCommands\Stasis\Events\V1\ChannelDtmfReceived;
 use AppFree\AppFreeCommands\Stasis\Events\V1\StasisEnd;
 use AppFree\AppFreeCommands\Stasis\Events\V1\StasisStart;
+use AppFree\AppFreeCommands\Stasis\Objects\V1\Caller;
 use AppFree\AppFreeCommands\Stasis\Objects\V1\Channel;
 
 describe("appfree generator logic", function () {
+    beforeEach(function () {
+        $this->caller = new Caller("c1", "c1");
+        $this->channel = new Channel("testchannel", $this->caller);
+    });
 //    it('state advances until OutputPin State', function () {
     it('expect works as first statement and yield "call" works as last statement', function () {
         global $calledProvidedFn;
@@ -27,11 +32,11 @@ describe("appfree generator logic", function () {
             }
         };
 
-        $channel = new Channel("testchannel");
+
         $inputDtos = [
-            new StasisStart($channel),
-            new ChannelDtmfReceived($channel, "#"),
-            new StasisEnd($channel),
+            new StasisStart($this->channel),
+            new ChannelDtmfReceived($this->channel, "#"),
+            new StasisEnd($this->channel),
         ];
 
         foreach ($inputDtos as $dto) {
@@ -52,7 +57,7 @@ describe("appfree generator logic", function () {
             }
         };
 
-        $channel = new Channel("testchannel");
+        $channel = new Channel("testchannel", $this->caller);
         $inputDtos = [
             new StasisStart($channel),
             new StasisEnd($channel),

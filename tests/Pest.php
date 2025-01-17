@@ -12,6 +12,11 @@
 */
 
 pest()->extend(Tests\TestCase::class)
+    ->beforeAll(function () {
+
+        // Disable user checking
+        config()->set("app.authenticate", false);
+    })
  // ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
     ->in('Feature');
 
