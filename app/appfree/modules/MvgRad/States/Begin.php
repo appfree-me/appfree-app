@@ -41,9 +41,8 @@ class Begin extends MvgRadState
         $channelsApi = $ari->channels();
 
         $channelsApi->ring($channel_id);
-        sleep(1);
+//        sleep(1);
         $channelsApi->answer($channel_id);
-        $logger->notice("channel_playback() play1 " . $channel_id);
         $channelsApi->play($channel_id, [self::SOUND_MVG_GREETING], null, null, null, "play2");
 
         if ($this->mvgRadModule->hasLastPin()) {

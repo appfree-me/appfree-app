@@ -1,7 +1,9 @@
 <?php
 
 use AppFree\AppController;
+use AppFree\appfree\modules\Generic\States\ReadDtmfString;
 use AppFree\appfree\modules\MvgRad\Api\MvgRadApi;
+use AppFree\appfree\modules\MvgRad\States\Begin;
 use AppFree\AppFreeCommands\Stasis\Events\V1\ChannelDtmfReceived;
 use AppFree\AppFreeCommands\Stasis\Events\V1\StasisStart;
 use AppFree\AppFreeCommands\Stasis\Objects\V1\Caller;
@@ -53,6 +55,7 @@ describe("appfree-mvgrad sample flow", function () {
         $this->instance(PhpAri::class, $phpAriMock);
 
         $app = resolve(AppController::class);
+        $sm = resolve(\AppFree\appfree\modules\MvgRad\MvgRadStateMachine::class);
         $app->start();
 //        $monologMock = Mockery::mock('overload:Monolog\Logger')->shouldIgnoreMissing();
 //        $ariEndpointMock = Mockery::mock('overload:GuzzleHttp\Client');
@@ -80,33 +83,36 @@ describe("appfree-mvgrad sample flow", function () {
 
         $app->start($phpAriMock);
 
-        $channelsApiMock->shouldReceive("ring");
-        $channelsApiMock->shouldReceive("answer")->once();
+        $channelsApiMock->shouldReceive("ring")->ordered(Begin::class);
+        $channelsApiMock->shouldReceive("answer")->once()->ordered(Begin::class);
 
 
         // BEgrüssung
-        $channelsApiMock->shouldReceive("play")->withArgs(function ($arg1, $arg) {
-            return $arg === [\AppFree\appfree\modules\MvgRad\States\Begin::SOUND_MVG_GREETING];
-        })->ordered()->once();
 
         $channelsApiMock->shouldReceive("play")->withArgs(function ($arg1, $arg) {
-            return $arg === [\AppFree\appfree\modules\MvgRad\States\Begin::SOUND_MVG_LAST_PIN_IS];
-        })->ordered()->once();
+            return $arg === [Begin::SOUND_MVG_GREETING];
+        })->ordered(Begin::class);
+
+        $channelsApiMock->shouldReceive("play")->withArgs(function ($arg1, $arg) {
+            return $arg === [Begin::SOUND_MVG_LAST_PIN_IS];
+        })->once()->ordered(Begin::class);
+
+        $channelsApiMock->shouldReceive("play")->withArgs(function ($arg1, $arg) {
+            return $arg === [Begin::SOUND_MVG_PIN_PROMPT];
+        })->once()->ordered(Begin::class);
 
         // Vorlesen Letzte Pin
         $channelsApiMock->shouldReceive("play")->withArgs(function ($arg1, $arg) {
             return $arg === ["sound:digits/1"];
-        })->ordered()->once();
+        })->once()->ordered(Begin::class);
         $channelsApiMock->shouldReceive("play")->withArgs(function ($arg1, $arg) {
             return $arg === ["sound:digits/2"];
-        })->ordered()->once();
+        })->once()->ordered(Begin::class);
         $channelsApiMock->shouldReceive("play")->withArgs(function ($arg1, $arg) {
             return $arg === ["sound:digits/3"];
-        })->ordered()->once();
+        })->once()->ordered(Begin::class);
 
-        $channelsApiMock->shouldReceive("play")->withArgs(function ($arg1, $arg) {
-            return $arg === [\AppFree\appfree\modules\MvgRad\States\Begin::SOUND_MVG_PIN_PROMPT];
-        })->ordered()->once();
+
 
 
 
@@ -139,15 +145,19 @@ describe("appfree-mvgrad sample flow", function () {
         // 3. PIN-Ausgabe
         $channelsApiMock->shouldReceive("play")->withArgs(function ($arg1, $arg) {
             return $arg === ["sound:digits/9"];
-        })->ordered()->times(3);
+        })->times(3)->ordered(\AppFree\appfree\modules\MvgRad\States\AusleiheAndOutputPin::class);
 
 
         // Auflegen
-        $channelsApiMock->shouldReceive("hangup")
+        $channelsApiMock->shouldReceive("hangup");//->ordered(\AppFree\appfree\modules\MvgRad\States\AusleiheAndOutputPin::class);
 //            ->withArgs(function ($arg1, $arg) {
 //            return $arg === ["sound:digits/9"];
 //        })
-            ->ordered();
+
+//        expect($sm->getCurrentState()->getName())->toBe(Begin::class);
+
+
+
 
 
         // should transition to ... / enter state ...
@@ -156,6 +166,7 @@ describe("appfree-mvgrad sample flow", function () {
             $app->receive($dto);
 //            sleep(1);
         }
+//        expect($sm->getCurrentState()->getName())->toBe(ReadDtmfString::class);
 
         foreach ($getMvgRadAusleiheBikeNumberEntryDtos() as $dto) {
             print(serialize($dto) . "\n");
