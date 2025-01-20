@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Test a new migration by applying it, rolling it back, and re-applying it 
+# This tests the down() function also, which often gets overlooked
+has=$( php artisan migrate:status --pending|grep -q Pending)
+if [[ $has == "0" ]]; then 
+php artisan migrate  && \
+php artisan migrate:rollback --step=1 && \
+php artisan migrate 
+fi

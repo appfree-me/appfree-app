@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace AppFree;
 
 
-use AllowDynamicProperties;
 use AppFree\appfree\modules\MvgRad\MvgRadStateMachine;
 use AppFree\appfree\StateMachineContext;
 use AppFree\AppFreeCommands\AppFreeDto;
@@ -20,20 +19,20 @@ use Finite\Exception\TransitionException;
 use Finite\StatefulInterface;
 use Finite\StateMachine\StateMachineInterface;
 use GuzzleHttp\Client;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\DB;
 use Monolog\Logger;
 use Ratchet\Client\WebSocket;
 use React\Promise\PromiseInterface;
 use Swagger\Client\ApiException;
 
-#[AllowDynamicProperties] class AppController implements StatefulInterface, EventReceiverInterface
+class AppController implements StatefulInterface, EventReceiverInterface
 {
     public PhpAri $ari;
     public PromiseInterface $stasisClient;
     public Logger $logger;
     protected Client $client;
     private array $stateMachines = [];
-    public ?StateMachineInterface $sm = null;
     private ?string $state = null;
     private EventEmitterInterface $emitter;
 
@@ -96,7 +95,6 @@ use Swagger\Client\ApiException;
     }
 
     /**
-     * @throws ObjectException
      */
     public function start(): void
     {
@@ -110,8 +108,10 @@ use Swagger\Client\ApiException;
     public function initStateMachine(StateMachineContext $stateMachineContext): StateMachineInterface
     {
         $sm = resolve(MvgRadStateMachine::class);
-        $sm->setObject($stateMachineContext);
+        $sm->setObject(new StatefulObject());
+        $sm->setContext($stateMachineContext);
         $sm->initialize();
+
         return $sm;
     }
 
@@ -138,20 +138,23 @@ use Swagger\Client\ApiException;
         $this->myEvents($eventDto);
     }
 
-    private function authenticate(string $number)
+    public static function getUserId(string $number): ?int
     {
         $user = DB::table('users')->where('mobilephone', $number)->first();
 
         // Right now, if the user is available in the database, this counts as authentication
-        return isset($user) && $user->mobilephone === $number;
+        if( isset($user) && $user->mobilephone === $number) {
+            return $user->id;
+        }
+
+        return null;
     }
 
     private function myEvents($eventDto): void
     {
         if ($eventDto instanceof StasisStart) {
-            if (!config('app.authenticate') || $this->authenticate($eventDto->channel->caller->number)) {
+            if (!config('app.authenticate') || $this->getUserId($eventDto->channel->caller->number)) {
                 $this->prepareForCall($eventDto->channel->id);
-
             } else {
                 // todo: play rejection message
                 // later may throw user to "login" state machine
@@ -172,8 +175,8 @@ use Swagger\Client\ApiException;
 
         // Initial State
 
-        if (isset($this->sm)) {
-            $state = $this->sm->getCurrentState();
+        if (isset($this->xxxx)) {
+            $state = $this->xxxx->getCurrentState();
             $this->logger->debug("AppController::myEvents::" . $state->getName() . "::onEvent(" . json_encode($eventDto) . ")");
 
             $state->onEvent($eventDto);

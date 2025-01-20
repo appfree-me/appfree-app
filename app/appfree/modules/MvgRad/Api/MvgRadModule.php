@@ -2,15 +2,20 @@
 
 namespace AppFree\appfree\modules\MvgRad\Api;
 
-use Swagger\Client\Api\ChannelsApi;
-use Swagger\Client\ApiException;
+use AppFree\AppController;
+use Illuminate\Support\Facades\DB;
+use React\Dns\RecordNotFoundException;
 
 class MvgRadModule
 {
-
-    public static function hasLastPin(): bool
+    public static function getLastPin(string $mobilephone): string
     {
-        return true;
-    }
+        $userId = AppController::getUserId($mobilephone);
 
+        try {
+            return DB::table('mvgrad_transactions')->where(['user_id' => $userId, 'type' => 'rental'])->firstOrFail()->pin;
+        } catch (RecordNotFoundException $e) {
+            return "";
+        }
+    }
 }

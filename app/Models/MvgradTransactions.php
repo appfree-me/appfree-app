@@ -22,6 +22,7 @@ class MvgradTransactions extends Model
         'user_id',
         'type',
         'pin',
+        'group_id'
     ];
 
     /**

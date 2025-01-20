@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace AppFree\appfree;
 
+use App\Models\User;
 use Finite\StatefulInterface;
 use Swagger\Client\Api\ChannelsApi;
 use Swagger\Client\ApiException;
@@ -13,6 +14,7 @@ class StateMachineContext implements StatefulInterface
     public string $channelId;
     private ?string $state = null;
     public ChannelsApi $channelsApi;
+    private User $user;
 
     public function __construct(string $channelId, ChannelsApi $channelsApi)
     {
@@ -57,8 +59,10 @@ class StateMachineContext implements StatefulInterface
     /**
      * Playback some digits and return the playback id of the last played back digit.
      */
-    public function sayDigits(string $digitString): string
+    public function sayDigits(string $digitString): ?string
     {
+        $playbackId = null;
+
         foreach (str_split($digitString) as $digit) {
             $playbackId = uniqid(__METHOD__);
             $this->channelsApi->play($this->channelId, ["sound:digits/$digit"], null, null, null, $playbackId);
@@ -69,5 +73,10 @@ class StateMachineContext implements StatefulInterface
     public function hangup()
     {
         $this->channelsApi->hangup($this->channelId);
+    }
+
+    public function getMobilePhone(): ?string
+    {
+        return $this->user->mobilephone;
     }
 }

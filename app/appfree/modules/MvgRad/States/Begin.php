@@ -26,13 +26,15 @@ class Begin extends MvgRadState
         $ctx->answer();
         $ctx->play(self::SOUND_MVG_GREETING);
 
-        if ($this->mvgRadModule->hasLastPin()) {
+        if ($ctx->getMobilePhone() && $lastPin = $this->mvgRadModule->getLastPin($ctx->getMobilePhone())) {
             $ctx->play(self::SOUND_MVG_LAST_PIN_IS);
-            $ctx->sayDigits("123");
+            $ctx->sayDigits($lastPin);
         }
-        $finalPlayback = $ctx->play(self::SOUND_MVG_PIN_PROMPT);
 
-        yield "expect" => new PlaybackFinishedExpectation($finalPlayback);
+        if ($finalPlayback = $ctx->play(self::SOUND_MVG_PIN_PROMPT)) {
+            yield "expect" => new PlaybackFinishedExpectation($finalPlayback);
+        }
+
 
         yield "call" => function () {
             $this->sm->done(ReadDtmfString::class,

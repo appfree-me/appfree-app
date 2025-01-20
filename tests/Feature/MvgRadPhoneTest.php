@@ -75,7 +75,7 @@ describe("appfree-mvgrad sample flow", function () {
         $mockedReturnedPin = "999";
 
         $mvgRadModuleMock->shouldReceive("sayDigits");
-        $mvgRadModuleMock->shouldReceive("hasLastPin")->andReturn(true);
+        $mvgRadModuleMock->shouldReceive("getLastPin")->andReturn(true);
 
         // OKASSERT
         $mvgRadApiMock->shouldReceive("doAusleihe")->once()->andReturn($mockedReturnedPin);
