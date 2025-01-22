@@ -124,7 +124,7 @@ class AppController implements StatefulInterface, EventReceiverInterface
 
     public static function getUserForPhonenumber(string $number): ?User
     {
-        $user = DB::table('users')->where('mobilephone', $number)->first();
+        $user = User::where('mobilephone', $number)->first();
 
         // Right now, if the user is available in the database, this counts as authentication
         if( isset($user) && $user->mobilephone === $number) {

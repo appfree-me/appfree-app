@@ -15,23 +15,24 @@ describe("appfree mvgrad module", function () {
 
         $testtransaction = new MvgradTransactions();
         $testuser = new User();
-        $phone = "112233445566";
+        $phone = "1234";
         $pin = "xyz";
 
         $testuser->mobilephone = $phone;
-        $testuser->id = "9999999";
+        $userId = "9999999";
+        $testuser->id = $userId;
         $testuser->name = "name1";
         $testuser->email = "email1";
         $testuser->password = "pass1";
 
-        $testtransaction->user_id = "9999999";
-
+        $testtransaction->user_id = $userId;
         $testtransaction->pin = $pin;
+        $testtransaction->type ="rental";
         $testtransaction->group_id = uuid_create();
         $testuser->save();
         $testtransaction->save();
 
-        $lastpin = $m->getLastPin($phone);
+        $lastpin = $m->getLastPin($phone, $userId);
 
         expect($lastpin)->toBe($pin);
     });
