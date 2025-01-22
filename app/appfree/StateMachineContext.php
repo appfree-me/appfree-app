@@ -7,19 +7,23 @@ namespace AppFree\appfree;
 use App\Models\User;
 use Finite\StatefulInterface;
 use Swagger\Client\Api\ChannelsApi;
-use Swagger\Client\ApiException;
 
 class StateMachineContext implements StatefulInterface
 {
-    public string $channelId;
+    const ASTERISK_MAX_VAR_LENGTH = 255;
+    public readonly string $channelId;
     private ?string $state = null;
     public ChannelsApi $channelsApi;
-    private User $user;
+    private ?User $user;
 
-    public function __construct(string $channelId, ChannelsApi $channelsApi)
+    private ConvenienceApi $api;
+
+    public function __construct(string $channelId, ChannelsApi $channelsApi, ?User $user)
     {
         $this->channelId = $channelId;
         $this->channelsApi = $channelsApi;
+        $this->user = $user;
+        $this->api = new ConvenienceApi($channelId, $channelsApi, $user);
     }
 
     public function getFiniteState()
@@ -36,14 +40,8 @@ class StateMachineContext implements StatefulInterface
 
     public function play(string|array $media): string
     {
-        if (gettype($media) === "string") {
-            $media = [$media];
-        }
 
-        $playbackId = uniqid($media);
-        $this->channelsApi->play($this->channelId, $media, null, null, null, $playbackId);
-
-        return $playbackId;
+        return $this->api->play($media);
     }
 
     public function ring()
@@ -61,13 +59,7 @@ class StateMachineContext implements StatefulInterface
      */
     public function sayDigits(string $digitString): ?string
     {
-        $playbackId = null;
-
-        foreach (str_split($digitString) as $digit) {
-            $playbackId = uniqid(__METHOD__);
-            $this->channelsApi->play($this->channelId, ["sound:digits/$digit"], null, null, null, $playbackId);
-        }
-        return $playbackId;
+        return $this->api->sayDigits($digitString);
     }
 
     public function hangup()
@@ -77,6 +69,6 @@ class StateMachineContext implements StatefulInterface
 
     public function getMobilePhone(): ?string
     {
-        return $this->user->mobilephone;
+        return $this?->user?->mobilephone;
     }
 }

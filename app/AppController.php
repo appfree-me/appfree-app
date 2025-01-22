@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace AppFree;
 
 
+use App\Models\User;
 use AppFree\appfree\modules\MvgRad\MvgRadStateMachine;
 use AppFree\appfree\StateMachineContext;
 use AppFree\AppFreeCommands\AppFreeDto;
@@ -55,23 +56,6 @@ class AppController implements StatefulInterface, EventReceiverInterface
         $this->ari->channels()->continueInDialplan($channelId);
     }
 
-    /**
-     * @throws ApiException
-     */
-    private function prepareForCall(string $channelId): void
-    {
-        if (isset($this->stateMachines["$channelId"])) {
-            //todo ist sichergestellt, dass das nicht passieren kann?
-            $this->logger->error("Channel $channelId already has a state machine, this should never happen.");
-            $this->denyChannel($channelId);
-            return;
-        }
-
-        $sm = $this->initStateMachine(new StateMachineContext($channelId, $this->ari->channels()));
-        $this->stateMachines["$channelId"] = $sm;
-
-        $this->logger->notice("Added Channel", [$channelId]);
-    }
 
     private function removeStateMachine(string $channelId): void
     {
@@ -138,23 +122,44 @@ class AppController implements StatefulInterface, EventReceiverInterface
         $this->myEvents($eventDto);
     }
 
-    public static function getUserId(string $number): ?int
+    public static function getUserForPhonenumber(string $number): ?User
     {
         $user = DB::table('users')->where('mobilephone', $number)->first();
 
         // Right now, if the user is available in the database, this counts as authentication
         if( isset($user) && $user->mobilephone === $number) {
-            return $user->id;
+            return $user;
         }
 
         return null;
     }
 
+    /**
+     * @throws ApiException
+     */
+    private function prepareForCall(string $channelId, ?User $user): void
+    {
+        if (isset($this->stateMachines["$channelId"])) {
+            //todo ist sichergestellt, dass das nicht passieren kann?
+            $this->logger->error("Channel $channelId already has a state machine, this should never happen.");
+            $this->denyChannel($channelId);
+            return;
+        }
+
+        $sm = $this->initStateMachine(new StateMachineContext($channelId, $this->ari->channels(), $user));
+        $this->stateMachines["$channelId"] = $sm;
+
+        $this->logger->notice("Added Channel", [$channelId]);
+    }
+
+
+
     private function myEvents($eventDto): void
     {
         if ($eventDto instanceof StasisStart) {
-            if (!config('app.authenticate') || $this->getUserId($eventDto->channel->caller->number)) {
-                $this->prepareForCall($eventDto->channel->id);
+            $user = $this->getUserForPhonenumber($eventDto->channel->caller->number);
+            if (!config('app.authenticate') || $user) {
+                $this->prepareForCall($eventDto->channel->id, $user);
             } else {
                 // todo: play rejection message
                 // later may throw user to "login" state machine
@@ -175,13 +180,31 @@ class AppController implements StatefulInterface, EventReceiverInterface
 
         // Initial State
 
-        if (isset($this->xxxx)) {
-            $state = $this->xxxx->getCurrentState();
+        $stateMachines = $this->getStateMachineForDto($eventDto);
+
+        if (! count($stateMachines)) {
+            $this->logger->error("AppController::myEvents:: (State not initialized)::onEvent(" . json_encode($eventDto) . ")");
+
+        }
+        foreach ($stateMachines as $stateMachine) {
+            $state = $stateMachine->getCurrentState();
             $this->logger->debug("AppController::myEvents::" . $state->getName() . "::onEvent(" . json_encode($eventDto) . ")");
 
             $state->onEvent($eventDto);
-        } else {
-            $this->logger->error("AppController::myEvents:: (State not initialized)::onEvent(" . json_encode($eventDto) . ")");
         }
+    }
+
+    /**
+     * @param AppFreeDto $dto
+     * @return array<StateMachineInterface>
+     */
+    public function getStateMachineForDto(AppFreeDto $dto): array {
+        if (!$dto->getChannel() || !isset($this->stateMachines[$dto->getChannel()->id])) {
+            // this should probably be handled in a better way
+            $this->logger->error(sprintf("Could not determine which state machine to pass event to, so passing to all %s, event:" . serialize($dto), count($this->stateMachines)));
+            return $this->stateMachines;
+        }
+
+        return [$this->stateMachines[$dto->getChannel()->id]];
     }
 }

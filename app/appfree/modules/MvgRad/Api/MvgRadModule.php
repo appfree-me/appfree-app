@@ -10,7 +10,7 @@ class MvgRadModule
 {
     public static function getLastPin(string $mobilephone): string
     {
-        $userId = AppController::getUserId($mobilephone);
+        $userId = AppController::getUserForPhonenumber($mobilephone);
 
         try {
             return DB::table('mvgrad_transactions')->where(['user_id' => $userId, 'type' => 'rental'])->firstOrFail()->pin;
