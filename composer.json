@@ -39,7 +39,7 @@
     },
       "lelaurent/php-asterisk-swagger-api"  : {
           "type": "vcs",
-          "url": "appfree@laurentpichler.com:repos/lelaurent/php-asterisk-swagger-api"
+          "url": "ssh://appfree@laurentpichler.com:repos/lelaurent/php-asterisk-swagger-api"
       }
 },
     "autoload": {
