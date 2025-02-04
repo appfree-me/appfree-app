@@ -1,0 +1,3 @@
+#!/bin/bash
+
+journalctl -u appfree-app_prod -u appfree-app_demo -u appfree-app_local
