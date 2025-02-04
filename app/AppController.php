@@ -131,6 +131,8 @@ class AppController implements StatefulInterface, EventReceiverInterface
             return $user;
         }
 
+        resolve(Logger::class)->debug("User $number not found.");
+
         return null;
     }
 
