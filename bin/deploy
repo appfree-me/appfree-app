@@ -21,5 +21,5 @@ set -e
 ssh appfree@laurentpichler.com "systemctl --user stop $service_name"
 ssh appfree@laurentpichler.com "cd ~/deploy/$branch/appfree-app && git stash && git fetch && git checkout '$branch' && git reset --hard && git pull && composer config repositories.local-libs --unset && composer update lelaurent/php-asterisk-swagger-api && php artisan migrate"
 
-ssh appfree@laurentpichler.com "systemctl --userstart $service_name"
+ssh appfree@laurentpichler.com "systemctl --user start $service_name"
 
