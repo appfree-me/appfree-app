@@ -19,7 +19,7 @@ class StasisClientServiceProvider extends ServiceProvider
             return \Ratchet\Client\connect($config_asterisk["transport"] . "://" .
                 $config_asterisk["host"] . ":" . $config_asterisk["port"] .
                 $config_asterisk["endpoint"] . "/events?api_key=" . $config_asterisk["username"] .
-                ":" . $config_asterisk["password"] . "&app=" . "appfree", [], [], Loop::get()); //fixme
+                ":" . $config_asterisk["password"] . "&app=" . "appfree-". config("app.env"), [], [], Loop::get()); //fixme
         });
     }
 }

@@ -21,7 +21,7 @@ class PhpAriServiceProvider extends ServiceProvider
         $this->app->singleton(PhpAri::class, function (Application $app) {
             $emitter = $app->get(EventEmitter::class);
 
-            return new PhpAri("appfree", $emitter, $app->get(PhpAriConfig::class), $app->get(Client::class), $app->get(Logger::class)); //fixme
+            return new PhpAri("appfree-". config("app.env"), $emitter, $app->get(PhpAriConfig::class), $app->get(Client::class), $app->get(Logger::class)); //fixme
         });
     }
 }
