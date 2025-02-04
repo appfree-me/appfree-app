@@ -1,12 +1,12 @@
 #!/bin/bash
 
-cd "$(dirname "$0")"
+cd "$(dirname "$0")"/.. || exit 1
 
-# Test a new migration by applying it, rolling it back, and re-applying it 
+# Test a new migration by applying it, rolling it back, and re-applying it
 # This tests the down() function also, which often gets overlooked
 has=$( php artisan migrate:status --pending|grep -q Pending)
-if [[ $has == "0" ]]; then 
+if [[ $has == "0" ]]; then
 php artisan migrate  && \
 php artisan migrate:rollback --step=1 && \
-php artisan migrate 
+php artisan migrate
 fi

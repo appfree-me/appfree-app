@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd "$(dirname "$0")"
+cd "$(dirname "$0")"/.. || exit 1
 
 export XDEBUG_SESSION=1
-bin/artisan app:run-appfree
+php artisan app:run-appfree
