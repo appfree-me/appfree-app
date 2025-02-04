@@ -1,2 +1,6 @@
+#!/bin/bash
+
+cd "$(dirname "$0")"
+
 php artisan app:call-route /asterisk
 

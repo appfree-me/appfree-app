@@ -1,2 +1,6 @@
+#!/bin/bash
+
+cd "$(dirname "$0")"
+
 export XDEBUG_SESSION=1
 bin/artisan app:run-appfree

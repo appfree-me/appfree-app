@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd "$(dirname "$0")"
+
 # Test a new migration by applying it, rolling it back, and re-applying it 
 # This tests the down() function also, which often gets overlooked
 has=$( php artisan migrate:status --pending|grep -q Pending)

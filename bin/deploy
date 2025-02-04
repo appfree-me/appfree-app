@@ -17,11 +17,9 @@ cd "$(dirname "$0")"
 set -x
 set -e
 
-git push origin --all
-
 # assumes git repo for $branch is already cloned
-ssh appfree@laurentpichler.com "systemctl stop $service_name"
+ssh appfree@laurentpichler.com "systemctl --user stop $service_name"
 ssh appfree@laurentpichler.com "cd ~/deploy/$branch/appfree-app && git stash && git fetch && git checkout '$branch' && git reset --hard && git pull && composer config repositories.local-libs --unset && composer update lelaurent/php-asterisk-swagger-api && php artisan migrate"
 
-ssh appfree@laurentpichler.com "systemctl start $service_name"
+ssh appfree@laurentpichler.com "systemctl --userstart $service_name"
 
