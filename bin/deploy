@@ -1,19 +1,27 @@
 #!/bin/bash
 
-service_name="appfree-app_$DEPLOY_BRANCH"
+# . ../.env
+
+branch="$1"
+
+case "$branch" in
+    prod|demo) true;;
+    *) echo "Usage: $0 prod|demo"; exit 1;;
+esac
+
+service_name="appfree-app_$branch"
 
 cd "$(dirname "$0")"
 
-. ../.env
 
 set -x
 set -e
 
 git push origin --all
 
-# assumes git repo for $DEPLOY_BRANCH is already cloned
+# assumes git repo for $branch is already cloned
 ssh appfree@laurentpichler.com "systemctl stop $service_name"
-ssh appfree@laurentpichler.com "cd ~/deploy/$DEPLOY_BRANCH/appfree-app && git stash && git fetch && git checkout '$DEPLOY_BRANCH' && git reset --hard && git pull && composer config repositories.local-libs --unset && composer update lelaurent/php-asterisk-swagger-api && php artisan migrate"
+ssh appfree@laurentpichler.com "cd ~/deploy/$branch/appfree-app && git stash && git fetch && git checkout '$branch' && git reset --hard && git pull && composer config repositories.local-libs --unset && composer update lelaurent/php-asterisk-swagger-api && php artisan migrate"
 
 ssh appfree@laurentpichler.com "systemctl start $service_name"
 
