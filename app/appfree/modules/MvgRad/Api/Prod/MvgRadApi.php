@@ -3,13 +3,14 @@
 namespace AppFree\appfree\modules\MvgRad\Api\Prod;
 
 use AppFree\appfree\modules\MvgRad\Api\MvgRadApiInterface;
+use AppFree\appfree\modules\MvgRad\AppFreeStateMachine;
 use Finite\StateMachine\StateMachineInterface;
 
 class MvgRadApi implements MvgRadApiInterface
 {
     public const API_ID = "prod";
 
-    public function __construct(private StateMachineInterface $sm)
+    public function __construct(private AppFreeStateMachine $sm)
     {
     }
 

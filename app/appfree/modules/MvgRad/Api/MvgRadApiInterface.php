@@ -2,13 +2,15 @@
 
 namespace AppFree\appfree\modules\MvgRad\Api;
 
-use Finite\StateMachine\StateMachineInterface;
+use AppFree\appfree\modules\MvgRad\AppFreeStateMachine;
 
 interface MvgRadApiInterface
 {
-    public function __construct(StateMachineInterface $sm);
+    public function __construct(AppFreeStateMachine $sm);
 
     public function doAusleihe(string $radnummer): ?string;
+
     public function isAusleiheRunning(): bool;
+
     public function getPin(): ?string;
 }
