@@ -123,6 +123,7 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
-    'authenticate' => env('APP_AUTHENTICATE', false)
+    'authenticate' => env('APP_AUTHENTICATE', false),
+    'mvg-rad-api' => env('APP_MVG_RAD_API', 'prod'),
 
 ];

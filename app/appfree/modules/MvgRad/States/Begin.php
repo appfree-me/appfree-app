@@ -26,7 +26,7 @@ class Begin extends MvgRadState
         $ctx->answer();
         $ctx->play(self::SOUND_MVG_GREETING);
 
-        if ($ctx->getMobilePhone() && $lastPin = $this->mvgRadModule->getLastPin($ctx->getMobilePhone())) {
+        if ($ctx->getUserMobilePhone() && $lastPin = $this->mvgRadModule->getLastPin($ctx->getUserMobilePhone())) {
             $ctx->play(self::SOUND_MVG_LAST_PIN_IS);
             $ctx->sayDigits($lastPin);
         }

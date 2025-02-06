@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace AppFree\appfree;
 
 use App\Models\User;
+use AppFree\AppFreeCommands\Stasis\Objects\V1\Caller;
 use Finite\StatefulInterface;
 use Swagger\Client\Api\ChannelsApi;
 
@@ -14,15 +15,18 @@ class StateMachineContext implements StatefulInterface
     public readonly string $channelId;
     private ?string $state = null;
     public ChannelsApi $channelsApi;
-    private ?User $user;
+    private readonly ?User $user;
+
+    private readonly Caller $caller;
 
     private ConvenienceApi $api;
 
-    public function __construct(string $channelId, ChannelsApi $channelsApi, ?User $user)
+    public function __construct(string $channelId, ChannelsApi $channelsApi, Caller $caller, ?User $user)
     {
         $this->channelId = $channelId;
         $this->channelsApi = $channelsApi;
         $this->user = $user;
+        $this->caller = $caller;
         $this->api = new ConvenienceApi($channelId, $channelsApi, $user);
     }
 
@@ -67,8 +71,14 @@ class StateMachineContext implements StatefulInterface
         $this->channelsApi->hangup($this->channelId);
     }
 
-    public function getMobilePhone(): ?string
+    public function getUserMobilePhone(): ?string
     {
         return $this?->user?->mobilephone;
     }
+
+    public function getCallerPhoneNumber(): string
+    {
+        return $this->caller->number;
+    }
+
 }

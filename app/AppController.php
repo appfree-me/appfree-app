@@ -12,6 +12,7 @@ use AppFree\AppFreeCommands\AppFreeDto;
 use AppFree\AppFreeCommands\Stasis\Events\V1\ChannelHangupRequest;
 use AppFree\AppFreeCommands\Stasis\Events\V1\StasisEnd;
 use AppFree\AppFreeCommands\Stasis\Events\V1\StasisStart;
+use AppFree\AppFreeCommands\Stasis\Objects\V1\Caller;
 use AppFree\Ari\Interfaces\EventReceiverInterface;
 use AppFree\Ari\PhpAri;
 use Evenement\EventEmitterInterface;
@@ -140,7 +141,7 @@ class AppController implements StatefulInterface, EventReceiverInterface
     /**
      * @throws ApiException
      */
-    private function prepareForCall(string $channelId, ?User $user): void
+    private function prepareForCall(string $channelId, Caller $caller, ?User $user): void
     {
         if (isset($this->stateMachines["$channelId"])) {
             //todo ist sichergestellt, dass das nicht passieren kann?
@@ -149,7 +150,7 @@ class AppController implements StatefulInterface, EventReceiverInterface
             return;
         }
 
-        $sm = $this->initStateMachine(new StateMachineContext($channelId, $this->ari->channels(), $user));
+        $sm = $this->initStateMachine(new StateMachineContext($channelId, $this->ari->channels(), $caller, $user));
         $this->stateMachines["$channelId"] = $sm;
 
         $this->logger->notice("Added Channel", [$channelId]);
@@ -160,7 +161,7 @@ class AppController implements StatefulInterface, EventReceiverInterface
         if ($eventDto instanceof StasisStart) {
             $user = $this->getUserForPhonenumber($eventDto->channel->caller->number);
             if (!config('app.authenticate') || $user) {
-                $this->prepareForCall($eventDto->channel->id, $user);
+                $this->prepareForCall($eventDto->channel->id, $eventDto->channel->caller, $user);
             } else {
                 // todo: play rejection message
                 // later may throw user to "login" state machine

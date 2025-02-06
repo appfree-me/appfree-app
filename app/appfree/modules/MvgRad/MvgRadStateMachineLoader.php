@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace AppFree\appfree\modules\MvgRad;
 
 use AppFree\appfree\modules\Generic\States\ReadDtmfString;
+use AppFree\appfree\modules\MvgRad\Api\MvgRadApiInterface;
 use AppFree\appfree\modules\MvgRad\Api\MvgRadModule;
 use AppFree\appfree\modules\MvgRad\Api\Prod\MvgRadApi;
 use AppFree\appfree\modules\MvgRad\States\AusleiheAndOutputPin;
@@ -17,7 +18,7 @@ class MvgRadStateMachineLoader
 
 public const  DTO = "dto";
 
-    public static function definition(StateMachineInterface $myStateMachine, MvgRadApi $mvgRadApi, MvgRadModule $mvgRadModule)
+    public static function definition(StateMachineInterface $myStateMachine, MvgRadApiInterface $mvgRadApi, MvgRadModule $mvgRadModule)
     {
         // https://github.com/yohang/Finite/blob/master/docs/usage/symfony.rst
 
