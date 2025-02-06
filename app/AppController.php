@@ -15,13 +15,10 @@ use AppFree\AppFreeCommands\Stasis\Events\V1\StasisStart;
 use AppFree\Ari\Interfaces\EventReceiverInterface;
 use AppFree\Ari\PhpAri;
 use Evenement\EventEmitterInterface;
-use Finite\Exception\ObjectException;
 use Finite\Exception\TransitionException;
 use Finite\StatefulInterface;
 use Finite\StateMachine\StateMachineInterface;
 use GuzzleHttp\Client;
-use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Support\Facades\DB;
 use Monolog\Logger;
 use Ratchet\Client\WebSocket;
 use React\Promise\PromiseInterface;
@@ -56,7 +53,6 @@ class AppController implements StatefulInterface, EventReceiverInterface
         $this->ari->channels()->continueInDialplan($channelId);
     }
 
-
     private function removeStateMachine(string $channelId): void
     {
         unset($this->stateMachines[$channelId]);
@@ -67,15 +63,19 @@ class AppController implements StatefulInterface, EventReceiverInterface
         switch ($signo) {
             case SIGINT:
                 // handle shutdown tasks
-                echo "SIGINT caught, endHandler, closing Websocket\n";
-
-                $this->stasisClient->then(function (WebSocket $conn) {
-                    $conn->close();
-                    exit;
-                });
+                $this->logger->notice("SIGINT caught. Shutting down...");
+                exit;
             default:
                 // handle all other signals
         }
+    }
+
+    public function shutdown(): void
+    {
+        $this->stasisClient->then(function (WebSocket $conn) {
+            $this->logger->notice("Closing Websocket...");
+            $conn->close();
+        });
     }
 
     /**
@@ -127,7 +127,7 @@ class AppController implements StatefulInterface, EventReceiverInterface
         $user = User::where('mobilephone', $number)->first();
 
         // Right now, if the user is available in the database, this counts as authentication
-        if( isset($user) && $user->mobilephone === $number) {
+        if (isset($user) && $user->mobilephone === $number) {
             return $user;
         }
 
@@ -153,8 +153,6 @@ class AppController implements StatefulInterface, EventReceiverInterface
 
         $this->logger->notice("Added Channel", [$channelId]);
     }
-
-
 
     private function myEvents($eventDto): void
     {
@@ -184,9 +182,8 @@ class AppController implements StatefulInterface, EventReceiverInterface
 
         $stateMachines = $this->getStateMachineForDto($eventDto);
 
-        if (! count($stateMachines)) {
+        if (!count($stateMachines)) {
             $this->logger->error("AppController::myEvents:: (State not initialized)::onEvent(" . json_encode($eventDto) . ")");
-
         }
         foreach ($stateMachines as $stateMachine) {
             $state = $stateMachine->getCurrentState();
@@ -200,7 +197,8 @@ class AppController implements StatefulInterface, EventReceiverInterface
      * @param AppFreeDto $dto
      * @return array<StateMachineInterface>
      */
-    public function getStateMachineForDto(AppFreeDto $dto): array {
+    public function getStateMachineForDto(AppFreeDto $dto): array
+    {
         if (!$dto->getChannel() || !isset($this->stateMachines[$dto->getChannel()->id])) {
             // this should probably be handled in a better way
             $this->logger->error(sprintf("Could not determine which state machine to pass event to, so passing to all %s, event:" . serialize($dto), count($this->stateMachines)));

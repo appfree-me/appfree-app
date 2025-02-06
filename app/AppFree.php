@@ -22,7 +22,7 @@ class AppFree
         });
 
         register_shutdown_function(function () use ($app) {
-            $app->handler(SIGINT, []);
+            $app->shutdown();
         });
 
         $app->start();

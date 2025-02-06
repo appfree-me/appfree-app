@@ -40,7 +40,7 @@ class ConvenienceApi
         $playbackId = null;
 
         foreach (str_split($digitString) as $digit) {
-            $playbackId = $this->play($digit);
+            $playbackId = $this->play("sound:digits/$digit");
         }
 
         return $playbackId;
