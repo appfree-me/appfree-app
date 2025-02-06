@@ -107,7 +107,7 @@ describe("appfree-mvgrad sample flow", function () {
         // BEgrüssung
 
         $channelsApiMock->shouldReceive("play")->withArgs(function ($arg1, $arg) {
-            $b = $arg === [Begin::SOUND_MVG_GREETING];
+            $b = $arg === [Begin::SOUND_MVG_GRUSS];
             return $b;
         })->ordered();//->ordered(Begin::class);
 

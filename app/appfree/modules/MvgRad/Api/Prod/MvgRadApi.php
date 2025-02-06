@@ -5,6 +5,7 @@ namespace AppFree\appfree\modules\MvgRad\Api\Prod;
 use AppFree\appfree\modules\MvgRad\Api\MvgRadApiInterface;
 use AppFree\appfree\modules\MvgRad\AppFreeStateMachine;
 use Finite\StateMachine\StateMachineInterface;
+use RuntimeException;
 
 class MvgRadApi implements MvgRadApiInterface
 {
@@ -28,5 +29,10 @@ class MvgRadApi implements MvgRadApiInterface
     public function getPin(): ?string
     {
         return "999";
+    }
+
+    public function doRueckgabe(): void
+    {
+        throw new RuntimeException("Prod Endpoint bei MVG existiert nicht");
     }
 }

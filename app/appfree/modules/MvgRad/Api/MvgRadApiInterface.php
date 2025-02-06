@@ -13,4 +13,6 @@ interface MvgRadApiInterface
     public function isAusleiheRunning(): bool;
 
     public function getPin(): ?string;
+
+    public function doRueckgabe(): ?string;
 }

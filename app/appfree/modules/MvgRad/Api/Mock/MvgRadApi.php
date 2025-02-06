@@ -5,6 +5,7 @@ namespace AppFree\appfree\modules\MvgRad\Api\Mock;
 use AppFree\appfree\modules\MvgRad\Api\MvgRadApiInterface;
 use AppFree\appfree\modules\MvgRad\AppFreeStateMachine;
 use AppFree\Models\MvgradMockState;
+use Illuminate\Database\RecordNotFoundException;
 use Illuminate\Support\Facades\DB;
 
 class MvgRadApi implements MvgRadApiInterface
@@ -37,8 +38,16 @@ class MvgRadApi implements MvgRadApiInterface
         return $pin;
     }
 
-    public function doRueckgabe()
+    public function doRueckgabe(): ?string
     {
+
+        $phone = $this->sm->getContext()->getCallerPhoneNumber();
+        try {
+            $radnummer =  MvgradMockState::where('phone', '=', $phone, 'and')->where('rental_state', '=', 'running')->firstOrFail()->radnummer;
+        } catch (RecordNotFoundException $e) {
+            $radnummer = null;
+        }
+
         DB::table("mvgrad_mock_state")->updateOrInsert(
             [
                 'phone' => $this->sm->getContext()->getCallerPhoneNumber(),
@@ -48,6 +57,8 @@ class MvgRadApi implements MvgRadApiInterface
                 'pin' => '',
                 'radnummer' => ''
             ]);
+
+        return $radnummer;
     }
 
     public function isAusleiheRunning(): bool
