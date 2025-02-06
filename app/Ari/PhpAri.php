@@ -108,6 +108,7 @@ class PhpAri
                 $this->emitter->emit(self::EVENT_NAME_APPFREE_MESSAGE, [$eventDto]);
             });
         });
+
     }
 
     private function getApi(string $fqcn)

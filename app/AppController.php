@@ -75,6 +75,7 @@ class AppController implements StatefulInterface, EventReceiverInterface
         $this->stasisClient->then(function (WebSocket $conn) {
             $this->logger->notice("Closing Websocket...");
             $conn->close();
+            exit;
         });
     }
 

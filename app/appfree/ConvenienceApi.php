@@ -26,7 +26,7 @@ class ConvenienceApi
             $media = [$media];
         }
 
-        $playbackId = uniqid() . substr(implode(",", $media), 0, StateMachineContext::ASTERISK_MAX_VAR_LENGTH - 50);
+        $playbackId = $this->getRandomId() . substr(implode(",", $media), 0, StateMachineContext::ASTERISK_MAX_VAR_LENGTH - 50);
         $this->channelsApi->play($this->channelId, $media, null, null, null, $playbackId);
 
         return $playbackId;
@@ -46,4 +46,11 @@ class ConvenienceApi
         return $playbackId;
     }
 
+    /**
+     * @return string
+     */
+    public function getRandomId(): string
+    {
+        return bin2hex(random_bytes(4));
+    }
 }
