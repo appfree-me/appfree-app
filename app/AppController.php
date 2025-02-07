@@ -49,9 +49,8 @@ class AppController implements StatefulInterface, EventReceiverInterface
     private function denyChannel(string $channelId): void
     {
         $this->logger->error("Channel $channelId denied");
-        $this->ari->channels()->play($channelId, ['media:please-try-call-later'], null, null, null, "channel-denied");
-        sleep(2);
-        $this->ari->channels()->continueInDialplan($channelId);
+//        $this->ari->channels()->play($channelId, ['media:please-try-call-later'], null, null, null, "channel-denied");
+        $this->ari->channels()->hangup($channelId);
     }
 
     public function removeStateMachine(string $channelId): void
@@ -89,6 +88,18 @@ class AppController implements StatefulInterface, EventReceiverInterface
         });
 
         $this->stasisClient = resolve(PromiseInterface::class);
+        $this->dropAllCalls();
+    }
+
+    private function dropAllCalls()
+    {
+        $r = $this->ari->channels()->callListWithHttpInfo()[0];
+            $x = json_decode($r, true);
+            foreach ($x as $c) {
+                $this->logger->debug("Cleaning up old channel ".$c["id"]);
+                $this->denyChannel($c["id"]);
+            }
+
     }
 
     public function initStateMachine(StateMachineContext $stateMachineContext): StateMachineInterface
