@@ -23,7 +23,7 @@ class MvgRadApi implements MvgRadApiInterface
 
     public function isAusleiheRunning(): bool
     {
-        return true;
+        return false;
     }
 
     public function getPin(): ?string
@@ -31,7 +31,7 @@ class MvgRadApi implements MvgRadApiInterface
         return "999";
     }
 
-    public function doRueckgabe(): void
+    public function doRueckgabe(): ?string
     {
         throw new RuntimeException("Prod Endpoint bei MVG existiert nicht");
     }

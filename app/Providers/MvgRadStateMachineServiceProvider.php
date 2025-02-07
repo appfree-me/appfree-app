@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace AppFree\Providers;
 
 use AppFree\AppController;
+use AppFree\appfree\modules\MvgRad\Api\MvgRadApiInterface;
 use AppFree\appfree\modules\MvgRad\Api\MvgRadModule;
 use AppFree\appfree\modules\MvgRad\Api\Prod\MvgRadApi;
 use AppFree\appfree\modules\MvgRad\MvgRadArrayLoader;
@@ -29,7 +30,6 @@ class MvgRadStateMachineServiceProvider extends ServiceProvider
             };
 
             $l = new MvgRadArrayLoader(MvgRadStateMachineLoader::definition($sm, $mvgRadApi, $app->get(MvgRadModule::class)));
-
             $l->load($sm);
 
             // Used to give the previous state a way to pass a message to the next state

@@ -29,6 +29,7 @@ describe("appfree mvgrad module", function () {
         $testtransaction->pin = $pin;
         $testtransaction->type ="rental";
         $testtransaction->group_id = uuid_create();
+        $testtransaction->api_id = "prod";
         $testuser->save();
         $testtransaction->save();
 

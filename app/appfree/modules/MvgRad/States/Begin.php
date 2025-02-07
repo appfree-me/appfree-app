@@ -30,7 +30,6 @@ class Begin extends MvgRadState
         $ctx->answer();
         $ctx->play(self::SOUND_MVG_GRUSS);
 
-
         if ($this->mvgRadApi->isAusleiheRunning()) {
             $ctx->play(self::SOUND_MVG_AUSLEIHE_LAEUFT_PIN_IST);
             $ctx->sayDigits($this->mvgRadApi->getPin());

@@ -6,7 +6,7 @@ use AppFree\appfree\modules\MvgRad\AppFreeStateMachine;
 
 interface MvgRadApiInterface
 {
-    public function __construct(AppFreeStateMachine $sm);
+//    public function __construct(AppFreeStateMachine $sm);
 
     public function doAusleihe(string $radnummer): ?string;
 

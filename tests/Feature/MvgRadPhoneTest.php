@@ -17,6 +17,8 @@ describe("appfree-mvgrad sample flow", function () {
     beforeEach(function () {
         //todo should be beforeAll
         config()->set("app.authenticate", false);
+        config()->set("app.mvg-rad-api", "prod");
+//        require_once(__DIR__ . "/../../app/appfree/modules/MvgRad/Api/MvgRadApiInterface.php");
     });
 
 //    it('state advances until OutputPin State', function () {
@@ -49,7 +51,8 @@ describe("appfree-mvgrad sample flow", function () {
 //$app = App::make(AppController::class);
 //        $app = resolve(AppController::class);
 //        $app = new AppController();
-        $mvgRadApiMock = Mockery::mock(MvgRadApi::class);
+        $mvgRadApiMock = Mockery::mock('overload:AppFree\appfree\modules\MvgRad\Api\Prod\MvgRadApi', \AppFree\appfree\modules\MvgRad\Api\MvgRadApiInterface::class);
+        $mvgRadApiMock->shouldReceive("isAusleiheRunning")->andReturn(false);
         $mvgRadModuleMock = Mockery::mock(\AppFree\appfree\modules\MvgRad\Api\MvgRadModule::class);
         $phpAriMock = Mockery::mock(PhpAri::class);
         $channelsApiMock = Mockery::mock(ChannelsApi::class);

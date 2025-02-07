@@ -24,7 +24,7 @@ class MvgRadApi implements MvgRadApiInterface
 
         $pin = $this->generateMockPin();
 
-        DB::table("mvgrad_mock_state")->updateOrInsert(
+        DB::table("mvgrad_mock_states")->updateOrInsert(
             [
                 'phone' => $this->sm->getContext()->getCallerPhoneNumber()
             ],
@@ -48,7 +48,7 @@ class MvgRadApi implements MvgRadApiInterface
             $radnummer = null;
         }
 
-        DB::table("mvgrad_mock_state")->updateOrInsert(
+        DB::table("mvgrad_mock_states")->updateOrInsert(
             [
                 'phone' => $this->sm->getContext()->getCallerPhoneNumber(),
             ],
@@ -65,13 +65,15 @@ class MvgRadApi implements MvgRadApiInterface
     {
         $phone = $this->sm->getContext()->getCallerPhoneNumber();
 
-        return MvgradMockState::where('phone', '=', $phone, 'and')->where('rental_state', '=', 'running')->count() > 0;
+        $b = MvgradMockState::where('phone', '=', $phone, 'and')->where('rental_state', '=', 'running')->count() > 0;
+        return $b;
     }
 
     public function getPin(): ?string
     {
         $phone = $this->sm->getContext()->getCallerPhoneNumber();
-        return MvgradMockState::where('phone', '=', $phone, 'and')->where('rental_state', '=', 'running')->first()->pin;
+        $pin = MvgradMockState::where('phone', '=', $phone, 'and')->where('rental_state', '=', 'running')->first()->pin;
+        return $pin;
     }
 
     private function generateMockPin()
