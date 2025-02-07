@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace AppFree\appfree;
 
 use App\Models\User;
+use AppFree\AppController;
+use Monolog\Logger;
 use Swagger\Client\Api\ChannelsApi;
+use Swagger\Client\ApiException;
 
 class ConvenienceApi
 {
@@ -27,7 +30,17 @@ class ConvenienceApi
         }
 
         $playbackId = $this->getRandomId() . substr(implode(",", $media), 0, StateMachineContext::ASTERISK_MAX_VAR_LENGTH - 50);
-        $this->channelsApi->play($this->channelId, $media, null, null, null, $playbackId);
+
+        try {
+            $this->channelsApi->play($this->channelId, $media, null, null, null, $playbackId);
+        }
+            // Only should catch "channel not found" - fixme
+            // Sometimes channels just disappear, we don't want to crash the entire app
+        catch (ApiException $exception) {
+            resolve(Logger::class)->error("play api exception for channel $this->channelId: " . $exception->getMessage());
+            resolve(AppController::class)->removeStateMachine($this->channelId);
+            return "channelRemoved_$this->channelId";
+        }
 
         return $playbackId;
     }

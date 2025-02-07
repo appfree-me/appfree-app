@@ -18,7 +18,7 @@ class MvgRadApi implements MvgRadApiInterface
 
     public function doAusleihe(string $radnummer): ?string
     {
-        if ($this->isAusleiheRunning()) {
+        if ($this->getAusleiheRadnummer()) {
             return null;
         }
 
@@ -40,10 +40,9 @@ class MvgRadApi implements MvgRadApiInterface
 
     public function doRueckgabe(): ?string
     {
-
         $phone = $this->sm->getContext()->getCallerPhoneNumber();
         try {
-            $radnummer =  MvgradMockState::where('phone', '=', $phone, 'and')->where('rental_state', '=', 'running')->firstOrFail()->radnummer;
+            $radnummer = MvgradMockState::where('phone', '=', $phone, 'and')->where('rental_state', '=', 'running')->firstOrFail()->radnummer;
         } catch (RecordNotFoundException $e) {
             $radnummer = null;
         }
@@ -61,19 +60,28 @@ class MvgRadApi implements MvgRadApiInterface
         return $radnummer;
     }
 
-    public function isAusleiheRunning(): bool
+    public function getAusleiheRadnummer(): ?string
     {
         $phone = $this->sm->getContext()->getCallerPhoneNumber();
 
-        $b = MvgradMockState::where('phone', '=', $phone, 'and')->where('rental_state', '=', 'running')->count() > 0;
-        return $b;
+        $record = MvgradMockState::where('phone', '=', $phone, 'and')->where('rental_state', '=', 'running')->first();
+        if ($record) {
+            return $record->radnummer;
+        }
+
+        return null;
     }
 
     public function getPin(): ?string
     {
         $phone = $this->sm->getContext()->getCallerPhoneNumber();
-        $pin = MvgradMockState::where('phone', '=', $phone, 'and')->where('rental_state', '=', 'running')->first()->pin;
-        return $pin;
+        $record = MvgradMockState::where('phone', '=', $phone, 'and')->where('rental_state', '=', 'running')->first();
+
+        if ($record) {
+            return $record->pin;
+        }
+
+        return null;
     }
 
     private function generateMockPin()

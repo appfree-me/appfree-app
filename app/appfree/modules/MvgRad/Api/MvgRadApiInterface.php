@@ -10,7 +10,7 @@ interface MvgRadApiInterface
 
     public function doAusleihe(string $radnummer): ?string;
 
-    public function isAusleiheRunning(): bool;
+    public function getAusleiheRadnummer(): ?string;
 
     public function getPin(): ?string;
 

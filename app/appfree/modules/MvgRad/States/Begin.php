@@ -15,9 +15,10 @@ class Begin extends MvgRadState
     const SOUND_MVG_GRUSS = 'sound:mvg-greeting';
     const SOUND_MVG_LAST_PIN_IS = 'sound:mvg-last-pin-is';
     const SOUND_MVG_PIN_PROMPT = 'sound:mvg-pin-prompt';
-    const SOUND_MVG_AUSLEIHE_LAEUFT_PIN_IST = 'sound:mvg-ausleihe-laeuft';
+    const SOUND_MVG_AUSLEIHE_LAEUFT_RADNUMMER_IST = 'sound:mvg-ausleihe-laeuft';
     const SOUND_MVG_RUECKGABE_PROMPT = 'sound:mvg-rueckgabe-prompt';
-    const SOUND_MVG_RUECKGABE_BESTAETIGUNG = 'sound:mvg-rueckgabe-bestetigung';
+    const SOUND_MVG_RUECKGABE_BESTAETIGUNG = 'sound:mvg-rueckgabe-bestaetigung';
+    const SOUND_PIN_IS = 'sound:mvg-pin-is';
 
     public function run(): \Generator
     {
@@ -30,9 +31,17 @@ class Begin extends MvgRadState
         $ctx->answer();
         $ctx->play(self::SOUND_MVG_GRUSS);
 
-        if ($this->mvgRadApi->isAusleiheRunning()) {
-            $ctx->play(self::SOUND_MVG_AUSLEIHE_LAEUFT_PIN_IST);
+        if ($radnummerAusgeliehen = $this->mvgRadApi->getAusleiheRadnummer()) {
+
+            $ctx->play(self::SOUND_MVG_AUSLEIHE_LAEUFT_RADNUMMER_IST);
+            $wait = $ctx->sayDigits($radnummerAusgeliehen);
+            yield "expect" => new PlaybackFinishedExpectation($wait);
+
+            $wait = $ctx->play(self::SOUND_PIN_IS);
             $ctx->sayDigits($this->mvgRadApi->getPin());
+
+            yield "expect" => new PlaybackFinishedExpectation($wait);
+
             $prompt = $ctx->play(self::SOUND_MVG_RUECKGABE_PROMPT);
 
             yield "expect" => new PlaybackFinishedExpectation($prompt);
@@ -42,8 +51,8 @@ class Begin extends MvgRadState
                 $radnummerZurueckgegeben = $this->mvgRadApi->doRueckgabe();
                 $playback = $ctx->play(self::SOUND_MVG_RUECKGABE_BESTAETIGUNG);
                 yield "expect" => new PlaybackFinishedExpectation($playback);
-                $ctx->sayDigits($radnummerZurueckgegeben);
                 $ctx->hangup();
+                return;
             }
         }
 

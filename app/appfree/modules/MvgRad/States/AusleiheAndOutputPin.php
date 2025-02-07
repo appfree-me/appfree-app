@@ -14,6 +14,7 @@ use Swagger\Client\Api\ChannelsApi;
 
 class AusleiheAndOutputPin extends MvgRadState
 {
+    const SOUND_PIN_IS = 'sound:mvg-pin-is';
 
     public function run(): \Generator
     {
@@ -22,6 +23,9 @@ class AusleiheAndOutputPin extends MvgRadState
         $dto = yield "expect" => MvgRadAusleiheCommand::class;
 
         $pin = $this->mvgRadApi->doAusleihe($dto->radnummer);
+        $wait = $ctx->play(self::SOUND_PIN_IS);
+        yield "expect" => new PlaybackFinishedExpectation($wait);
+
         $lastPlaybackId = $ctx->sayDigits($pin);
 
         yield "expect" => new PlaybackFinishedExpectation($lastPlaybackId);

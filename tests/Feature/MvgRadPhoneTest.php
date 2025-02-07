@@ -52,7 +52,7 @@ describe("appfree-mvgrad sample flow", function () {
 //        $app = resolve(AppController::class);
 //        $app = new AppController();
         $mvgRadApiMock = Mockery::mock('overload:AppFree\appfree\modules\MvgRad\Api\Prod\MvgRadApi', \AppFree\appfree\modules\MvgRad\Api\MvgRadApiInterface::class);
-        $mvgRadApiMock->shouldReceive("isAusleiheRunning")->andReturn(false);
+        $mvgRadApiMock->shouldReceive("getAusleiheRadnummer")->andReturn(false);
         $mvgRadModuleMock = Mockery::mock(\AppFree\appfree\modules\MvgRad\Api\MvgRadModule::class);
         $phpAriMock = Mockery::mock(PhpAri::class);
         $channelsApiMock = Mockery::mock(ChannelsApi::class);

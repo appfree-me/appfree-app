@@ -54,7 +54,7 @@ class AppController implements StatefulInterface, EventReceiverInterface
         $this->ari->channels()->continueInDialplan($channelId);
     }
 
-    private function removeStateMachine(string $channelId): void
+    public function removeStateMachine(string $channelId): void
     {
         unset($this->stateMachines[$channelId]);
     }
@@ -166,17 +166,20 @@ class AppController implements StatefulInterface, EventReceiverInterface
                 // todo: play rejection message
                 // later may throw user to "login" state machine
                 // todo: implement transitions between state machines
+                $this->logger->debug("Hung up on " . $eventDto->channel->id);
                 $this->ari->channels()->hangup($eventDto->channel->id);
                 return;
             }
         }
 
         if ($eventDto instanceof StasisEnd) {
+            $this->logger->debug("Removed State Machine for Channel (StasisEnd)" . $eventDto->channel->id);
             $this->removeStateMachine($eventDto->channel->id);
         }
 
 
         if ($eventDto instanceof ChannelHangupRequest) {
+            $this->logger->debug("Removed State Machine for Channel (ChannelHangupRequest)" . $eventDto->channel->id);
             $this->removeStateMachine($eventDto->channel->id);
         }
 
@@ -185,8 +188,9 @@ class AppController implements StatefulInterface, EventReceiverInterface
         $stateMachines = $this->getStateMachineForDto($eventDto);
 
         if (!count($stateMachines)) {
-            $this->logger->error("AppController::myEvents:: (State not initialized)::onEvent(" . json_encode($eventDto) . ")");
+            $this->logger->error("AppController::myEvents:: No State Machine for Event, swallowing... ::onEvent(" . json_encode($eventDto) . ")");
         }
+
         foreach ($stateMachines as $stateMachine) {
             $state = $stateMachine->getCurrentState();
             $this->logger->debug("AppController::myEvents::" . $state->getName() . "::onEvent(" . json_encode($eventDto) . ")");
@@ -203,10 +207,12 @@ class AppController implements StatefulInterface, EventReceiverInterface
     {
         if (!$dto->getChannel() || !isset($this->stateMachines[$dto->getChannel()->id])) {
             // this should probably be handled in a better way
-            $this->logger->error(sprintf("Could not determine which state machine to pass event to, so passing to all %s, event:" . serialize($dto), count($this->stateMachines)));
+            $this->logger->notice(sprintf("Could not determine which state machine to pass event to, so passing to all %s, event:" . serialize($dto), count($this->stateMachines)));
             return $this->stateMachines;
         }
 
-        return [$this->stateMachines[$dto->getChannel()->id]];
+        $id = $dto->getChannel()->id;
+        $this->logger->debug("Selected State Machine for Channel " . $id);
+        return [$this->stateMachines[$id]];
     }
 }

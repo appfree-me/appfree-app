@@ -21,7 +21,6 @@ class MvgRadStateMachineServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(MvgRadStateMachine::class, function (Application $app) {
-            /** @var StateMachineInterface $sm */
             $sm = new MvgRadStateMachine();
             $mvgRadApi = match (config('app.mvg-rad-api')) {
                 'prod' => new MvgRadApi($sm),

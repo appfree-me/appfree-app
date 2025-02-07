@@ -21,9 +21,9 @@ class MvgRadApi implements MvgRadApiInterface
         return "999";
     }
 
-    public function isAusleiheRunning(): bool
+    public function getAusleiheRadnummer(): ?string
     {
-        return false;
+        return null;
     }
 
     public function getPin(): ?string
