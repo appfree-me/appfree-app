@@ -18,6 +18,8 @@ class MvgRadApi implements MvgRadApiInterface
 
     public function doAusleihe(string $radnummer): ?string
     {
+        sleep(2);
+
         if ($this->getAusleiheRadnummer()) {
             return null;
         }
@@ -40,6 +42,8 @@ class MvgRadApi implements MvgRadApiInterface
 
     public function doRueckgabe(): ?string
     {
+        sleep(2);
+
         $phone = $this->sm->getContext()->getCallerPhoneNumber();
         try {
             $radnummer = MvgradMockState::where('phone', '=', $phone, 'and')->where('rental_state', '=', 'running')->firstOrFail()->radnummer;
@@ -56,6 +60,7 @@ class MvgRadApi implements MvgRadApiInterface
                 'pin' => '',
                 'radnummer' => ''
             ]);
+
 
         return $radnummer;
     }
