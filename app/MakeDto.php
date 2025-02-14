@@ -22,7 +22,7 @@ use Monolog\Logger;
 class MakeDto
 {
     /*todo test schreiben der korrektheit eingabe=> ausgabe prüft */
-    const LAURENT_NUMBER = "017662328758x";
+    const LAURENT_NUMBER = "017662328758";
 
     public static function make(\stdClass $data): AppFreeDto
     {
