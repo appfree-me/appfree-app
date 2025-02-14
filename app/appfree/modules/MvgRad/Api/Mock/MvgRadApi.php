@@ -16,7 +16,7 @@ class MvgRadApi implements MvgRadApiInterface
     {
     }
 
-    public function doAusleihe(string $radnummer): ?string
+    public function doAusleihe(string $radnummer, string $mockPin = null): ?string
     {
         sleep(2);
 
@@ -24,20 +24,25 @@ class MvgRadApi implements MvgRadApiInterface
             return null;
         }
 
-        $pin = $this->generateMockPin();
+        if ($mockPin === null) {
+            $mockPin = $this->generateMockPin();
+        }
 
-        DB::table("mvgrad_mock_states")->updateOrInsert(
-            [
-                'phone' => $this->sm->getContext()->getCallerPhoneNumber()
-            ],
-            [
-                'rental_state' => 'running',
-                'pin' => $pin,
-                'radnummer' => $radnummer,
-            ]
-        );
+        if (!config('mvg.video_dreh')) {
+            DB::table("mvgrad_mock_states")->updateOrInsert(
+                [
+                    'phone' => $this->sm->getContext()->getCallerPhoneNumber()
+                ],
+                [
+                    'rental_state' => 'running',
+                    'pin' => $mockPin,
+                    'radnummer' => $radnummer,
+                ]
+            );
+        }
 
-        return $pin;
+
+        return $mockPin;
     }
 
     public function doRueckgabe(): ?string

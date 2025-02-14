@@ -15,8 +15,7 @@ class StateMachineContext implements StatefulInterface
     public readonly string $channelId;
     private ?string $state = null;
     public ChannelsApi $channelsApi;
-    private readonly ?User $user;
-
+    public readonly ?User $user;
     private readonly Caller $caller;
 
     private ConvenienceApi $api;
