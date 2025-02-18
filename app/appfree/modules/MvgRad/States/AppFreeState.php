@@ -16,12 +16,21 @@ abstract class AppFreeState extends State implements AppFreeStateInterface
     public const KEY_CALL = "call";
     public const VALID_KEYS = [self::KEY_CALL, self::KEY_EXPECT];
     protected ?\Generator $generator = null;
+    /**
+     * @var true
+     */
+    private bool $disable = false;
 
     public function onEvent(AppFreeDto $dto): void
     {
         $logger = resolve(Logger::class);
         $skip = false;
         $sent = false;
+
+        if ($this->disable) {
+            $logger->notice("Skipped DTO, Generator disabled: " . serialize($dto));
+            return;
+        }
 
         if (!$this->generator) {
             $this->generator = $this->run();
@@ -65,11 +74,23 @@ abstract class AppFreeState extends State implements AppFreeStateInterface
 
         if ($this->generator->key() === self::KEY_CALL) {
             $fn = $this->generator->current();
-            $fn();
+            try { $fn(); }
+            catch (\Exception $e) {
+                $this->disable = true;
+            }
         }
 
         if (!$skip && !$sent) {
             $this->generator->send($dto);
+        }
+    }
+
+    private function sendToGenerator(AppFreeDto $dto): void {
+        try {
+            $this->generator->send($dto);
+        }
+        catch (\Exception $e) {
+            $this->disable = true;
         }
     }
 
