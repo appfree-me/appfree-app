@@ -16,6 +16,7 @@ use AppFree\AppFreeCommands\Stasis\Events\V1\StasisStart;
 use AppFree\AppFreeCommands\Stasis\Objects\V1\Caller;
 use AppFree\AppFreeCommands\Stasis\Objects\V1\Channel;
 use AppFree\AppFreeCommands\Stasis\Objects\V1\Playback;
+use Exception;
 use Monolog\Logger;
 
 class MakeDto
@@ -48,7 +49,7 @@ class MakeDto
             $digit = property_exists($data, "digit") ? $data->digit : null;
             try {
                 $var = new $mapping[$data->type](...[$channel, $digit]); //todo fixme: it must be defined how each dto is instantiated
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 /** @var Logger $resolve */
                 $resolve = resolve(Logger::class);
                 $resolve->error($e->getMessage() . ", context: " . serialize($data));
@@ -58,7 +59,7 @@ class MakeDto
         } elseif ($data->type === "PlaybackStarted") {
             $var = new PlaybackStarted(new Playback($data->playback->id));
         } else {
-            throw new \Exception("Unknown Event: " . json_encode($data)); //todo fixme: every valid message must result in valid dto
+            throw new Exception("Unknown Event: " . json_encode($data)); //todo fixme: every valid message must result in valid dto
 
         }
         print("Made DTO" . serialize($var));

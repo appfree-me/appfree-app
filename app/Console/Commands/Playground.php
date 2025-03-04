@@ -4,7 +4,13 @@ namespace AppFree\Console\Commands;
 
 use Illuminate\Console\Command;
 
-class playground extends Command
+/**
+ * Suppress all rules containing "unused" in this
+ * class
+ *
+ * @SuppressWarnings("PHPMD")
+ */
+class Playground extends Command
 {
     /**
      * The name and signature of the console command.

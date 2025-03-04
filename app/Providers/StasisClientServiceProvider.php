@@ -14,12 +14,12 @@ class StasisClientServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(PromiseInterface::class, function ($app) {
-            $config_asterisk = $app->get(PhpAriConfig::class)->asterisk_ari;
+            $configAsterisk = $app->get(PhpAriConfig::class)->asterisk_ari;
 
-            return \Ratchet\Client\connect($config_asterisk["transport"] . "://" .
-                $config_asterisk["host"] . ":" . $config_asterisk["port"] .
-                $config_asterisk["endpoint"] . "/events?api_key=" . $config_asterisk["username"] .
-                ":" . $config_asterisk["password"] . "&app=" . "appfree-". config("app.env"), [], [], Loop::get()); //fixme
+            return \Ratchet\Client\connect($configAsterisk["transport"] . "://" .
+                $configAsterisk["host"] . ":" . $configAsterisk["port"] .
+                $configAsterisk["endpoint"] . "/events?api_key=" . $configAsterisk["username"] .
+                ":" . $configAsterisk["password"] . "&app=" . "appfree-". config("app.env"), [], [], Loop::get()); //fixme
         });
     }
 }

@@ -62,14 +62,14 @@
     <rule ref="rulesets/codesize.xml/CyclomaticComplexity">
         <priority>1</priority>
         <properties>
-            <property name="reportLevel" value="11" />
+            <property name="reportLevel" value="12" />
         </properties>
     </rule>
 
     <rule ref="rulesets/codesize.xml/NPathComplexity">
         <priority>1</priority>
         <properties>
-            <property name="minimum" value="260" />
+            <property name="minimum" value="290" />
         </properties>
     </rule>
 

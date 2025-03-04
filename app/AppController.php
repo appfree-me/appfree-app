@@ -24,6 +24,11 @@ use Ratchet\Client\WebSocket;
 use React\Promise\PromiseInterface;
 use Swagger\Client\ApiException;
 
+/**
+ * Suppress all warnings from these two rules.
+ *
+ * @SuppressWarnings(PHPMD.ExitExpression)
+ */
 class AppController implements StatefulInterface, EventReceiverInterface
 {
     public PhpAri $ari;

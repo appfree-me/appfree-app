@@ -14,6 +14,7 @@ use Finite\State\Accessor\PropertyPathStateAccessor;
 use Finite\State\StateInterface;
 use Finite\StateMachine\StateMachineInterface;
 use Finite\Transition\Transition;
+use ReflectionClass;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -81,7 +82,7 @@ class MvgRadArrayLoader implements LoaderInterface
      */
     public function supportsObject(object $object): bool
     {
-        $reflection = new \ReflectionClass($this->config['class']);
+        $reflection = new ReflectionClass($this->config['class']);
 
         return $reflection->isInstance($object);
     }

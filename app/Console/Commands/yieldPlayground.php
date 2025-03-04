@@ -4,7 +4,13 @@ namespace AppFree\Console\Commands;
 
 use Illuminate\Console\Command;
 
-class invokeTest
+/**
+ * Suppress all rules containing "unused" in this
+ * class
+ *
+ * @SuppressWarnings("PHPMD")
+ */
+class InvokeTest
 {
     public function __invoke()
     {
@@ -12,6 +18,13 @@ class invokeTest
     }
 
 }
+
+/**
+ * Suppress all rules containing "unused" in this
+ * class
+ *
+ * @SuppressWarnings("PHPMD")
+ */
 class yieldPlayground extends Command
 {
     /**

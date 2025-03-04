@@ -14,9 +14,9 @@ class GuzzleHttpServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(Client::class, function (Application $app) {
-            $config_asterisk = $app->get(PhpAriConfig::class);
-            return new \GuzzleHttp\Client([
-                'auth' => [$config_asterisk->asterisk_ari["username"], $config_asterisk->asterisk_ari["password"]
+            $configAsterisk = $app->get(PhpAriConfig::class);
+            return new Client([
+                'auth' => [$configAsterisk->asterisk_ari["username"], $configAsterisk->asterisk_ari["password"]
                     //    [$config_asterisk["host"], $config_asterisk["port"]
                 ]]);
         });

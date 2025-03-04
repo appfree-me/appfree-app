@@ -11,6 +11,7 @@ use AppFree\AppFreeCommands\MvgRad\Commands\V1\MvgRadAusleiheCommand;
 use AppFree\AppFreeCommands\Stasis\Events\V1\ChannelDtmfReceived;
 use AppFree\AppFreeCommands\Stasis\Events\V1\StasisStart;
 use AppFree\MakeDto;
+use Generator;
 use Illuminate\Support\Facades\DB;
 
 class Begin extends MvgRadState
@@ -23,7 +24,7 @@ class Begin extends MvgRadState
     public const SOUND_MVG_RUECKGABE_BESTAETIGUNG = 'sound:mvg-rueckgabe-bestaetigung';
     public const SOUND_PIN_IS = 'sound:mvg-pin-is';
 
-    public function run(): \Generator
+    public function run(): Generator
     {
         $ctx = $this->sm->getContext();
 
@@ -59,7 +60,8 @@ class Begin extends MvgRadState
 
         $ctx->play(self::SOUND_MVG_GRUSS);
 
-        if ($radnummerAusgeliehen = $this->mvgRadApi->getAusleiheRadnummer()) {
+        $radnummerAusgeliehen = $this->mvgRadApi->getAusleiheRadnummer();
+        if ($radnummerAusgeliehen) {
             $ctx->play(self::SOUND_MVG_AUSLEIHE_LAEUFT_RADNUMMER_IST);
             $wait = $ctx->sayDigits($radnummerAusgeliehen);
             yield "expect" => new PlaybackFinishedExpectation($wait);
@@ -75,7 +77,7 @@ class Begin extends MvgRadState
             /** @var ChannelDtmfReceived $dto */
             $dto = yield "expect" => ChannelDtmfReceived::class; // fixme sollte natürlich auch funktionieren nicht nur wenn Rautetaste als erstes gedrückt wurde
             if ($dto->digit === '#') {
-                $radnummerZurueckgegeben = $this->mvgRadApi->doRueckgabe();
+                $this->mvgRadApi->doRueckgabe();
                 $playback = $ctx->play(self::SOUND_MVG_RUECKGABE_BESTAETIGUNG);
                 yield "expect" => new PlaybackFinishedExpectation($playback);
                 $ctx->hangup();
@@ -83,7 +85,8 @@ class Begin extends MvgRadState
             }
         }
 
-        if ($finalPlayback = $ctx->play(self::SOUND_MVG_PIN_PROMPT)) {
+        $finalPlayback = $ctx->play(self::SOUND_MVG_PIN_PROMPT);
+        if ($finalPlayback) {
             yield "expect" => new PlaybackFinishedExpectation($finalPlayback);
         }
 
@@ -96,8 +99,8 @@ class Begin extends MvgRadState
                     if (config('mvg.video_dreh')) {
                         $record = DB::table("mvgrad_feature_flags")->select('json')->where('feature', '=', 'video_dreh');
                         $x = $record->first();
-                        $json_decode = json_decode($x->json);
-                        $setPin = implode($json_decode->fixedPin);
+                        $decoded = json_decode($x->json);
+                        $setPin = implode($decoded->fixedPin);
 
                     }
                     $this->sm->done(AusleiheAndOutputPin::class, new MvgRadAusleiheCommand(implode($dtmfSequence), $setPin));

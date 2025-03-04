@@ -45,7 +45,6 @@ class PhpAri
 
     public function __construct(string $appName, EventEmitterInterface $emitter, PhpAriConfig $phpAriConfig, Client $client, Logger $logger)
     {
-        try {
             /* Get our configuration */
             $this->config = $phpAriConfig;
             $this->logger = $logger;
@@ -60,9 +59,7 @@ class PhpAri
 
             /* Connect to ARI server */
             $this->init();
-        } catch (Exception $e) {
-            die("Exception raised: " . $e->getMessage() . "\nFile: " . $e->getFile() . "\nLine: " . $e->getLine());
-        }
+
     }
 
     /**
@@ -75,7 +72,6 @@ class PhpAri
 
     public function init(): PromiseInterface
     {
-        try {
             if ($this->isDebug) {
                 $this->logger->debug("Initializing WebSocket Information");
             }
@@ -93,9 +89,7 @@ class PhpAri
             $this->logger->debug("Setup Events");
             $this->setupEvents($this->stasisClient);
             return $promise;
-        } catch (Exception $e) {
-            die("Exception raised: " . $e->getMessage() . "\nFile: " . $e->getFile() . "\nLine: " . $e->getLine());
-        }
+
     }
 
     private function setupEvents(PromiseInterface $stasisClient): void

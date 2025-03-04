@@ -3,9 +3,10 @@
 namespace AppFree\Console\Commands;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Cookie\CookieJar;
 use Illuminate\Console\Command;
 
-class mlogin extends Command
+class MLogin extends Command
 {
     /**
      * The name and signature of the console command.
@@ -75,9 +76,9 @@ class mlogin extends Command
         // 'https://login.muenchen.de/auth/oauth2/realms/root/realms/customers/authorize?client_id=go-prod&redirect_uri=https%3A%2F%2Fmvgo-gateway.web.azrapp.swm.de%2Foauth%2Fredirect&response_type=code&state=App_Qij6i9-FeeGiNIdZeouOaw&code_challenge=sYtD5Bz3lJsWyCK8Lyn8TL4AGC1iX6faYr2Ag6B3YaY&code_challenge_method=S256&locale=de_DE&login_action=widen_scope'
         // curl_setopt($ch, CURLOPT_VERBOSE, true);
         $client = new Client();
-        $now = new DateTime('now');
-        $filename = $now->format('Y-m-d_H:i:s');
-        $jar = new \GuzzleHttp\Cookie\CookieJar();
+//        $now = new DateTime('now');
+//        $filename = $now->format('Y-m-d_H:i:s');
+        $jar = new CookieJar();
 
 
         $options = [
@@ -103,15 +104,15 @@ class mlogin extends Command
         $url = 'https://login.muenchen.de/auth/oauth2/realms/root/realms/customers/authorize?client_id=go-prod&redirect_uri=https%3A%2F%2Fmvgo-gateway.web.azrapp.swm.de%2Foauth%2Fredirect&response_type=code&state=App_Qij6i9-FeeGiNIdZeouOaw&code_challenge=sYtD5Bz3lJsWyCK8Lyn8TL4AGC1iX6faYr2Ag6B3YaY&code_challenge_method=S256&locale=de_DE&login_action=widen_scope';
         $result = $client->request('GET', $url, $options);
         $result->getBody()->getContents();
-
-        $captchaReq1 = [
-            "clientKey" => "bd768a319499f6dc93dc83493630e58c",
-            "task" => [
-                "type" => "TurnstileTaskProxyless",
-                "websiteURL" => "",
-                "websiteKey" => $websiteKey
-            ]
-        ];
+//
+//        $captchaReq1 = [
+//            "clientKey" => "bd768a319499f6dc93dc83493630e58c",
+//            "task" => [
+//                "type" => "TurnstileTaskProxyless",
+//                "websiteURL" => "",
+//                "websiteKey" => $websiteKey
+//            ]
+//        ];
 
 
         //source command-02
