@@ -1,15 +1,16 @@
 {
     "name": "lelaurent/appfree",
-    "type": "project",
     "description": "AppFree main Laravel application",
+    "license": "MIT",
+    "type": "project",
     "keywords": [
         "laravel",
         "framework"
     ],
-    "license": "MIT",
     "require": {
         "php": "^8.4",
         "ext-pcntl": "*",
+        "ergebnis/composer-normalize": "^2.45",
         "evenement/evenement": "^3.0",
         "guzzlehttp/guzzle": "^7.9",
         "laravel/framework": "^11.9",
@@ -28,21 +29,24 @@
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.1",
         "pestphp/pest-plugin-laravel": "^3.0",
+        "phpmd/phpmd": "^2.15",
         "phpstan/phpdoc-parser": "^1.18"
     },
     "repositories": {
-    "local-libs": {
-        "type": "path",
-        "url": "/home/kali/proto/repos/lelaurent/php-asterisk-swagger-api",
-        "options": {
-            "symlink": true
+        "local-libs": {
+            "type": "path",
+            "url": "/home/kali/proto/repos/lelaurent/php-asterisk-swagger-api",
+            "options": {
+                "symlink": true
+            }
+        },
+        "lelaurent/php-asterisk-swagger-api": {
+            "type": "vcs",
+            "url": "appfree@laurentpichler.com:repos/lelaurent/php-asterisk-swagger-api"
         }
     },
-      "lelaurent/php-asterisk-swagger-api"  : {
-          "type": "vcs",
-          "url": "appfree@laurentpichler.com:repos/lelaurent/php-asterisk-swagger-api"
-      }
-},
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "AppFree\\": "app/",
@@ -56,13 +60,28 @@
             "Tests\\": "tests/"
         }
     },
+    "config": {
+        "allow-plugins": {
+            "ergebnis/composer-normalize": true,
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true
+        },
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": []
+        }
+    },
     "scripts": {
+        "post-update-cmd": [
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+        ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
-        ],
-        "post-update-cmd": [
-            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
@@ -75,22 +94,14 @@
         "dev": [
             "Composer\\Config::disableProcessTimeout",
             "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"npm run dev\" --names=server,queue,logs,vite"
+        ],
+        "lint": [
+            "@php ./vendor/bin/php-cs-fixer fix --verbose --dry-run --diff",
+            "@php ./vendor/bin/phpmd src text ruleset.xml"
+        ],
+        "lint:fix": [
+            "@php ./vendor/bin/php-cs-fixer fix --diff",
+            "@composer normalize"
         ]
-    },
-    "extra": {
-        "laravel": {
-            "dont-discover": []
-        }
-    },
-    "config": {
-        "optimize-autoloader": true,
-        "preferred-install": "dist",
-        "sort-packages": true,
-        "allow-plugins": {
-            "pestphp/pest-plugin": true,
-            "php-http/discovery": true
-        }
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    }
 }
