@@ -109,7 +109,7 @@ abstract class AppFreeState extends State implements AppFreeStateInterface
         } else {
             $skip = true;
         }
-        return array($sent, $skip);
+        return [$sent, $skip];
     }
 
     /**

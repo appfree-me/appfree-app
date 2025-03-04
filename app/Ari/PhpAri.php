@@ -46,20 +46,20 @@ class PhpAri
 
     public function __construct(string $appName, EventEmitterInterface $emitter, PhpAriConfig $phpAriConfig, Client $client, Logger $logger)
     {
-            /* Get our configuration */
-            $this->config = $phpAriConfig;
-            $this->logger = $logger;
+        /* Get our configuration */
+        $this->config = $phpAriConfig;
+        $this->logger = $logger;
 
-            /* Some general information */
-            $this->isDebug = (bool)$this->config->general['debug'];
-            $this->logfile = $this->config->general['logfile'];
-            $this->emitter = $emitter;
-            $this->ariEndpoint = $client;
+        /* Some general information */
+        $this->isDebug = (bool)$this->config->general['debug'];
+        $this->logfile = $this->config->general['logfile'];
+        $this->emitter = $emitter;
+        $this->ariEndpoint = $client;
 
-            $this->appName = $appName;
+        $this->appName = $appName;
 
-            /* Connect to ARI server */
-            $this->init();
+        /* Connect to ARI server */
+        $this->init();
 
     }
 
@@ -73,23 +73,23 @@ class PhpAri
 
     public function init(): PromiseInterface
     {
-            if ($this->isDebug) {
-                $this->logger->debug("Initializing WebSocket Information");
-            }
+        if ($this->isDebug) {
+            $this->logger->debug("Initializing WebSocket Information");
+        }
 
-            $promise = resolve(PromiseInterface::class);
-            $promise->catch(function (Exception $err) {
-                $this->logger->error($err->getCode() . $err->getMessage());
-            });
-            // todo anwendung sollte auf vebindungszusammenbruch reagieren
+        $promise = resolve(PromiseInterface::class);
+        $promise->catch(function (Exception $err) {
+            $this->logger->error($err->getCode() . $err->getMessage());
+        });
+        // todo anwendung sollte auf vebindungszusammenbruch reagieren
 
 
-            $this->stasisLoop = Loop::get();
-            $this->stasisClient = $promise;
+        $this->stasisLoop = Loop::get();
+        $this->stasisClient = $promise;
 
-            $this->logger->debug("Setup Events");
-            $this->setupEvents($this->stasisClient);
-            return $promise;
+        $this->logger->debug("Setup Events");
+        $this->setupEvents($this->stasisClient);
+        return $promise;
 
     }
 
