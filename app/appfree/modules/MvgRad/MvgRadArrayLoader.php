@@ -29,7 +29,7 @@ class MvgRadArrayLoader implements LoaderInterface
     private ?CallbackHandler $callbackHandler;
     private ?CallbackBuilderFactoryInterface $callbackBuilderFactory;
 
-    public function __construct(array $config, CallbackHandler $handler = null, CallbackBuilderFactoryInterface $callbackBuilderFactory = null)
+    public function __construct(array $config, ?CallbackHandler $handler = null, ?CallbackBuilderFactoryInterface $callbackBuilderFactory = null)
     {
         $this->callbackHandler = $handler;
         $this->callbackBuilderFactory = $callbackBuilderFactory;

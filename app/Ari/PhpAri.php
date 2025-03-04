@@ -42,6 +42,7 @@ class PhpAri
     public string $baseUri;
     private string $appName;
     private EventEmitterInterface $emitter;
+    private array $apis =  [];
 
     public function __construct(string $appName, EventEmitterInterface $emitter, PhpAriConfig $phpAriConfig, Client $client, Logger $logger)
     {

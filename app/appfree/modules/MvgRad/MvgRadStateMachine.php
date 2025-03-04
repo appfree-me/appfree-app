@@ -32,7 +32,7 @@ class MvgRadStateMachine extends AppFreeStateMachine
      * @return string
      * @throws Exception
      */
-    public function getNextTransition(string $nextState = null): string
+    public function getNextTransition(?string $nextState = null): string
     {
         $currentState = $this->getCurrentState();
         $fromTransitions = $currentState->getTransitions();

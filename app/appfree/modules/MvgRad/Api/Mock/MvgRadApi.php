@@ -16,7 +16,7 @@ class MvgRadApi implements MvgRadApiInterface
     {
     }
 
-    public function doAusleihe(string $radnummer, string $mockPin = null): ?string
+    public function doAusleihe(string $radnummer, ?string $mockPin = null): ?string
     {
         sleep(2);
 
