@@ -98,7 +98,8 @@
         ],
         "lint": [
             "@php ./vendor/bin/php-cs-fixer fix --verbose --dry-run --diff",
-            "@php ./vendor/bin/phpmd src text ruleset.xml"
+            "@php ./vendor/bin/phpmd app text ruleset.xml",
+            "@php ./vendor/bin/phpstan analyse app"
         ],
         "lint:fix": [
             "@php ./vendor/bin/php-cs-fixer fix --diff",
