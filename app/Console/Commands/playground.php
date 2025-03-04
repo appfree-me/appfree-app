@@ -19,7 +19,7 @@ class playground extends Command
      * @var string
      */
     protected $description = 'Command description';
-    private  $callable;
+    private $callable;
 
     /**
      * Execute the console command.
@@ -36,7 +36,7 @@ class playground extends Command
 
     private function makeCallable()
     {
-        return function() {
+        return function () {
             print "hi";
         };
     }

@@ -64,7 +64,8 @@ class MvgRadApi implements MvgRadApiInterface
                 'rental_state' => 'not-running',
                 'pin' => '',
                 'radnummer' => ''
-            ]);
+            ]
+        );
 
 
         return $radnummer;

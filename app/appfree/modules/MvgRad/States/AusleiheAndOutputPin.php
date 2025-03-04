@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace AppFree\appfree\modules\MvgRad\States;
@@ -6,10 +7,9 @@ namespace AppFree\appfree\modules\MvgRad\States;
 use AppFree\AppFreeCommands\AppFree\Expectations\PlaybackFinishedExpectation;
 use AppFree\AppFreeCommands\MvgRad\Commands\V1\MvgRadAusleiheCommand;
 
-
 class AusleiheAndOutputPin extends MvgRadState
 {
-    const SOUND_PIN_IS = 'sound:mvg-pin-is';
+    public const SOUND_PIN_IS = 'sound:mvg-pin-is';
 
     public function run(): \Generator
     {

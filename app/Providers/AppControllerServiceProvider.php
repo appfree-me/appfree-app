@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare(strict_types=1);
 
 namespace AppFree\Providers;
 
@@ -14,7 +14,8 @@ use Monolog\Logger;
 
 class AppControllerServiceProvider extends ServiceProvider
 {
-    public function register(): void {
+    public function register(): void
+    {
         $this->app->singleton(AppController::class, function ($app) {
             $emitter = $app->get(EventEmitter::class);
 

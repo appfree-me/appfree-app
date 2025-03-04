@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace AppFree\Ari;
@@ -23,7 +24,6 @@ use Swagger\Client\Api\MailboxesApi;
 use Swagger\Client\Api\PlaybacksApi;
 use Swagger\Client\Api\RecordingsApi;
 use Swagger\Client\Api\SoundsApi;
-
 
 /**
  * phpari - A PHP Class Library for interfacing with Asterisk(R) ARI

@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare(strict_types=1);
 
 namespace AppFree\Providers;
 
@@ -12,7 +12,6 @@ use Illuminate\Support\ServiceProvider;
 
 class PhpAriConfigServiceProvider extends ServiceProvider
 {
-
     public function register(): void
     {
         $this->app->singleton(PhpAriConfig::class, function (Application $app) {

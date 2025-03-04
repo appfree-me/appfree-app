@@ -1,13 +1,15 @@
 <?php
 
 declare(strict_types=1);
+
 namespace AppFree\appfree\modules\MvgRad;
+
 class MvgRadApp implements \Finite\StatefulInterface
 {
     private string $state;
 
 
-//    public const STATE
+    //    public const STATE
 
     public function getFiniteState(): string
     {

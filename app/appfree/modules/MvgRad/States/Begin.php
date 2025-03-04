@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace AppFree\appfree\modules\MvgRad\States;
@@ -14,13 +15,13 @@ use Illuminate\Support\Facades\DB;
 
 class Begin extends MvgRadState
 {
-    const SOUND_MVG_GRUSS = 'sound:mvg-greeting';
-    const SOUND_MVG_LAST_PIN_IS = 'sound:mvg-last-pin-is';
-    const SOUND_MVG_PIN_PROMPT = 'sound:mvg-pin-prompt';
-    const SOUND_MVG_AUSLEIHE_LAEUFT_RADNUMMER_IST = 'sound:mvg-ausleihe-laeuft';
-    const SOUND_MVG_RUECKGABE_PROMPT = 'sound:mvg-rueckgabe-prompt';
-    const SOUND_MVG_RUECKGABE_BESTAETIGUNG = 'sound:mvg-rueckgabe-bestaetigung';
-    const SOUND_PIN_IS = 'sound:mvg-pin-is';
+    public const SOUND_MVG_GRUSS = 'sound:mvg-greeting';
+    public const SOUND_MVG_LAST_PIN_IS = 'sound:mvg-last-pin-is';
+    public const SOUND_MVG_PIN_PROMPT = 'sound:mvg-pin-prompt';
+    public const SOUND_MVG_AUSLEIHE_LAEUFT_RADNUMMER_IST = 'sound:mvg-ausleihe-laeuft';
+    public const SOUND_MVG_RUECKGABE_PROMPT = 'sound:mvg-rueckgabe-prompt';
+    public const SOUND_MVG_RUECKGABE_BESTAETIGUNG = 'sound:mvg-rueckgabe-bestaetigung';
+    public const SOUND_PIN_IS = 'sound:mvg-pin-is';
 
     public function run(): \Generator
     {
@@ -34,7 +35,8 @@ class Begin extends MvgRadState
 
         if (config('mvg.video_dreh') && $ctx->user && $ctx->user->mobilephone === MakeDto::LAURENT_NUMBER) {
             yield "call" => function () use ($ctx) {
-                $this->sm->done(ReadDtmfString::class,
+                $this->sm->done(
+                    ReadDtmfString::class,
                     new ReadDtmfStringFunctionCommand(4, function (array $setPin) use ($ctx) {
                         DB::table("mvgrad_feature_flags")->updateOrInsert(
                             [
@@ -47,10 +49,10 @@ class Begin extends MvgRadState
                                     ]
                                 )
                             ]
-
                         );
                         $ctx->hangup();
-                    }));
+                    })
+                );
             };
         }
 
@@ -86,7 +88,8 @@ class Begin extends MvgRadState
         }
 
         yield "call" => function () {
-            $this->sm->done(ReadDtmfString::class,
+            $this->sm->done(
+                ReadDtmfString::class,
                 new ReadDtmfStringFunctionCommand(5, function (array $dtmfSequence) {
                     $setPin = null;
 
@@ -98,7 +101,8 @@ class Begin extends MvgRadState
 
                     }
                     $this->sm->done(AusleiheAndOutputPin::class, new MvgRadAusleiheCommand(implode($dtmfSequence), $setPin));
-                }));
+                })
+            );
         };
     }
 }

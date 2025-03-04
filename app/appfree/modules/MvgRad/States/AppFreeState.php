@@ -63,8 +63,8 @@ abstract class AppFreeState extends State implements AppFreeStateInterface
                 } else {
                     $skip = true;
                 }
-//                throw new \Exception("State yielded expect, expected value of type " . Expectation::class . ", got " . gettype($current) === "object" ? get_class($current) : serialize($current));
-            } else if ($this->generator->current() === $dto::class) {
+                //                throw new \Exception("State yielded expect, expected value of type " . Expectation::class . ", got " . gettype($current) === "object" ? get_class($current) : serialize($current));
+            } elseif ($this->generator->current() === $dto::class) {
                 $this->generator->send($dto);
                 $sent = true;
             } else {
@@ -74,8 +74,9 @@ abstract class AppFreeState extends State implements AppFreeStateInterface
 
         if ($this->generator->key() === self::KEY_CALL) {
             $fn = $this->generator->current();
-            try { $fn(); }
-            catch (\Exception $e) {
+            try {
+                $fn();
+            } catch (\Exception $e) {
                 $this->disable = true;
             }
         }
@@ -85,11 +86,11 @@ abstract class AppFreeState extends State implements AppFreeStateInterface
         }
     }
 
-    private function sendToGenerator(AppFreeDto $dto): void {
+    private function sendToGenerator(AppFreeDto $dto): void
+    {
         try {
             $this->generator->send($dto);
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             $this->disable = true;
         }
     }

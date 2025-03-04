@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare(strict_types=1);
 
 namespace AppFree\appfree;
 
@@ -34,8 +34,8 @@ class ConvenienceApi
         try {
             $this->channelsApi->play($this->channelId, $media, null, null, null, $playbackId);
         }
-            // Only should catch "channel not found" - fixme
-            // Sometimes channels just disappear, we don't want to crash the entire app
+        // Only should catch "channel not found" - fixme
+        // Sometimes channels just disappear, we don't want to crash the entire app
         catch (ApiException $exception) {
             resolve(Logger::class)->error("play api exception for channel $this->channelId: " . $exception->getMessage());
             resolve(AppController::class)->removeStateMachine($this->channelId);

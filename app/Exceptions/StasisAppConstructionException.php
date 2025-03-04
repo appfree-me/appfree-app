@@ -4,6 +4,6 @@ namespace AppFree\Exceptions;
 
 use Exception;
 
-class StasisAppConstructionException extends Exception {
-
+class StasisAppConstructionException extends Exception
+{
 }

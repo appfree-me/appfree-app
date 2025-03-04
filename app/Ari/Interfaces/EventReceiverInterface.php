@@ -7,8 +7,7 @@ namespace AppFree\Ari\Interfaces;
 use AppFree\AppFreeCommands\AppFreeDto;
 use Swagger\Client\Model\ModelInterface;
 
-interface EventReceiverInterface {
-
-
+interface EventReceiverInterface
+{
     public function receive(AppFreeDto $eventDto): void;
 }

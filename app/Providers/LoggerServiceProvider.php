@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare(strict_types=1);
 
 namespace AppFree\Providers;
 
@@ -17,7 +17,7 @@ class LoggerServiceProvider extends ServiceProvider
         $this->app->singleton(Logger::class, function (Application $app) {
             $config_asterisk = $app->get(PhpAriConfig::class);
 
-            $logger = new \Monolog\Logger("appfree-" . config("app.env") );
+            $logger = new \Monolog\Logger("appfree-" . config("app.env"));
 
             if ($config_asterisk->general['logfile'] == "console") {
                 $logWriter = new StreamHandler("php://stdout");

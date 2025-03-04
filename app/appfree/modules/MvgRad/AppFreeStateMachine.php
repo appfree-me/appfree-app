@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare(strict_types=1);
 
 namespace AppFree\appfree\modules\MvgRad;
 
@@ -9,7 +9,6 @@ use Finite\StateMachine\StateMachine;
 
 abstract class AppFreeStateMachine extends StateMachine
 {
-
     private StateMachineContext $context;
 
     public function getContext(): StateMachineContext
@@ -17,7 +16,8 @@ abstract class AppFreeStateMachine extends StateMachine
         return $this->context;
     }
 
-    public function setContext(StateMachineContext $context): void {
+    public function setContext(StateMachineContext $context): void
+    {
         $this->context = $context;
     }
 }

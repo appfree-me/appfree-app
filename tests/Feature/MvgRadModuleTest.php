@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 uses(DatabaseTransactions::class);
 
 describe("appfree mvgrad module", function () {
-//    it('state advances until OutputPin State', function () {
+    //    it('state advances until OutputPin State', function () {
     it('MvgRadModule::getLastPin reads correctly from DB', function () {
         $m = new MvgRadModule();
 
@@ -27,7 +27,7 @@ describe("appfree mvgrad module", function () {
 
         $testtransaction->user_id = $userId;
         $testtransaction->pin = $pin;
-        $testtransaction->type ="rental";
+        $testtransaction->type = "rental";
         $testtransaction->group_id = uuid_create();
         $testtransaction->api_id = "prod";
         $testuser->save();

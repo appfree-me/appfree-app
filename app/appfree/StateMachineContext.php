@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare(strict_types=1);
 
 namespace AppFree\appfree;
 
@@ -11,7 +11,7 @@ use Swagger\Client\Api\ChannelsApi;
 
 class StateMachineContext implements StatefulInterface
 {
-    const ASTERISK_MAX_VAR_LENGTH = 255;
+    public const ASTERISK_MAX_VAR_LENGTH = 255;
     public readonly string $channelId;
     private ?string $state = null;
     public ChannelsApi $channelsApi;

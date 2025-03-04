@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare(strict_types=1);
 
 namespace AppFree;
 
@@ -13,7 +13,7 @@ class AppFree
     /**
      * @throws ObjectException
      */
-        public static function app(AppController $app): void
+    public static function app(AppController $app): void
     {
         pcntl_async_signals(true);
 

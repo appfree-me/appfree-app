@@ -26,11 +26,11 @@ class GenerateDtosFromSwaggerApi extends Command
     public function handle()
     {
 
-/*
- * todo: Alle Dateien unterhalb von
- *  vendor/lelaurent/php-asterisk-swagger-api/lib/Model/Playback.php
- * durchlaufen, parsen, DtoCommands erstellen
+        /*
+         * todo: Alle Dateien unterhalb von
+         *  vendor/lelaurent/php-asterisk-swagger-api/lib/Model/Playback.php
+         * durchlaufen, parsen, DtoCommands erstellen
 
-*/
+        */
     }
 }

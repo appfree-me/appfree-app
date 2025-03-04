@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare(strict_types=1);
 
 namespace AppFree\AppFreeCommands\AppFree\Commands\V1;
 
@@ -12,7 +12,8 @@ class ReadDtmfStringFunctionCommand extends AppFreeDto
     public readonly \Closure $callback;
     public int $dtmfLength;
 
-    public function __construct(int $length, \Closure $callback) {
+    public function __construct(int $length, \Closure $callback)
+    {
         $this->callback = $callback;
         $this->dtmfLength = $length;
     }

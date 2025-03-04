@@ -11,7 +11,8 @@ use Illuminate\Notifications\Notifiable;
 class MvgradTransactions extends Model
 {
     /** @use HasFactory<\Database\Factories\MvgradTransactionsFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.

@@ -25,18 +25,18 @@ class mlogin extends Command
      */
     public function handle()
     {
-// https://login.muenchen.de/ui/account/login?service=go-prod
+        // https://login.muenchen.de/ui/account/login?service=go-prod
         /*
          * For this case just need to extract the sitekey and send it to our API with full page URL.
          * Then just place the token into cf-turnstile-response and g-recaptcha-response
          */
 
-//
-//        source command-00
+        //
+        //        source command-00
 
-// Alles löschen
+        // Alles löschen
 
-//source command-01
+        //source command-01
 
         // curl -v -b cookie-jar-00.txt -c cookie-jar-00.txt -L -H\
         // 'upgrade-insecure-requests: 1' -H\
@@ -54,7 +54,7 @@ class mlogin extends Command
         //8Fsg&code_challenge=b9BlK9_kTgBKxtTe5a9vmVQfwDRXilo6JvBxfP5TY6I&code_challenge_method=S256&locale=de_DE&login_action=widen_s
         //cope'
 
-//source command-01-03
+        //source command-01-03
         // xsrf token sichern
         // NEU: turnstile lösen
 
@@ -114,7 +114,7 @@ class mlogin extends Command
         ];
 
 
-//source command-02
+        //source command-02
 
         // curl --trace command02-trace -b cookie-jar-00.txt -c cookie-jar-00.txt   -o redirectUrl.json -H\
         // 'accept: application/json, text/plain, */*' -H\
@@ -129,21 +129,21 @@ class mlogin extends Command
         // 'accept-language: en-US,en;q=0.9' \
         //  -X POST 'https://login.muenchen.de/login?sso=true&locale=en' --data-binary $'------WebKitFormBoundaryZ6PCNbiAXfqBAIfV\r\nContent-Disposition: form-data; name="username"\r\n\r\nlpi@mytum.de\r\n------WebKitFormBoundaryZ6PCNbiAXfqBAIfV\r\nContent-Disposition: form-data; name="password"\r\n\r\npillepalle1A\r\n------WebKitFormBoundaryZ6PCNbiAXfqBAIfV--\r\n'
 
-// NEU in urlencoded form:
-//        cf-turnstile-response: 0.dwrOo1bUUWTbQWpgo3r4l215OwjpTNe1Pzd27aN8nNFrGK9L-pi1Go7K3XamGEfcIg4ctvyrlq_RWdSXbgoLJTooez34lXFg1APbAhwCfYy2hd1SwnxowgEaHX1q2LPjWz6szshqh1uLOvtTABS9Ssc
-//WwRVz_80jeorE8nMlRWDsRf0ZWid6LbrUFBYa9KMxZFoFIINjWBH0ku1o35nu5vzpVfjApUrNDyZI_1HF1tu9JZKfGVcjJ2vWhI9LHKO2ChihDB-LCGM6N4K92NM-WjotiUsZV3-ok_wXQL8ExXqaxmW-t0yLdRxv2j6kmxZ4xkeenxx
-//JJpQz11AQge4gBtwgJhogXageALXVSsUdB1c5NcQPIU78YqkGcLC4SUFDxq2Hqtu3PPn3Ldo9994rMbNn5-hN0g7QZnx_G1WP9n2MZYNaIAKQ9jh32AZNX1oCxBnWZhfM9FASW_jynEZPBDkqCzfktV8ywkXmIOUtTh0kp6vEefgRkQW
-//58k8XAK_lplCjW3hR46QfK2YaPmFWRLakB23_3Wg3CPhUL5bBOo2LkCiCavwKslX8AXrU1DFBYz2oclgC_6TRRGQP9ViCxcRJC-2LYaWnbl6inj8Vdh74sucb09sbmw3HgtYH8MCLc2YM_zIKl5moz_ouU-tbpMltxvD2vHih7n2VQ09
-//K4Sh3gHRqu2aQrx4E2GeNIblPPE-YVPpUgbAx5w7k_AMP0xsMsfHOCg10UPffeer6uiTKcygsBSJPtDHQKQycBlKTV8flSypBn0yudcmd-7JTRHi-4FLGOHAFcPIFpDywIIU_NY6B9n_uPXdvJX7-mWxn6ckBDtjCeV_F3e5zmP8ygWl
-//Wk8BQcmoKbLEIA9oKEAQ9LjuZciyRj1LOGYi4wG9w8T55jHDhGmJix3oeuE1um9HWRVA-1ptaPN138Tg63Eg.rMvvCX1c6haithM8UckEbQ.3da74d23fe302b922c8637658c068969d420d9ceef4867e41aa0aba96b700157
-//_csrf:                 7ffd0799-1836-427d-91c9-d38f92996939
+        // NEU in urlencoded form:
+        //        cf-turnstile-response: 0.dwrOo1bUUWTbQWpgo3r4l215OwjpTNe1Pzd27aN8nNFrGK9L-pi1Go7K3XamGEfcIg4ctvyrlq_RWdSXbgoLJTooez34lXFg1APbAhwCfYy2hd1SwnxowgEaHX1q2LPjWz6szshqh1uLOvtTABS9Ssc
+        //WwRVz_80jeorE8nMlRWDsRf0ZWid6LbrUFBYa9KMxZFoFIINjWBH0ku1o35nu5vzpVfjApUrNDyZI_1HF1tu9JZKfGVcjJ2vWhI9LHKO2ChihDB-LCGM6N4K92NM-WjotiUsZV3-ok_wXQL8ExXqaxmW-t0yLdRxv2j6kmxZ4xkeenxx
+        //JJpQz11AQge4gBtwgJhogXageALXVSsUdB1c5NcQPIU78YqkGcLC4SUFDxq2Hqtu3PPn3Ldo9994rMbNn5-hN0g7QZnx_G1WP9n2MZYNaIAKQ9jh32AZNX1oCxBnWZhfM9FASW_jynEZPBDkqCzfktV8ywkXmIOUtTh0kp6vEefgRkQW
+        //58k8XAK_lplCjW3hR46QfK2YaPmFWRLakB23_3Wg3CPhUL5bBOo2LkCiCavwKslX8AXrU1DFBYz2oclgC_6TRRGQP9ViCxcRJC-2LYaWnbl6inj8Vdh74sucb09sbmw3HgtYH8MCLc2YM_zIKl5moz_ouU-tbpMltxvD2vHih7n2VQ09
+        //K4Sh3gHRqu2aQrx4E2GeNIblPPE-YVPpUgbAx5w7k_AMP0xsMsfHOCg10UPffeer6uiTKcygsBSJPtDHQKQycBlKTV8flSypBn0yudcmd-7JTRHi-4FLGOHAFcPIFpDywIIU_NY6B9n_uPXdvJX7-mWxn6ckBDtjCeV_F3e5zmP8ygWl
+        //Wk8BQcmoKbLEIA9oKEAQ9LjuZciyRj1LOGYi4wG9w8T55jHDhGmJix3oeuE1um9HWRVA-1ptaPN138Tg63Eg.rMvvCX1c6haithM8UckEbQ.3da74d23fe302b922c8637658c068969d420d9ceef4867e41aa0aba96b700157
+        //_csrf:                 7ffd0799-1836-427d-91c9-d38f92996939
 
 
-//source command-02-01
-//source command-03
-//source command-03-01
-//source command-04
-//source command-04-01
+        //source command-02-01
+        //source command-03
+        //source command-03-01
+        //source command-04
+        //source command-04-01
 
 
     }

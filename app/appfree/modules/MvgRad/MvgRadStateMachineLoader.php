@@ -15,8 +15,7 @@ use Finite\StateMachine\StateMachineInterface;
 
 class MvgRadStateMachineLoader
 {
-
-public const  DTO = "dto";
+    public const  DTO = "dto";
 
     public static function definition(StateMachineInterface $myStateMachine, MvgRadApiInterface $mvgRadApi, MvgRadModule $mvgRadModule)
     {

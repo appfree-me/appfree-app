@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace AppFree\AppFreeCommands\AppFree\Expectations;
@@ -11,11 +12,13 @@ class PlaybackFinishedExpectation extends Expectation
 {
     private string $playbackId;
 
-    public function __construct(string $playbackId) {
+    public function __construct(string $playbackId)
+    {
         $this->playbackId = $playbackId;
     }
 
-    public function hasMatch(AppFreeDto $inputDto): bool {
+    public function hasMatch(AppFreeDto $inputDto): bool
+    {
 
         if (! $inputDto instanceof PlaybackFinished) {
             return false;

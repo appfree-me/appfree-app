@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare(strict_types=1);
 
 namespace AppFree;
 
@@ -8,7 +8,7 @@ use Finite\StatefulInterface;
 
 class StatefulObject implements StatefulInterface
 {
-    private ?string $state=null;
+    private ?string $state = null;
 
     public function __construct()
     {

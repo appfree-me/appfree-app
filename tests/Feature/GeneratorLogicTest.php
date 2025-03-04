@@ -10,7 +10,6 @@ use AppFree\AppFreeCommands\Stasis\Objects\V1\Caller;
 use AppFree\AppFreeCommands\Stasis\Objects\V1\Channel;
 use AppFree\AppFreeCommands\Stasis\Objects\V1\Playback;
 
-
 describe("appfree generator logic", function () {
     beforeEach(function () {
         config()->set("app.authenticate", false);
@@ -18,12 +17,12 @@ describe("appfree generator logic", function () {
         $this->caller = new Caller("c1", "c1");
         $this->channel = new Channel("testchannel", $this->caller);
     });
-//    it('state advances until OutputPin State', function () {
+    //    it('state advances until OutputPin State', function () {
     it('expect works as first statement and yield "call" works as last statement', function () {
         global $calledProvidedFn;
         $calledProvidedFn = false;
 
-        $class = new class("testname") extends AppFreeState {
+        $class = new class ("testname") extends AppFreeState {
             public function run(): \Generator
             {
                 $dto = yield "expect" => StasisEnd::class;
@@ -50,7 +49,7 @@ describe("appfree generator logic", function () {
         expect($calledProvidedFn)->toBeTrue("AppFreeState should call the function provided by the generator.");
     });
     it('processing works after call', function () {
-        $class = new class("testname") extends AppFreeState {
+        $class = new class ("testname") extends AppFreeState {
             public function run(): \Generator
             {
                 $dto = yield "expect" => StasisEnd::class;
@@ -76,7 +75,7 @@ describe("appfree generator logic", function () {
         global $calledProvidedFn;
         $calledProvidedFn = false;
 
-        $class = new class("testname") extends AppFreeState {
+        $class = new class ("testname") extends AppFreeState {
             public function run(): \Generator
             {
                 global $calledProvidedFn;
