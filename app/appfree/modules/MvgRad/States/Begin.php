@@ -32,7 +32,7 @@ class Begin extends MvgRadState
         $ctx->ring();
         $ctx->answer();
 
-        if (config('mvg.video_dreh') && $ctx->user->mobilephone === MakeDto::LAURENT_NUMBER) {
+        if (config('mvg.video_dreh') && $ctx->user && $ctx->user->mobilephone === MakeDto::LAURENT_NUMBER) {
             yield "call" => function () use ($ctx) {
                 $this->sm->done(ReadDtmfString::class,
                     new ReadDtmfStringFunctionCommand(4, function (array $setPin) use ($ctx) {

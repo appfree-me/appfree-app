@@ -93,13 +93,13 @@ class AppController implements StatefulInterface, EventReceiverInterface
 
     private function dropAllCalls()
     {
-        $r = $this->ari->channels()->callListWithHttpInfo()[0];
-            $x = json_decode($r, true);
-            foreach ($x as $c) {
-                $this->logger->debug("Cleaning up old channel ".$c["id"]);
-                $this->denyChannel($c["id"]);
-            }
-
+        $r = $this->ari->channels()->callListWithHttpInfo();
+        if (!$r) {return;}
+        $x = json_decode($r[0], true);
+        foreach ($x as $c) {
+            $this->logger->debug("Cleaning up old channel " . $c["id"]);
+            $this->denyChannel($c["id"]);
+        }
     }
 
     public function initStateMachine(StateMachineContext $stateMachineContext): StateMachineInterface

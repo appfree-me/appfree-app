@@ -66,6 +66,7 @@ describe("appfree-mvgrad sample flow", function () {
                 return $b;
             })
             ->andReturn($lastOutputDigitPlaybackId);
+        $channelsApiMock->shouldReceive("callListWithHttpInfo");
 
 
         $this->instance(ChannelsApi::class, $channelsApiMock);
