@@ -10,7 +10,7 @@ use AppFree\AppFreeCommands\AppFreeDto;
 class ReadDtmfStringFunctionCommand extends AppFreeDto
 {
     public readonly \Closure $callback;
-    public int $dtmfLength;
+    public readonly int $dtmfLength;
 
     public function __construct(int $length, \Closure $callback)
     {

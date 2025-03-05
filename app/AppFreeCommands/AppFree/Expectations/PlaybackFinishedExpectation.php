@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\App;
 
 class PlaybackFinishedExpectation extends Expectation
 {
-    private string $playbackId;
+    private readonly string $playbackId;
 
     public function __construct(string $playbackId)
     {
