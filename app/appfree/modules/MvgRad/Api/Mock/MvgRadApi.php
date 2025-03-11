@@ -10,8 +10,6 @@ use Illuminate\Support\Facades\DB;
 
 class MvgRadApi implements MvgRadApiInterface
 {
-    public const API_ID = "mock";
-
     public function __construct(private AppFreeStateMachine $sm)
     {
     }
@@ -98,5 +96,10 @@ class MvgRadApi implements MvgRadApiInterface
     private function generateMockPin()
     {
         return mt_rand(1, 9) . mt_rand(0, 9) . mt_rand(0, 9) . mt_rand(0, 9);
+    }
+
+    public function isMock(): bool
+    {
+        return true;
     }
 }

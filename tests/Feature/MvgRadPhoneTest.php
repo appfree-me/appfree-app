@@ -16,7 +16,7 @@ describe("appfree-mvgrad sample flow", function () {
     beforeEach(function () {
         //todo should be beforeAll
         config()->set("app.authenticate", false);
-        config()->set("app.mvg-rad-api", "prod");
+        config()->set("app.mvg-rad-api", "mock");
         //        require_once(__DIR__ . "/../../app/appfree/modules/MvgRad/Api/MvgRadApiInterface.php");
     });
 
@@ -61,10 +61,17 @@ describe("appfree-mvgrad sample flow", function () {
         $conApiMock->shouldReceive("play")->andReturn($pinPromptPlaybackId);
         $conApiMock->shouldReceive("sayDigits")
             ->withArgs(function ($arg1) {
-                $b = $arg1 === "999";
+                $b = $arg1 === "12345";
                 return $b;
             })
             ->andReturn($lastOutputDigitPlaybackId);
+
+        //todo hier kommt die pin des ausleihvorgangs rein - wird momentan noch nicht in DB geschrieben - fix me
+        $conApiMock->shouldReceive("sayDigits")->withArgs(function ($arg1) {
+            return $arg1 === "";
+        });
+
+
         $channelsApiMock->shouldReceive("callListWithHttpInfo");
 
 

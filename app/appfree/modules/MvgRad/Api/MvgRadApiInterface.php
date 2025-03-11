@@ -8,6 +8,8 @@ interface MvgRadApiInterface
 {
     //    public function __construct(AppFreeStateMachine $sm);
 
+    public function isMock(): bool;
+
     public function doAusleihe(string $radnummer): ?string;
 
     public function getAusleiheRadnummer(): ?string;

@@ -20,9 +20,10 @@ class Begin extends MvgRadState
     public const SOUND_MVG_LAST_PIN_IS = 'sound:mvg-last-pin-is';
     public const SOUND_MVG_PIN_PROMPT = 'sound:mvg-pin-prompt';
     public const SOUND_MVG_AUSLEIHE_LAEUFT_RADNUMMER_IST = 'sound:mvg-ausleihe-laeuft';
-    public const SOUND_MVG_RUECKGABE_PROMPT = 'sound:mvg-rueckgabe-prompt';
-    public const SOUND_MVG_RUECKGABE_BESTAETIGUNG = 'sound:mvg-rueckgabe-bestaetigung';
+    public const SOUND_MVG_MOCK_RUECKGABE_PROMPT = 'sound:mvg-rueckgabe-prompt';
+    public const SOUND_MVG_MOCK_RUECKGABE_BESTAETIGUNG = 'sound:mvg-rueckgabe-bestaetigung';
     public const SOUND_PIN_IS = 'sound:mvg-pin-is';
+    public const SOUND_MVG_PROD_RUECKGABE_ALERT = 'sound:mvg-rad-rueckgabe-impossible-alert' ;
 
     public function run(): Generator
     {
@@ -71,15 +72,26 @@ class Begin extends MvgRadState
 
             yield "expect" => new PlaybackFinishedExpectation($wait);
 
-            $prompt = $ctx->play(self::SOUND_MVG_RUECKGABE_PROMPT);
+            // Mock API has a bike return feature for demonstration purposes
+            if ($this->mvgRadApi->isMock()) {
+                $prompt = $ctx->play(self::SOUND_MVG_MOCK_RUECKGABE_PROMPT);
 
-            yield "expect" => new PlaybackFinishedExpectation($prompt);
-            /** @var ChannelDtmfReceived $dto */
-            $dto = yield "expect" => ChannelDtmfReceived::class; // fixme sollte natürlich auch funktionieren nicht nur wenn Rautetaste als erstes gedrückt wurde
-            if ($dto->digit === '#') {
-                $this->mvgRadApi->doRueckgabe();
-                $playback = $ctx->play(self::SOUND_MVG_RUECKGABE_BESTAETIGUNG);
-                yield "expect" => new PlaybackFinishedExpectation($playback);
+
+                yield "expect" => new PlaybackFinishedExpectation($prompt);
+                /** @var ChannelDtmfReceived $dto */
+                $dto = yield "expect" => ChannelDtmfReceived::class; // fixme sollte natürlich auch funktionieren nicht nur wenn Rautetaste als erstes gedrückt wurde
+                if ($dto->digit === '#') {
+                    $this->mvgRadApi->doRueckgabe();
+                    $playback = $ctx->play(self::SOUND_MVG_MOCK_RUECKGABE_BESTAETIGUNG);
+                    yield "expect" => new PlaybackFinishedExpectation($playback);
+                    $ctx->hangup();
+                    return;
+                }
+            } // Prod API just tells the user to return it on the bike and hangs up on him :-(
+            else {
+                $prompt = $ctx->play(self::SOUND_MVG_PROD_RUECKGABE_ALERT);
+                yield "expect" => new PlaybackFinishedExpectation($prompt);
+
                 $ctx->hangup();
                 return;
             }
@@ -101,7 +113,6 @@ class Begin extends MvgRadState
                         $x = $record->first();
                         $decoded = json_decode($x->json);
                         $setPin = implode($decoded->fixedPin);
-
                     }
                     $this->sm->done(AusleiheAndOutputPin::class, new MvgRadAusleiheCommand(implode($dtmfSequence), $setPin));
                 })

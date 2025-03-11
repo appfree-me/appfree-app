@@ -14,10 +14,9 @@ use AppFree\AppFreeCommands\AppFreeDto;
 use ReflectionClass;
 use Tests\TestCase;
 
-
 class AppFreeDtoTest extends TestCase
 {
-    const string APP_APP_FREE_COMMANDS_DIR = __DIR__ . "/../../../app/AppFreeCommands";
+    public const string APP_APP_FREE_COMMANDS_DIR = __DIR__ . "/../../../app/AppFreeCommands";
 
     private function loadDtoClasses(string $dir): void
     {
@@ -51,24 +50,22 @@ class AppFreeDtoTest extends TestCase
         }
     }
 
-//    function isSerializable( $var )
-//    {
-//        try {
-//            serialize( $var );
-//            return TRUE;
-//        } catch( Exception $e ) {
-//            return FALSE;
-//        }
-//    }
+    //    function isSerializable( $var )
+    //    {
+    //        try {
+    //            serialize( $var );
+    //            return TRUE;
+    //        } catch( Exception $e ) {
+    //            return FALSE;
+    //        }
+    //    }
 
     public function testCheckAllDtoClassesHaveOnlyReadonlyAttribute()
     {
         $this->loadDtoClasses(self::APP_APP_FREE_COMMANDS_DIR);
         foreach ($this->getDescendantsOfAppFreeDto() as $afd) {
 
-
-//            $this->assertTrue($this->isSerializable($afd));
-            // 2. check readonly
+            // check that all DTO class properties are readonly
             $reflection = new ReflectionClass($afd);
             $properties = $reflection->getProperties();
             foreach ($properties as $property) {

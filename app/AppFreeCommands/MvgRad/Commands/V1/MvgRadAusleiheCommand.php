@@ -8,13 +8,10 @@ use AppFree\AppFreeCommands\AppFreeDto;
 
 class MvgRadAusleiheCommand extends AppFreeDto
 {
-    public readonly string $radnummer;
-    public readonly ?string $pin;
-
-    public function __construct(string $radnummer, ?string $setPin = null)
-    {
-        $this->radnummer = $radnummer;
-        $this->pin = $setPin;
+    public function __construct(
+        public readonly string $radnummer,
+        public readonly ?string $setPin = null,
+    ) {
     }
 
 }
