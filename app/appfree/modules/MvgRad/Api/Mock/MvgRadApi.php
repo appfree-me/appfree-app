@@ -102,4 +102,9 @@ class MvgRadApi implements MvgRadApiInterface
     {
         return true;
     }
+
+    public function init(): void
+    {
+        // TODO: Implement init() method.
+    }
 }

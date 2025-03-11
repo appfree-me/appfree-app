@@ -15,7 +15,7 @@ class AusleiheAndOutputPin extends MvgRadState
     {
         $ctx = $this->sm->getContext();
         $dto = yield "expect" => MvgRadAusleiheCommand::class;
-        $pin = $this->mvgRadApi->doAusleihe($dto->radnummer, $dto->pin);
+        $pin = $this->mvgRadApi->doAusleihe($dto->radnummer, $dto->setPin);
 
         for ($i = 0; $i < 10; $i++) {
             $wait = $ctx->play(self::SOUND_PIN_IS);

@@ -3,7 +3,7 @@
 
 use App\Models\User;
 use AppFree\appfree\modules\MvgRad\Api\MvgRadModule;
-use AppFree\Models\MvgradTransactions;
+use AppFree\Models\MvgradTransaction;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 uses(DatabaseTransactions::class);
@@ -13,7 +13,7 @@ describe("appfree mvgrad module", function () {
     it('MvgRadModule::getLastPin reads correctly from DB', function () {
         $m = new MvgRadModule();
 
-        $testtransaction = new MvgradTransactions();
+        $testtransaction = new MvgradTransaction();
         $testuser = new User();
         $phone = "1234";
         $pin = "xyz";

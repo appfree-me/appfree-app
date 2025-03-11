@@ -8,10 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class MvgradTransactions extends Model
+class MvgradTransaction extends Model
 {
     /** @use HasFactory<\Database\Factories\MvgradTransactionsFactory> */
-    use HasFactory;
     use Notifiable;
 
     /**

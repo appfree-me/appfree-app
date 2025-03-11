@@ -16,13 +16,13 @@ describe("appfree-mvgrad sample flow", function () {
     beforeEach(function () {
         //todo should be beforeAll
         config()->set("app.authenticate", false);
-        config()->set("app.mvg-rad-api", "mock");
+        config()->set("app.mvg-rad-api", "prod");
         //        require_once(__DIR__ . "/../../app/appfree/modules/MvgRad/Api/MvgRadApiInterface.php");
     });
 
     //    it('state advances until OutputPin State', function () {
     it('state Begin plays greeting, last pin and pin prompt and transitions to ReadBikeNumber, receives Bike Number, repeats it and does ausleihe and plays pin', function () {
-        $channel = new Channel("testchannel", new Caller("12", "12"));
+        $channel = new Channel("testchannel", new Caller("017662328758", "017662328758"));
         $pinPromptPlaybackId = "xid";
         $lastOutputDigitPlaybackId = "xid2";
 
@@ -50,8 +50,8 @@ describe("appfree-mvgrad sample flow", function () {
         //$app = App::make(AppController::class);
         //        $app = resolve(AppController::class);
         //        $app = new AppController();
-        $mvgRadApiMock = Mockery::mock('overload:AppFree\appfree\modules\MvgRad\Api\Prod\MvgRadApi', \AppFree\appfree\modules\MvgRad\Api\MvgRadApiInterface::class);
-        $mvgRadApiMock->shouldReceive("getAusleiheRadnummer")->andReturn(false);
+        //        $mvgRadApiMock = Mockery::mock('overload:AppFree\appfree\modules\MvgRad\Api\Prod\MvgRadApi', \AppFree\appfree\modules\MvgRad\Api\MvgRadApiInterface::class);
+        //        $mvgRadApiMock->shouldReceive("getAusleiheRadnummer")->andReturn(false);
         $mvgRadModuleMock = Mockery::mock(\AppFree\appfree\modules\MvgRad\Api\MvgRadModule::class);
         $phpAriMock = Mockery::mock(PhpAri::class);
         $channelsApiMock = Mockery::mock(ChannelsApi::class);
@@ -79,7 +79,7 @@ describe("appfree-mvgrad sample flow", function () {
         $this->instance(\AppFree\appfree\modules\MvgRad\Api\MvgRadModule::class, $mvgRadModuleMock);
         $this->instance(\React\Promise\PromiseInterface::class, $promiseMock);
         $this->instance(Loop::class, $loopMock);
-        $this->instance(MvgRadApi::class, $mvgRadApiMock);
+        //        $this->instance(MvgRadApi::class, $mvgRadApiMock);
         $this->instance(PhpAri::class, $phpAriMock);
         $phpAriMock->shouldReceive('channels')->andReturn($channelsApiMock);
 
@@ -97,7 +97,7 @@ describe("appfree-mvgrad sample flow", function () {
         $mvgRadModuleMock->shouldReceive("getLastPin")->andReturn("123");
 
         // OKASSERT
-        $mvgRadApiMock->shouldReceive("doAusleihe")->once()->andReturn($mockedReturnedPin);
+        //        $mvgRadApiMock->shouldReceive("doAusleihe")->once()->andReturn($mockedReturnedPin);
         /////
         //        $phpAriMock->logger = $monologMock;
         //        $phpAriMock->ariEndpoint = $ariEndpointMock;

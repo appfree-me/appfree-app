@@ -122,6 +122,7 @@ abstract class AppFreeState extends State implements AppFreeStateInterface
             $fn();
         } catch (Exception $e) {
             $this->disable = true;
+            throw $e;
         }
     }
 }
