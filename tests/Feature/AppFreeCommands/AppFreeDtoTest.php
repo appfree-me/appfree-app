@@ -3,9 +3,9 @@
 namespace Tests\Feature\AppFreeCommands;
 
 /*
- * All classes extending AppFreeDto should only have readonly attributes
- * which are set via the constructor
- * This test finds all classes extending from it which are
+ * All classes extending AppFreeDto should only have readonly class properties
+ * which are set via the constructor. There can be no other class properties.
+ * This test finds all classes extending from AppFreeDto which are
  * located in the directory AppFreeCommands and checks this via reflection
  */
 

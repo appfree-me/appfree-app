@@ -6,24 +6,23 @@ namespace AppFree\AppFreeCommands\AppFree\Expectations;
 
 use AppFree\AppFreeCommands\AppFreeDto;
 use AppFree\AppFreeCommands\Stasis\Events\V1\PlaybackFinished;
-use Illuminate\Support\Facades\App;
 
 class PlaybackFinishedExpectation extends Expectation
 {
-    private readonly string $playbackId;
-
-    public function __construct(string $playbackId)
+    public function __construct(private readonly ?string $playbackId)
     {
-        $this->playbackId = $playbackId;
     }
 
     public function hasMatch(AppFreeDto $inputDto): bool
     {
-
-        if (! $inputDto instanceof PlaybackFinished) {
+        if (!$inputDto instanceof PlaybackFinished) {
             return false;
         }
 
-        return $inputDto->playback->id === $this->playbackId;
+        if ($this->playbackId !== null) {
+            return $inputDto->playback->id === $this->playbackId;
+        }
+
+        return false;
     }
 }
