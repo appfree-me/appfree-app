@@ -71,6 +71,9 @@ describe("appfree-mvgrad sample flow", function () {
             return $arg1 === "";
         });
 
+        //??
+        $conApiMock->shouldReceive("sayDigits");
+
 
         $channelsApiMock->shouldReceive("callListWithHttpInfo");
 

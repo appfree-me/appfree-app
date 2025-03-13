@@ -30,6 +30,7 @@ describe("appfree mvgrad module", function () {
         $testtransaction->type = "rental";
         $testtransaction->group_id = uuid_create();
         $testtransaction->api_id = "prod";
+        $testtransaction->mvg_start_date = "2022-02-02";
         $testuser->save();
         $testtransaction->save();
 

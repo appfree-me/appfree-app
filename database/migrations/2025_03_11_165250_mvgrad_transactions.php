@@ -14,6 +14,8 @@ return new class () extends Migration {
             $table->string('mvg_id');
             $table->string('mvg_start_date');
         });
+        DB::statement("ALTER TABLE mvgrad_transactions MODIFY COLUMN mvg_id varchar(255) default null");
+
     }
 
     /**
@@ -22,6 +24,5 @@ return new class () extends Migration {
     public function down(): void
     {
         Schema::dropColumns("mvgrad_transactions", ["mvg_id", "mvg_start_date"]);
-
     }
 };

@@ -7,6 +7,7 @@ use AppFree\appfree\modules\MvgRad\AppFreeStateMachine;
 use AppFree\Models\MvgradTransaction;
 use AppFree\Models\MvgRadUser;
 use Illuminate\Support\Facades\Http;
+use Monolog\Logger;
 use RuntimeException;
 
 class MvgRadApi implements MvgRadApiInterface
@@ -37,7 +38,7 @@ class MvgRadApi implements MvgRadApiInterface
 
         $apiRecord = $this->apiRecord;
 
-        $response = Http::withHeaders([
+        $headers = [
             'User-Agent' => $apiRecord->user_agent,
             'X-Api-Build-Info' => $apiRecord->api_build_info,
             'X-Api-Client-Device' => $apiRecord->api_client_device,
@@ -46,17 +47,21 @@ class MvgRadApi implements MvgRadApiInterface
             'X-Api-Client-Version' => $apiRecord->api_client_version,
             'X-Api-Key' => $apiRecord->api_key,
             'X-Api-Session' => $this->mvgRadUser->session_token,
-        ])->post('https://mvgo-gateway.web.azrapp.swm.de/v2/sharing/rad/rental/rent', [
+        ];
+        $data = [
 //        ])->post('http://localhost:12345', [
             'idForRental' => $radnummer,
             'vehicleType' => self::VEHICLE_TYPE_BIKE,
-        ])->json();
+        ];
+        $response = Http::withHeaders($headers)->post('https://mvgo-gateway.web.azrapp.swm.de/v2/sharing/rad/rental/rent', $data)->json();
 
         //        $response = json_decode('{
         //  "id": "RAD-f4f03b4c-9a92-4cec-a3f3-9d760b40f09a",
         //  "code": "7529",
         //  "startDate": "2025-03-11T16:18:18.000Z"
         //}', true);
+
+        resolve(Logger::class)->notice($response);
 
         $pin = $response["code"];
 
@@ -78,7 +83,7 @@ class MvgRadApi implements MvgRadApiInterface
         $tx->pin = $response["code"];
         $tx->api_id = self::API_ID;
         $tx->mvg_id = $response["id"];
-        $tx->mvg_start_date = $response["startDate"];
+        $tx->mvg_start_date = $response["startDate"] ?? "2022-02-02";
 
         $tx->save();
     }
