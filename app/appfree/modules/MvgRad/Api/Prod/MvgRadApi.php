@@ -61,7 +61,7 @@ class MvgRadApi implements MvgRadApiInterface
         //  "startDate": "2025-03-11T16:18:18.000Z"
         //}', true);
 
-        resolve(Logger::class)->notice($response);
+        resolve(Logger::class)->notice(implode($response));
 
         $pin = $response["code"];
 

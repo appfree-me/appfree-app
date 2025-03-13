@@ -9,7 +9,7 @@ use AppFree\AppFreeCommands\Stasis\Objects\V1\Channel;
 
 class ChannelStateChange extends AppFreeDto
 {
-    public function __construct(public readonly Channel $channel, public readonly string $digit)
+    public function __construct(public readonly Channel $channel)
     {
         // Wieso gibt es StasisStart Model in Swagger API?
         // Wieso ist das relevant für die HTTP Rest API?

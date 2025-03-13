@@ -14,7 +14,7 @@ return new class () extends Migration {
             $table->string('mvg_id');
             $table->string('mvg_start_date');
         });
-        DB::statement("ALTER TABLE mvgrad_transactions MODIFY COLUMN mvg_id varchar(255) default null");
+        DB::statement("ALTER TABLE 'mvgrad_transactions' MODIFY COLUMN mvg_id varchar(255) default null");
 
     }
 
