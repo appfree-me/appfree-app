@@ -1,0 +1,11 @@
+## bash snippet to be `source`d
+
+if [ ! -f .env ]; then
+  echo Please cp .env.dist to .env
+  echo and set at least DEPLOYHOST
+  exit 1;
+fi
+
+. .env
+
+export DEPLOYHOST
