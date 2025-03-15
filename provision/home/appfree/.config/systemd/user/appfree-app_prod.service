@@ -1,0 +1,15 @@
+[Unit]
+Description="Appfree-App Prod"
+StartLimitBurst=10
+StartLimitIntervalSec=20
+
+[Service]
+Restart=always
+Environment=LANG=en_US.UTF-8,LC_ALL=en_US.UTF-8
+ExecStart=/home/appfree/deploy/prod/appfree-app/bin/run-app
+RestartSec=10
+RestartMaxDelaySec=5m
+RestartSteps=10
+
+[Install]
+WantedBy=default.target

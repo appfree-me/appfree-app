@@ -8,7 +8,7 @@
         "framework"
     ],
     "require": {
-        "php": "^8.4",
+        "php": "^8.3",
         "ext-pcntl": "*",
         "ergebnis/composer-normalize": "^2.45",
         "evenement/evenement": "^3.0",
@@ -98,6 +98,9 @@
         ],
         "test": [
             "@php ./vendor/bin/pest"
+        ],
+        "deploy": [
+            "@php vendor/bin/dep -vv deploy"
         ],
         "lint": [
             "@php ./vendor/bin/php-cs-fixer fix --verbose --dry-run --diff",

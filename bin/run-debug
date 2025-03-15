@@ -2,4 +2,6 @@
 
 cd "$(dirname "$0")"/.. || exit 1
 
-php artisan app:run-appfree
+export XDEBUG_SESSION=1
+
+bin/run-app

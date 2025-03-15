@@ -1,0 +1,13 @@
+#!/bin/bash
+
+if [ ! "$UID" -eq "0" ]; then
+  echo Please run as root.
+  exit 1
+fi
+
+cd "$(dirname "$0")"/..
+
+
+echo Provision systemd unit files for user appfree...
+
+rsync -r provision/home/ /home/
