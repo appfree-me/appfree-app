@@ -1,14 +1,14 @@
 #!/bin/bash
 
-cd "$(dirname "$0")"
+cd "$(dirname "$0")"/..
 
-# . ../.env
+source .env
 
 instance="$1"
 
 case "$instance" in
     prod|demo) true;;
-    *) echo "Usage: $0 prod|demo"; exit 1;;
+    *) echo "Usage: $0 prod|staging"; exit 1;;
 esac
 
 branch="$2"
@@ -21,14 +21,9 @@ service_name="appfree-app_$instance"
 
 echo "Deploying $service_name with git branch $branch"
 
-
-
-set -x
-set -e
-
 # assumes git repo for $instance is already cloned
-ssh appfree@laurentpichler.com "systemctl --user stop $service_name"
-ssh appfree@laurentpichler.com "cd ~/deploy/$instance/appfree-app && git stash && git fetch && git checkout '$branch' && git reset --hard 'origin/$branch' && composer config repositories.local-libs --unset && composer update lelaurent/php-asterisk-swagger-api && php artisan migrate"
+ssh appfree@$DEPLOYHOST "systemctl --user stop $service_name"
+ssh appfree@$DEPLOYHOST "cd ~/deploy/$instance/appfree-app && git stash && git fetch && git checkout '$branch' && git reset --hard 'origin/$branch' && composer config repositories.local-libs --unset && composer update lelaurent/php-asterisk-swagger-api && php artisan migrate"
 
-ssh appfree@laurentpichler.com "systemctl --user restart $service_name"
+ssh appfree@$DEPLOYHOST "systemctl --user restart $service_name"
 
