@@ -1,5 +1,8 @@
 #!/bin/bash
 
+## call this script on the server you want to provision
+
+
 if [ ! "$UID" -eq "0" ]; then
   echo Please run as root.
   exit 1
@@ -8,6 +11,30 @@ fi
 cd "$(dirname "$0")"/..
 
 
-echo Provision systemd unit files for user appfree...
 
-rsync -r provision/home/ /home/
+echo Provisioning systemd unit files for user appfree...
+rsync -vr --chown appfree:appfree provision/home/ /home/
+
+apt install mariadb-client mariadb-server php8.3-mysql
+
+echo Creating mariadb user `appfree`...
+
+pw=a
+pw2=b
+
+while [ "$pw" != "$pw2" ]; do
+    echo "Creating database user appfree, enter password to create: "
+    read pw
+
+    echo Enter again:
+    read pw2
+
+    if [ "$pw" != "$pw2" ]; then
+        echo "Passwords do not match, please re-enter..."
+     fi
+done
+
+echo "Line for .env file: DB_PASSWORD=\"$pw\""
+export pw
+
+php provision/mariadb.sql | mariadb
