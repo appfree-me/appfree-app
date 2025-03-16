@@ -27,7 +27,7 @@ ssh appfree@"$DEPLOYHOST" "systemctl --user stop $service_name"
 ssh appfree@"$DEPLOYHOST" "mkdir -p ~/deploy/$instance/appfree-app"
 rsync -a --delete ./ appfree@"$DEPLOYHOST":"~/deploy/$instance/appfree-app"
 
-ssh appfree@"$DEPLOYHOST" "cd ~/deploy/$instance/appfree-app && git stash && git fetch && git checkout '$branch' && git reset --hard 'origin/$branch' && composer config repositories.local-libs --unset && composer update lelaurent/php-asterisk-swagger-api && php artisan migrate"
+ssh appfree@"$DEPLOYHOST" "cd ~/deploy/$instance/appfree-app && git stash && git fetch && git checkout '$branch' && git reset --hard 'origin/$branch' && git pull && composer config repositories.local-libs --unset && composer update lelaurent/php-asterisk-swagger-api && php artisan migrate"
 
 ssh appfree@"$DEPLOYHOST" "systemctl --user restart $service_name"
 
