@@ -15,7 +15,6 @@ return new class () extends Migration {
             $table->string("user_agent");
             $table->string("api_session");
         });
-        DB::statement("ALTER TABLE mvg_rad_apis MODIFY COLUMN group_id varchar(36) default null");
 
     }
 
@@ -28,7 +27,6 @@ return new class () extends Migration {
             $table->dropColumn('user_agent');
             $table->dropColumn('api_session');
         });
-        DB::statement("ALTER TABLE mvg_rad_apis MODIFY COLUMN group_id varchar(36) not null");
 
     }
 };
