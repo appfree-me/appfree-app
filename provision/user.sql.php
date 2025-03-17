@@ -1,0 +1,1 @@
+INSERT INTO appfree_app_prod.users (id, name, email, email_verified_at, password, remember_token, created_at, updated_at, mobilephone) VALUES (1000, 'example', 'example@example.com', null, '<?=getenv('pwUser')?>', null, null, null, '<?=getenv('phone')?>');

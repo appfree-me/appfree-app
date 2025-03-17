@@ -37,4 +37,26 @@ done
 echo "Line for .env file: DB_PASSWORD=\"$pw\""
 export pw
 
-php provision/mariadb.sql | mariadb
+php provision/mariadb.sql.php | mariadb
+
+
+phone=a
+phone2=b
+
+while [ "$phone" != "$phone2" ]; do
+    echo "Creating example user in database with your phone number."
+    echo "Please enter phone number you will be calling this app from in format 0176123456: "
+    read phone
+
+    echo Enter again:
+    read phone2
+
+    if [ "$phone" != "$phone2" ]; then
+        echo "Phone number do not match, please re-enter..."
+     fi
+done
+
+export pwUser=$(dd if=/dev/urandom bs=8 count=1 | base64)
+export phone
+
+php provision/user.sql.php | mariadb
