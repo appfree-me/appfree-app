@@ -44,64 +44,12 @@ Phone server backend providing connectivity to the phone network via Asterisk ap
   - Voice input (speech to text)
   - TTS (text to speech) for dynamic announcements
 
-## How to deploy
+## How to install/deploy/run
 
-1. Build debian package for `appfree-app`:
-
-Debian packages can be built from the repository. They are compatible with most Debian jammy?(##todo)
- based systems 
-
-- `bin/build-deb`
-- On target machine: `dpkg -i xy.deb`
-
-2. Build debian package for `appfree-phone-server`
-- `bin/build-deb`
-- On target machine: `dpgk -i xz.deb`
-
-Currently, configuration is hardcoded to expect both packages to be installed on the same machine. 
-
-For development: Deployment for local instance is supported via shell script `bin/deploy`
-
-## How to run
-
-(##todo)
-
-#### Run standalone
-
-`./bin/run-app`
-
-This runs appfree with Xdebug enabled. Use only for development.
-
-#### Run as a system service
-
-Use the systemctl commands provided in this document.
+See file README-install.md
 
 
-## Detailed information
-
-
-### System integration
-
-Appfree packages will create a user `appfree` in your system. Appfree doesn't need special privileges to run: it will run under the `appfree` user account. A separate `systemd` user instance will be started under this user account to manage the execution of the app. 
-
-### Database setup
-
-Appfree uses Mariadb as a database. Fill in DB_PASSWORD variable from .env.skel to configure access.
-
-### Systemd
-
-appfree is backed by systemd unit files which restart it automatically should the app crash.
-
-Enable and start appfree with these commands after installing the debian packages: 
-
-`systemctl --user enable appfree-app_local.service`
-`systemctl --user start appfree-app_local.service`
-
-Phone server is automatically started as a dependency. (##fixme)
-
-Appfree doesn't need special privileges to run: Systemd unit files are installed in the `appfree` user home directory and a separate systemd instance running under the same user is used to manage the instance. 
-
-### Watchdog 
+## Watchdog 
 
 A watchdog process regularly tests if the app is still available to users and sends an alert on failure. 
 
