@@ -17,7 +17,7 @@ rsync -vr --chown appfree:appfree provision/home/ /home/
 
 apt install mariadb-client mariadb-server php8.3-mysql
 
-echo Creating mariadb user `appfree`...
+echo Creating mariadb user appfree...
 
 pw=a
 pw2=b
@@ -56,7 +56,9 @@ while [ "$phone" != "$phone2" ]; do
      fi
 done
 
-export pwUser=$(dd if=/dev/urandom bs=8 count=1 | base64)
+pwUser=$(dd if=/dev/urandom bs=8 count=1 | base64)
+export pwUser
+
 export phone
 
 php provision/user.sql.php | mariadb
