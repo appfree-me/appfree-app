@@ -14,6 +14,7 @@ use AppFree\AppFreeCommands\Stasis\Events\V1\StasisStart;
 use AppFree\AppFreeCommands\Stasis\Objects\V1\Caller;
 use AppFree\Ari\Interfaces\EventReceiverInterface;
 use AppFree\Ari\PhpAri;
+use AppFree\Console\Commands\Watchdog;
 use Evenement\EventEmitterInterface;
 use Finite\Exception\TransitionException;
 use Finite\StatefulInterface;
@@ -83,11 +84,13 @@ class AppController implements StatefulInterface, EventReceiverInterface
         });
     }
 
-    /**
-     */
     public function start(): void
     {
         $this->emitter->on(PhpAri::EVENT_NAME_APPFREE_MESSAGE, function (AppFreeDto $dto) {
+            $this->receive($dto);
+        });
+
+        $this->emitter->on(Watchdog::EVENT_NAME_WATCHDOG_MESSAGE, function (AppFreeDto $dto) {
             $this->receive($dto);
         });
 
@@ -137,8 +140,8 @@ class AppController implements StatefulInterface, EventReceiverInterface
      */
     public function receive(AppFreeDto $eventDto): void
     {
-        $this->logger->notice("receive " . serialize($eventDto));
-        $this->myEvents($eventDto);
+        $this->logger->debug("receive " . serialize($eventDto));
+        $this->receiveStasisEvent($eventDto);
     }
 
     public static function getUserForPhonenumber(string $number): ?User
@@ -173,7 +176,7 @@ class AppController implements StatefulInterface, EventReceiverInterface
         $this->logger->notice("Added Channel", [$channelId]);
     }
 
-    private function myEvents($eventDto): void
+    private function receiveStasisEvent($eventDto): void
     {
         if ($eventDto instanceof StasisStart) {
             $user = $this->getUserForPhonenumber($eventDto->channel->caller->number);
@@ -181,8 +184,6 @@ class AppController implements StatefulInterface, EventReceiverInterface
                 $this->prepareForCall($eventDto->channel->id, $eventDto->channel->caller, $user);
             } else {
                 // todo: play rejection message
-                // later may throw user to "login" state machine
-                // todo: implement transitions between state machines
                 $this->logger->debug("Hung up on " . $eventDto->channel->id);
                 $this->ari->channels()->hangup($eventDto->channel->id);
                 return;

@@ -7,6 +7,6 @@ return [
     AppFree\Providers\GuzzleHttpServiceProvider::class,
     AppFree\Providers\LoggerServiceProvider::class,
     AppFree\Providers\MvgRadStateMachineServiceProvider::class,
-    AppFree\Providers\StasisClientServiceProvider::class,
+    AppFree\Providers\PromiseInterfaceServiceProvider::class,
     AppFree\Providers\EventEmitterServiceProvider::class,
 ];

@@ -77,6 +77,7 @@ class PhpAri
             $this->logger->debug("Initializing WebSocket Information");
         }
 
+        //todo more specific argument to resolve
         $promise = resolve(PromiseInterface::class);
         $promise->catch(function (Exception $err) {
             $this->logger->error($err->getCode() . $err->getMessage());
@@ -89,8 +90,8 @@ class PhpAri
 
         $this->logger->debug("Setup Events");
         $this->setupEvents($this->stasisClient);
-        return $promise;
 
+        return $promise;
     }
 
     private function setupEvents(PromiseInterface $stasisClient): void

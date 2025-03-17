@@ -4,14 +4,20 @@ namespace AppFree\appfree\modules\MvgRad\Api\Mock;
 
 use AppFree\appfree\modules\MvgRad\Api\MvgRadApiInterface;
 use AppFree\appfree\modules\MvgRad\AppFreeStateMachine;
+use AppFree\AppFreeCommands\MvgRad\Objects\V1\MvgRadUserInfo;
 use AppFree\Models\MvgradMockState;
 use Illuminate\Database\RecordNotFoundException;
 use Illuminate\Support\Facades\DB;
 
 class MvgRadApi implements MvgRadApiInterface
 {
+
     public function __construct(private AppFreeStateMachine $sm)
     {
+    }
+
+    public function userInfo(): MvgRadUserInfo {
+        return new MvgRadUserInfo(MvgRadUserInfo::ACCOUNT_STATUS_OK);
     }
 
     public function doAusleihe(string $radnummer, ?string $mockPin = null): ?string

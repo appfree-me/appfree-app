@@ -9,7 +9,7 @@ use Illuminate\Support\ServiceProvider;
 use React\EventLoop\Loop;
 use React\Promise\PromiseInterface;
 
-class StasisClientServiceProvider extends ServiceProvider
+class PromiseInterfaceServiceProvider extends ServiceProvider
 {
     public function register(): void
     {

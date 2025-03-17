@@ -7,7 +7,6 @@ namespace AppFree;
 use Finite\Exception\ObjectException;
 use React\EventLoop\Loop;
 
-//require("vendor/lelaurent/appfree-mvgrad/vendor/autoload.php");
 class AppFree
 {
     /**

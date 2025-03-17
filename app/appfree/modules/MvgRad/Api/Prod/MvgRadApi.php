@@ -4,6 +4,7 @@ namespace AppFree\appfree\modules\MvgRad\Api\Prod;
 
 use AppFree\appfree\modules\MvgRad\Api\MvgRadApiInterface;
 use AppFree\appfree\modules\MvgRad\AppFreeStateMachine;
+use AppFree\AppFreeCommands\MvgRad\Objects\V1\MvgRadUserInfo;
 use AppFree\Models\MvgradTransaction;
 use AppFree\Models\MvgRadUser;
 use Illuminate\Support\Facades\Http;
@@ -25,12 +26,14 @@ class MvgRadApi implements MvgRadApiInterface
 
     public function init(): void
     {
-        //fixme
+        //fixme: init should be called automatically
         $this->user = $this->sm->getContext()->user;
         $this->mvgRadUser = $this->sm->getContext()->user->mvgRadUser;
         $this->apiRecord = \AppFree\Models\MvgRadApi::first();
     }
 
+
+// fixme: return DTO
     public function doAusleihe(string $radnummer, ?string $mockPin): string
     {
 
