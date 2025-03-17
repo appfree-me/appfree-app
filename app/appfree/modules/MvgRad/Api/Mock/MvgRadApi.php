@@ -11,12 +11,12 @@ use Illuminate\Support\Facades\DB;
 
 class MvgRadApi implements MvgRadApiInterface
 {
-
     public function __construct(private AppFreeStateMachine $sm)
     {
     }
 
-    public function userInfo(): MvgRadUserInfo {
+    public function userInfo(): MvgRadUserInfo
+    {
         return new MvgRadUserInfo(MvgRadUserInfo::ACCOUNT_STATUS_OK);
     }
 

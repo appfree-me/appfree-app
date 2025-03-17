@@ -6,7 +6,6 @@ use AppFree\appfree\modules\MvgRad\AppFreeStateMachine;
 
 interface MvgRadApiInterface
 {
-
     public function isMock(): bool;
 
     public function doAusleihe(string $radnummer, ?string $mockPin): ?string;

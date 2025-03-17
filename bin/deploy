@@ -1,6 +1,6 @@
 #!/bin/bash
-
-cd "$(dirname "$0")"/..
+# todo replace all dirname constructs with this
+cd "$(dirname "$0")"/.. || exit 1
 
 source bin/load-env
 

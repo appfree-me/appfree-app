@@ -86,12 +86,12 @@ class AppController implements StatefulInterface, EventReceiverInterface
 
     public function start(): void
     {
-        $this->emitter->on(PhpAri::EVENT_NAME_APPFREE_MESSAGE, function (AppFreeDto $dto) {
-            $this->receive($dto);
+        $this->emitter->on(AppController\EventEmitterMessageTypes::EVENT_NAME_APPFREE_MESSAGE, function (AppFreeDto $dto) {
+            $this->receiveStasisEvent($dto);
         });
 
-        $this->emitter->on(Watchdog::EVENT_NAME_WATCHDOG_MESSAGE, function (AppFreeDto $dto) {
-            $this->receive($dto);
+        $this->emitter->on(AppController\EventEmitterMessageTypes::EVENT_NAME_WATCHDOG_MESSAGE, function (AppFreeDto $dto) {
+            $this->receiveWatchdogEvent($dto);
         });
 
         $this->stasisClient = resolve(PromiseInterface::class);
@@ -140,7 +140,6 @@ class AppController implements StatefulInterface, EventReceiverInterface
      */
     public function receive(AppFreeDto $eventDto): void
     {
-        $this->logger->debug("receive " . serialize($eventDto));
         $this->receiveStasisEvent($eventDto);
     }
 
@@ -176,8 +175,15 @@ class AppController implements StatefulInterface, EventReceiverInterface
         $this->logger->notice("Added Channel", [$channelId]);
     }
 
+    private function receiveWatchdogEvent($eventDto): void
+    {
+
+    }
+
     private function receiveStasisEvent($eventDto): void
     {
+        $this->logger->debug("receiveStasisEvent " . var_export($eventDto, true) . "\n");
+
         if ($eventDto instanceof StasisStart) {
             $user = $this->getUserForPhonenumber($eventDto->channel->caller->number);
             if (!config('app.authenticate') || $user) {

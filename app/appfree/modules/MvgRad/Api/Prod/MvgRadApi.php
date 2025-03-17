@@ -33,7 +33,7 @@ class MvgRadApi implements MvgRadApiInterface
     }
 
 
-// fixme: return DTO
+    // fixme: return DTO
     public function doAusleihe(string $radnummer, ?string $mockPin): string
     {
 
