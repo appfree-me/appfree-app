@@ -1,1 +1,1 @@
- wscat -c "ws://localhost:8088/ari/events?api_key=user1:pass1&app=appfree"
+ wscat -c "ws://localhost:8088/ari/events?api_key=user1:pass1&app=appfree-local" "$@"

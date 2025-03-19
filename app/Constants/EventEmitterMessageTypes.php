@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace AppFree\AppController;
+namespace AppFree\Constants;
 
 class EventEmitterMessageTypes
 {

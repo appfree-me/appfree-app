@@ -2,7 +2,7 @@
 
 namespace AppFree\appfree\modules\MvgRad\Api;
 
-use AppFree\AppController;
+use AppFree\Constants;
 use Illuminate\Database\RecordNotFoundException;
 use Illuminate\Support\Facades\DB;
 

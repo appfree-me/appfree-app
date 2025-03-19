@@ -4,13 +4,8 @@ declare (strict_types=1);
 
 namespace AppFree\appfree\modules\Generic\States;
 
-use AppFree\appfree\modules\MvgRad\States\AppFreeState;
-use AppFree\appfree\modules\MvgRad\States\AusleiheAndOutputPin;
-use AppFree\appfree\modules\MvgRad\States\MvgRadState;
-use AppFree\AppFreeCommands\AppFree\Commands\V1\ReadDtmfStringFunctionCommand;
-use AppFree\AppFreeCommands\MvgRad\Commands\V1\MvgRadAusleiheCommand;
+use AppFree\AppFreeCommands\AppFree\Commands\StateMachine\V1\ReadDtmfStringFunctionCommand;
 use AppFree\AppFreeCommands\Stasis\Events\V1\ChannelDtmfReceived;
-use Finite\Event\TransitionEvent;
 
 class ReadDtmfString extends GenericState
 {

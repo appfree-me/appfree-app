@@ -1,6 +1,6 @@
 <?php
 
-use AppFree\AppController;
+use AppFree\Constants;
 use AppFree\appfree\modules\MvgRad\Api\Prod\MvgRadApi;
 use AppFree\appfree\modules\MvgRad\States\Begin;
 use AppFree\AppFreeCommands\Stasis\Events\V1\ChannelDtmfReceived;

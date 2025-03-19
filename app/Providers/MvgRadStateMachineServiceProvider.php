@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace AppFree\Providers;
 
-use AppFree\AppController;
+use AppFree\Constants;
 use AppFree\appfree\modules\MvgRad\Api\Mock\MvgRadApi as MvgRadApiMock;
 use AppFree\appfree\modules\MvgRad\Api\MvgRadApiInterface;
 use AppFree\appfree\modules\MvgRad\Api\MvgRadModule;
@@ -24,6 +24,8 @@ class MvgRadStateMachineServiceProvider extends ServiceProvider
     {
         $this->app->bind(MvgRadStateMachine::class, function (Application $app) {
             $sm = new MvgRadStateMachine();
+
+            //todo extract to own service provider - but can't be singleton
             $mvgRadApi = match (config('app.mvg-rad-api')) {
                 'prod' => new MvgRadApi($sm),
                 'mock' => new MvgRadApiMock($sm),

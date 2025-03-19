@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace AppFree\appfree;
 
 use App\Models\User;
-use AppFree\AppController;
+use AppFree\Constants;
 use Monolog\Logger;
 use Swagger\Client\Api\ChannelsApi;
 use Swagger\Client\ApiException;

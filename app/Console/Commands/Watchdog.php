@@ -2,6 +2,8 @@
 
 namespace AppFree\Console\Commands;
 
+use AppFree\appfree\modules\MvgRad\Api\Mock\MvgRadApi;
+use AppFree\AppFreeCommands\AppFree\Commands\StateMachine\V1\WatchdogExecuteApiCall;
 use Illuminate\Console\Command;
 
 class Watchdog extends Command
@@ -18,13 +20,20 @@ class Watchdog extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Appfree watchdog background process';
 
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        echo "watch out!\n";
+
+
+
+
+        // inject into appfree main instance
+
+
+
     }
 }

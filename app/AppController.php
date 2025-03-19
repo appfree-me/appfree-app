@@ -7,6 +7,7 @@ namespace AppFree;
 use App\Models\User;
 use AppFree\appfree\modules\MvgRad\MvgRadStateMachine;
 use AppFree\appfree\StateMachineContext;
+use AppFree\AppFreeCommands\AppFree\Commands\StateMachine\V1\WatchdogExecuteApiCall;
 use AppFree\AppFreeCommands\AppFreeDto;
 use AppFree\AppFreeCommands\Stasis\Events\V1\ChannelHangupRequest;
 use AppFree\AppFreeCommands\Stasis\Events\V1\StasisEnd;
@@ -32,21 +33,14 @@ use Swagger\Client\ApiException;
  */
 class AppController implements StatefulInterface, EventReceiverInterface
 {
-    public PhpAri $ari;
     public PromiseInterface $stasisClient;
-    public Logger $logger;
-    protected Client $client;
     private array $stateMachines = [];
     private ?string $state = null;
-    private EventEmitterInterface $emitter;
 
-    public function __construct(EventEmitterInterface $emitter, PhpAri $phpAri, Logger $stasisLogger, Client $client)
+    public function __construct(private EventEmitterInterface $emitter, private PhpAri $ari, public Logger $logger, protected Client $client)
     {
-        $this->emitter = $emitter;
-        $this->ari = $phpAri;
-        $this->logger = $stasisLogger;
-        $this->client = $client;
     }
+
 
     /**
      * @throws ApiException
@@ -86,11 +80,11 @@ class AppController implements StatefulInterface, EventReceiverInterface
 
     public function start(): void
     {
-        $this->emitter->on(AppController\EventEmitterMessageTypes::EVENT_NAME_APPFREE_MESSAGE, function (AppFreeDto $dto) {
+        $this->emitter->on(Constants\EventEmitterMessageTypes::EVENT_NAME_APPFREE_MESSAGE, function (AppFreeDto $dto) {
             $this->receiveStasisEvent($dto);
         });
 
-        $this->emitter->on(AppController\EventEmitterMessageTypes::EVENT_NAME_WATCHDOG_MESSAGE, function (AppFreeDto $dto) {
+        $this->emitter->on(Constants\EventEmitterMessageTypes::EVENT_NAME_WATCHDOG_MESSAGE, function (AppFreeDto $dto) {
             $this->receiveWatchdogEvent($dto);
         });
 
@@ -175,9 +169,11 @@ class AppController implements StatefulInterface, EventReceiverInterface
         $this->logger->notice("Added Channel", [$channelId]);
     }
 
-    private function receiveWatchdogEvent($eventDto): void
+    private function receiveWatchdogEvent(WatchdogExecuteApiCall $dto): void
     {
 
+        $mvgApi = resolve($dto->apiFqcn);
+        $result = $mvgApi->{$dto->method}(...$dto->arguments);
     }
 
     private function receiveStasisEvent($eventDto): void

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace AppFree\Ari;
 
+use AppFree\Constants\EventEmitterMessageTypes;
 use AppFree\MakeDto;
 use Evenement\EventEmitterInterface;
 use Exception;
@@ -31,7 +32,6 @@ use Swagger\Client\Api\SoundsApi;
  */
 class PhpAri
 {
-    public const EVENT_NAME_APPFREE_MESSAGE = 'appfreedto.message';
     private PhpAriConfig $config;
     public Logger $logger;
     public LoopInterface $stasisLoop;
@@ -40,6 +40,8 @@ class PhpAri
     public string $logfile;
     public Client $ariEndpoint;
     public string $baseUri;
+
+    /** @noinspection PhpPropertyOnlyWrittenInspection */
     private string $appName;
     private EventEmitterInterface $emitter;
     private array $apis =  [];
@@ -101,7 +103,7 @@ class PhpAri
                 $payload = json_decode($message->getPayload());
                 $eventDto = MakeDto::make($payload);
 
-                $this->emitter->emit(self::EVENT_NAME_APPFREE_MESSAGE, [$eventDto]);
+                $this->emitter->emit(EventEmitterMessageTypes::EVENT_NAME_APPFREE_MESSAGE, [$eventDto]);
             });
         });
 

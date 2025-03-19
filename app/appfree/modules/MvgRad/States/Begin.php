@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace AppFree\appfree\modules\MvgRad\States;
 
 use AppFree\appfree\modules\Generic\States\ReadDtmfString;
-use AppFree\AppFreeCommands\AppFree\Commands\V1\ReadDtmfStringFunctionCommand;
+use AppFree\AppFreeCommands\AppFree\Commands\StateMachine\V1\ReadDtmfStringFunctionCommand;
 use AppFree\AppFreeCommands\AppFree\Expectations\PlaybackFinishedExpectation;
 use AppFree\AppFreeCommands\MvgRad\Commands\V1\MvgRadAusleiheCommand;
 use AppFree\AppFreeCommands\Stasis\Events\V1\ChannelDtmfReceived;

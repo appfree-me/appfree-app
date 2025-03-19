@@ -4,7 +4,6 @@ namespace AppFree\appfree\modules\MvgRad\Api\Prod;
 
 use AppFree\appfree\modules\MvgRad\Api\MvgRadApiInterface;
 use AppFree\appfree\modules\MvgRad\AppFreeStateMachine;
-use AppFree\AppFreeCommands\MvgRad\Objects\V1\MvgRadUserInfo;
 use AppFree\Models\MvgradTransaction;
 use AppFree\Models\MvgRadUser;
 use Illuminate\Support\Facades\Http;
@@ -15,28 +14,25 @@ class MvgRadApi implements MvgRadApiInterface
 {
     public const string VEHICLE_TYPE_BIKE = "BIKE";
     public const API_ID = 'MVG_PROD';
-    private ?\App\Models\User $user;
+    public const string MVG_ENDPOINT_RENT = 'https://mvgo-gateway.web.azrapp.swm.de/v2/sharing/rad/rental/rent';
     private MvgRadUser $mvgRadUser;
     private \AppFree\Models\MvgRadApi $apiRecord;
 
     public function __construct(private AppFreeStateMachine $sm)
     {
-
     }
 
     public function init(): void
     {
         //fixme: init should be called automatically
-        $this->user = $this->sm->getContext()->user;
+        //        $this->user = $this->sm->getContext()->user;
         $this->mvgRadUser = $this->sm->getContext()->user->mvgRadUser;
         $this->apiRecord = \AppFree\Models\MvgRadApi::first();
     }
 
-
     // fixme: return DTO
     public function doAusleihe(string $radnummer, ?string $mockPin): string
     {
-
         $this->init();
 
         $apiRecord = $this->apiRecord;
@@ -52,17 +48,10 @@ class MvgRadApi implements MvgRadApiInterface
             'X-Api-Session' => $this->mvgRadUser->session_token,
         ];
         $data = [
-//        ])->post('http://localhost:12345', [
             'idForRental' => $radnummer,
             'vehicleType' => self::VEHICLE_TYPE_BIKE,
         ];
-        $response = Http::withHeaders($headers)->post('https://mvgo-gateway.web.azrapp.swm.de/v2/sharing/rad/rental/rent', $data)->json();
-
-        //        $response = json_decode('{
-        //  "id": "RAD-f4f03b4c-9a92-4cec-a3f3-9d760b40f09a",
-        //  "code": "7529",
-        //  "startDate": "2025-03-11T16:18:18.000Z"
-        //}', true);
+        $response = Http::withHeaders($headers)->post(self::MVG_ENDPOINT_RENT, $data)->json();
 
         resolve(Logger::class)->notice(implode($response));
 
@@ -81,7 +70,7 @@ class MvgRadApi implements MvgRadApiInterface
     private function addMvgRadTransaction(array $response): void
     {
         $tx = new MvgradTransaction();
-        $tx->user_id = $this->user->id;
+        $tx->user_id = $this->mvgRadUser->user_id;
         $tx->type = "rental";
         $tx->pin = $response["code"];
         $tx->api_id = self::API_ID;
