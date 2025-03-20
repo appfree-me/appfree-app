@@ -26,7 +26,7 @@ return [
     |
     */
 
-    'env' => env('APP_ENV', 'production'),
+    'env' => env('APP_ENV', 'prod'),
 
     /*
     |--------------------------------------------------------------------------
@@ -124,6 +124,6 @@ return [
     ],
 
     'authenticate' => env('APP_AUTHENTICATE', false),
-    'mvg-rad-api' => env('APP_MVG_RAD_API', 'prod'),
+    'mvg-rad-api' => env('APP_MVG_RAD_API', 'mock'),
 
 ];

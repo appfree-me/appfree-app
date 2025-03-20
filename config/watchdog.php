@@ -3,9 +3,10 @@
 return [
 
     // Enable internal generation / saving of monitoring events?
-    'watchdog-internal' => env('WATCHDOG_MONITORING', 'false'),
+    'internal' => env('WATCHDOG_MONITORING', false),
 
     // Enable external monitoring of the generated events?
-    'watchdog-external' => env('WATCHDOG_MONITORING', 'false'),
+    'external' => env('WATCHDOG_MONITORING', false),
 
+    'ping-interval' => env('WATCHDOG_PING_INTERVAL', 60),
 ];

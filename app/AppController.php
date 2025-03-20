@@ -42,8 +42,7 @@ class AppController implements StatefulInterface, EventReceiverInterface
         public Logger                          $logger,
         protected Client                       $client,
         private readonly WatchdogController    $watchdogController
-    ) {
-    }
+    ) {}
 
     /**
      * @throws ApiException
@@ -86,7 +85,10 @@ class AppController implements StatefulInterface, EventReceiverInterface
         $this->wsClient = resolve(PromiseInterface::class);
 
         $this->setupAsteriskEvents();
-        $this->setupWatchdog();
+
+        if (config('watchdog.internal')) {
+            $this->setupWatchdog();
+        }
 
         //        $this->emitter->on(Constants\EventEmitterMessageTypes::EVENT_NAME_WATCHDOG_MESSAGE, function (AppFreeDto $dto) {
         //            $this->receiveWatchdogEvent($dto);

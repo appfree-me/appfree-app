@@ -15,6 +15,7 @@ class ConvenienceApi
 {
     public readonly string $channelId;
     public ChannelsApi $channelsApi;
+    /** @noinspection PhpPropertyOnlyWrittenInspection */
     private ?User $user;
 
     public function __construct(string $channelId, ChannelsApi $channelsApi, $user)

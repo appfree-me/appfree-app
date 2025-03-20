@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace AppFree\Watchdog;
 
 use AppFree\AppFreeCommands\Watchdog\V1\PingPongDto as Dto;
-use AppFree\ErrorHandling\Constants\ErrorIds;
+use AppFree\ErrorHandling\Constants\Errors;
 use AppFree\Models\WatchdogLog;
 use Exception;
 use Monolog\Logger;
@@ -18,12 +18,11 @@ use React\Promise\PromiseInterface;
 
 class WatchdogController
 {
-    public const int INTERVAL_SECONDS = 60;
-
     public function __construct(
-        private readonly Logger           $stasisLogger,
+        private readonly Logger           $logger,
         private readonly PromiseInterface $wsClient,
-        private readonly LoopInterface    $eventLoop
+        private readonly LoopInterface    $eventLoop,
+        public readonly int               $intervalSeconds
     ) {}
 
     /**
@@ -54,25 +53,25 @@ class WatchdogController
             ]);
             $this->saveToLog($dto);
         } catch (Exception $exception) {
-            $this->stasisLogger->error(ErrorIds::E_WATCHDOG_COULD_MAKE_DTO, ["exception" => $exception, "ERROR_ID" => ErrorIds::E_WATCHDOG_COULD_MAKE_DTO]);
+            $this->logger->error(Errors::E_WATCHDOG_COULD_MAKE_DTO, ["exception" => $exception, "ERROR_ID" => Errors::E_WATCHDOG_COULD_MAKE_DTO]);
         }
     }
 
     private function saveToLog(Dto $dto): void
     {
         $entity = WatchdogLog::firstWhere('unique_id', $dto->unique_id) ?? new WatchdogLog();
-        $entity->fill(array_filter($dto->toArray()));
 
         try {
+            $entity->augment($dto);
             $entity->save();
         } catch (Exception $e) {
-            $this->stasisLogger->error(ErrorIds::E_WATCHDOG_COULD_NOT_SAVE, ["exception" => $e, "ERROR_ID" => ErrorIds::E_WATCHDOG_COULD_NOT_SAVE]);
+            $this->logger->error(Errors::E_WATCHDOG_COULD_NOT_SAVE, ["dto" => $dto->toArray(), "exception" => $e, "ERROR_ID" => Errors::E_WATCHDOG_COULD_NOT_SAVE]);
         }
     }
 
     public function attachToEventLoop(): void
     {
-        $this->eventLoop->addPeriodicTimer(self::INTERVAL_SECONDS, function () {
+        $this->eventLoop->addPeriodicTimer($this->intervalSeconds, function () {
             $this->sendPing();
         });
     }

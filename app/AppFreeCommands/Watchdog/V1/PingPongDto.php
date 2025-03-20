@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace AppFree\AppFreeCommands\Watchdog\V1;
 
 use AppFree\AppFreeCommands\Watchdog\V1\PingPongDto as Dto;
-use JsonSerializable;
 use Random\RandomException;
 
 class PingPongDto
@@ -14,12 +13,11 @@ class PingPongDto
         public readonly string $unique_id,
         public readonly ?float $nanoseconds_created_at = null,
         public readonly ?float $seconds_received_at = null,
-    ) {
-    }
+    ) {}
 
-    public static function fromArray(mixed $json)
+    public static function fromArray(array $array): Dto
     {
-        return new self(...$json);
+        return new self(...$array);
     }
 
     /**
@@ -41,7 +39,7 @@ class PingPongDto
      * @return string
      * @throws RandomException
      */
-    public static function generatePingId()
+    public static function generatePingId(): string
     {
         return random_bytes(16);
     }
