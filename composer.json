@@ -92,15 +92,12 @@
             "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
             "@php artisan migrate --graceful --ansi"
         ],
+        "deploy": [
+            "@php vendor/bin/dep -vv deploy"
+        ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",
             "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"npm run dev\" --names=server,queue,logs,vite"
-        ],
-        "test": [
-            "@php ./vendor/bin/pest"
-        ],
-        "deploy": [
-            "@php vendor/bin/dep -vv deploy"
         ],
         "lint": [
             "@php ./vendor/bin/php-cs-fixer fix --verbose --dry-run --diff",
@@ -110,6 +107,9 @@
         "lint:fix": [
             "@php ./vendor/bin/php-cs-fixer fix --diff",
             "@composer normalize"
+        ],
+        "test": [
+            "@php ./vendor/bin/pest"
         ]
     }
 }

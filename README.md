@@ -21,6 +21,10 @@ With appfree, it is usable from every telephone.
 
 All filesystem paths mentioned here are relative to the project root unless otherwise indicated.
 
+## System requirements
+
+64-bit Linux, tested on Ubuntu 24.04.
+
 ## Project components
 
 - ### appfree-app

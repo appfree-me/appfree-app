@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace AppFree\Providers;
 
-use AppFree\Constants;
+use AppFree\AppController;
 use AppFree\Ari\PhpAri;
 use AppFree\Ari\PhpAriConfig;
 use Evenement\EventEmitter;

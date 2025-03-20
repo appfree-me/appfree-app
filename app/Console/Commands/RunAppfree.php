@@ -2,7 +2,7 @@
 
 namespace AppFree\Console\Commands;
 
-use AppFree\Constants;
+use AppFree\AppController;
 use AppFree\AppFree;
 use AppFree\Ari\PhpAri;
 use Illuminate\Console\Command;

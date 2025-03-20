@@ -7,7 +7,6 @@ namespace AppFree;
 use App\Models\User;
 use AppFree\appfree\modules\MvgRad\MvgRadStateMachine;
 use AppFree\appfree\StateMachineContext;
-use AppFree\AppFreeCommands\AppFree\Commands\StateMachine\V1\WatchdogExecuteApiCall;
 use AppFree\AppFreeCommands\AppFreeDto;
 use AppFree\AppFreeCommands\Stasis\Events\V1\ChannelHangupRequest;
 use AppFree\AppFreeCommands\Stasis\Events\V1\StasisEnd;
@@ -15,7 +14,7 @@ use AppFree\AppFreeCommands\Stasis\Events\V1\StasisStart;
 use AppFree\AppFreeCommands\Stasis\Objects\V1\Caller;
 use AppFree\Ari\Interfaces\EventReceiverInterface;
 use AppFree\Ari\PhpAri;
-use AppFree\Console\Commands\Watchdog;
+use AppFree\Watchdog\WatchdogController;
 use Evenement\EventEmitterInterface;
 use Finite\Exception\TransitionException;
 use Finite\StatefulInterface;
@@ -33,14 +32,18 @@ use Swagger\Client\ApiException;
  */
 class AppController implements StatefulInterface, EventReceiverInterface
 {
-    public PromiseInterface $stasisClient;
+    public PromiseInterface $wsClient;
     private array $stateMachines = [];
     private ?string $state = null;
 
-    public function __construct(private EventEmitterInterface $emitter, private PhpAri $ari, public Logger $logger, protected Client $client)
-    {
+    public function __construct(
+        private readonly EventEmitterInterface $emitter,
+        private readonly PhpAri                $ari,
+        public Logger                          $logger,
+        protected Client                       $client,
+        private readonly WatchdogController    $watchdogController
+    ) {
     }
-
 
     /**
      * @throws ApiException
@@ -71,7 +74,7 @@ class AppController implements StatefulInterface, EventReceiverInterface
 
     public function shutdown(): void
     {
-        $this->stasisClient->then(function (WebSocket $conn) {
+        $this->wsClient->then(function (WebSocket $conn) {
             $this->logger->notice("Closing Websocket...");
             $conn->close();
             exit;
@@ -80,15 +83,15 @@ class AppController implements StatefulInterface, EventReceiverInterface
 
     public function start(): void
     {
-        $this->emitter->on(Constants\EventEmitterMessageTypes::EVENT_NAME_APPFREE_MESSAGE, function (AppFreeDto $dto) {
-            $this->receiveStasisEvent($dto);
-        });
+        $this->wsClient = resolve(PromiseInterface::class);
 
-        $this->emitter->on(Constants\EventEmitterMessageTypes::EVENT_NAME_WATCHDOG_MESSAGE, function (AppFreeDto $dto) {
-            $this->receiveWatchdogEvent($dto);
-        });
+        $this->setupAsteriskEvents();
+        $this->setupWatchdog();
 
-        $this->stasisClient = resolve(PromiseInterface::class);
+        //        $this->emitter->on(Constants\EventEmitterMessageTypes::EVENT_NAME_WATCHDOG_MESSAGE, function (AppFreeDto $dto) {
+        //            $this->receiveWatchdogEvent($dto);
+        //        });
+
         $this->dropAllCalls();
     }
 
@@ -169,12 +172,12 @@ class AppController implements StatefulInterface, EventReceiverInterface
         $this->logger->notice("Added Channel", [$channelId]);
     }
 
-    private function receiveWatchdogEvent(WatchdogExecuteApiCall $dto): void
-    {
-
-        $mvgApi = resolve($dto->apiFqcn);
-        $result = $mvgApi->{$dto->method}(...$dto->arguments);
-    }
+    //    private function receiveWatchdogEvent(WatchdogExecuteApiCall $dto): void
+    //    {
+    //
+    //        $mvgApi = resolve($dto->apiFqcn);
+    //        $result = $mvgApi->{$dto->method}(...$dto->arguments);
+    //    }
 
     private function receiveStasisEvent($eventDto): void
     {
@@ -234,5 +237,26 @@ class AppController implements StatefulInterface, EventReceiverInterface
         $id = $dto->getChannel()->id;
         $this->logger->debug("Selected State Machine for Channel " . $id);
         return [$this->stateMachines[$id]];
+    }
+
+    /**
+     * @return mixed
+     */
+    public function setupAsteriskEvents()
+    {
+        return $this->emitter->on(Constants\EventEmitterMessageTypes::EVENT_NAME_APPFREE_MESSAGE, function (
+            AppFreeDto $dto
+        ) {
+            $this->receiveStasisEvent($dto);
+        });
+    }
+
+    /**
+     * @return null
+     */
+    public function setupWatchdog(): void
+    {
+        $this->watchdogController->attachPongListener();
+        $this->watchdogController->attachToEventLoop();
     }
 }

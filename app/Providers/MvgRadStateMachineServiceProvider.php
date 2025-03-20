@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace AppFree\Providers;
 
-use AppFree\Constants;
+use AppFree\AppController;
 use AppFree\appfree\modules\MvgRad\Api\Mock\MvgRadApi as MvgRadApiMock;
 use AppFree\appfree\modules\MvgRad\Api\MvgRadApiInterface;
 use AppFree\appfree\modules\MvgRad\Api\MvgRadModule;

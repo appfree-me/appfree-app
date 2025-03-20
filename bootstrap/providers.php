@@ -9,4 +9,5 @@ return [
     AppFree\Providers\MvgRadStateMachineServiceProvider::class,
     AppFree\Providers\PromiseInterfaceServiceProvider::class,
     AppFree\Providers\EventEmitterServiceProvider::class,
+    AppFree\Providers\WatchdogControllerServiceProvider::class,
 ];

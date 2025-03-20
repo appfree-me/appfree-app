@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace AppFree\appfree;
 
 use App\Models\User;
-use AppFree\Constants;
+use AppFree\AppController;
+use AppFree\Helpers\Helpers;
 use Monolog\Logger;
 use Swagger\Client\Api\ChannelsApi;
 use Swagger\Client\ApiException;
@@ -29,7 +30,7 @@ class ConvenienceApi
             $media = [$media];
         }
 
-        $playbackId = $this->getRandomId() . substr(implode(",", $media), 0, StateMachineContext::ASTERISK_MAX_VAR_LENGTH - 50);
+        $playbackId = Helpers::makeAsteriskId() . substr(implode(",", $media), 0, StateMachineContext::ASTERISK_MAX_VAR_LENGTH - 50);
 
         try {
             $this->channelsApi->play($this->channelId, $media, null, null, null, $playbackId);
@@ -57,13 +58,5 @@ class ConvenienceApi
         }
 
         return $playbackId;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRandomId(): string
-    {
-        return bin2hex(random_bytes(4));
     }
 }

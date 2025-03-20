@@ -1,6 +1,6 @@
 <?php
 
-namespace AppFree\Exceptions;
+namespace AppFree\ErrorHandling\Exceptions;
 
 use Exception;
 

@@ -1,7 +1,6 @@
 #!/bin/bash
 
 #todo replace shebang in all scripts with #!/usr/bin/env bash
-#(why?)
 
 
 cd "$(dirname "$0")"/.. || exit 1

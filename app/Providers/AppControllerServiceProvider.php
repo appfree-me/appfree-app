@@ -6,6 +6,7 @@ namespace AppFree\Providers;
 
 use AppFree\AppController;
 use AppFree\Ari\PhpAri;
+use AppFree\Watchdog\WatchdogController;
 use Evenement\EventEmitter;
 use GuzzleHttp\Client;
 use Illuminate\Support\ServiceProvider;
@@ -16,7 +17,7 @@ class AppControllerServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(AppController::class, function ($app) {
-            return new AppController($app->get(EventEmitter::class), $app->get(PhpAri::class), $app->get(Logger::class), $app->get(Client::class));
+            return new AppController($app->get(EventEmitter::class), $app->get(PhpAri::class), $app->get(Logger::class), $app->get(Client::class), $app->get(WatchdogController::class));
         });
     }
 }

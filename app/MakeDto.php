@@ -58,6 +58,8 @@ class MakeDto
             $var = new PlaybackFinished(new Playback($data->playback->id));
         } elseif ($data->type === "PlaybackStarted") {
             $var = new PlaybackStarted(new Playback($data->playback->id));
+        } elseif ($data->type === "ApplicationReplaced") {
+            $var = new ApplicationReplaced();
         } else {
             throw new Exception("Unknown Event: " . json_encode($data)); //todo fixme: every valid message must result in valid dto
 
