@@ -19,12 +19,12 @@ use React\Promise\PromiseInterface;
 class WatchdogController
 {
     public const int INTERVAL_SECONDS = 60;
+
     public function __construct(
         private readonly Logger           $stasisLogger,
         private readonly PromiseInterface $wsClient,
         private readonly LoopInterface    $eventLoop
-    ) {
-    }
+    ) {}
 
     /**
      * @throws RandomException
@@ -37,7 +37,7 @@ class WatchdogController
         $this->wsClient->then(
             function (WebSocket $conn) use ($dto) {
                 $conn->send(new Frame(
-                    json_encode(["unique_id" => bin2hex($dto->unique_id)]),
+                    $dto->unique_id,
                     true,
                     Frame::OP_PING
                 ));
@@ -47,12 +47,11 @@ class WatchdogController
 
     public function receivePong(FrameInterface $frame): void
     {
-        $json = json_decode($frame->getPayload(), true);
-        $json["unique_id"] = hex2bin($json["unique_id"]);
-        $json["seconds_received_at"] = Dto::generateTimestamp();
-
         try {
-            $dto = Dto::fromArray($json);
+            $dto = Dto::fromArray([
+                "unique_id" => $frame->getPayload(),
+                "seconds_received_at" => Dto::generateTimestamp()
+            ]);
             $this->saveToLog($dto);
         } catch (Exception $exception) {
             $this->stasisLogger->error(ErrorIds::E_WATCHDOG_COULD_MAKE_DTO, ["exception" => $exception, "ERROR_ID" => ErrorIds::E_WATCHDOG_COULD_MAKE_DTO]);
