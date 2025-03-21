@@ -49,8 +49,7 @@ class AppController implements StatefulInterface, EventReceiverInterface
      */
     private function denyChannel(string $channelId): void
     {
-        $this->logger->error("Channel $channelId denied");
-        //        $this->ari->channels()->play($channelId, ['media:please-try-call-later'], null, null, null, "channel-denied");
+        $this->logger->notice("Channel $channelId denied");
         $this->ari->channels()->hangup($channelId);
     }
 
@@ -89,10 +88,6 @@ class AppController implements StatefulInterface, EventReceiverInterface
         if (config('watchdog.internal')) {
             $this->setupWatchdog();
         }
-
-        //        $this->emitter->on(Constants\EventEmitterMessageTypes::EVENT_NAME_WATCHDOG_MESSAGE, function (AppFreeDto $dto) {
-        //            $this->receiveWatchdogEvent($dto);
-        //        });
 
         $this->dropAllCalls();
     }

@@ -1,0 +1,9 @@
+[Unit]
+Description="Appfree-App Clean %i"
+
+[Service]
+Environment=LANG=en_US.UTF-8,LC_ALL=en_US.UTF-8
+ExecStart=/home/appfree/deploy/%i/appfree-app/bin/run-cleaning -y
+
+[Install]
+WantedBy=default.target

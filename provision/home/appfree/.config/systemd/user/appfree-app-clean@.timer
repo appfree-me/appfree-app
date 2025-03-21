@@ -1,0 +1,11 @@
+[Unit]
+Description=Daily DB cleaning for appfree-app-clean_%i
+
+[Timer]
+OnCalendar=*-*-* 04:00:00
+RandomizedDelaySec=10m
+Persistent=true
+Unit=appfree-app-clean@%i.service
+
+[Install]
+WantedBy=default.target

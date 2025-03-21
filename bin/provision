@@ -13,29 +13,33 @@ cd "$(dirname "$0")"/..
 
 
 echo Provisioning systemd unit files for user appfree...
+# todo provisionierung auch für lokale installation mit lokalem user!
 rsync -vr --chown appfree:appfree provision/home/ /home/
 
 apt install mariadb-client mariadb-server php8.3-mysql
 
 echo Creating mariadb user appfree...
 
-pw=a
-pw2=b
+pwDb=a
+pwDb2=b
 
-while [ "$pw" != "$pw2" ]; do
+while [ "$pwDb" != "$pwDb2" ]; do
     echo "Creating database user appfree, enter password to create: "
-    read pw
+    read pwDb
 
     echo Enter again:
-    read pw2
+    read pwDb2
 
-    if [ "$pw" != "$pw2" ]; then
+    if [ "$pwDb" != "$pwDb2" ]; then
         echo "Passwords do not match, please re-enter..."
      fi
 done
 
-echo "Line for .env file: DB_PASSWORD=\"$pw\""
-export pw
+echo "Adding comment to .env file: #DB_PASSWORD=\"$pwDb\""
+cat >> .env <<EOM
+#DB_PASSWORD="$pwDb"
+EOM
+export pwDb
 
 php provision/mariadb.sql.php | mariadb
 

@@ -18,16 +18,18 @@ if [[ -z "$branch" ]]; then
   branch="$instance"
 fi
 
-service_name="appfree-app_$instance"
+service_name_app="appfree-app_$instance"
+service_name_cleaner="appfree-app-clean@$instance.timer"
 
-echo "Deploying $service_name with git branch $branch"
+echo "Deploying $service_name_app with git branch $branch"
 
 # assumes git repo for $instance is already cloned
-ssh appfree@"$DEPLOYHOST" "systemctl --user stop $service_name"
+ssh appfree@"$DEPLOYHOST" "systemctl --user stop $service_name_app"
 ssh appfree@"$DEPLOYHOST" "mkdir -p ~/deploy/$instance/appfree-app"
 rsync -a --delete ./ appfree@"$DEPLOYHOST":"~/deploy/$instance/appfree-app"
 
 ssh appfree@"$DEPLOYHOST" "cd ~/deploy/$instance/appfree-app && git stash && git fetch && git checkout '$branch' && git reset --hard 'origin/$branch' && git pull && composer config repositories.local-libs --unset && composer update lelaurent/php-asterisk-swagger-api && php artisan migrate"
 
-ssh appfree@"$DEPLOYHOST" "systemctl --user daemon-reload && systemctl --user restart $service_name"
+ssh appfree@"$DEPLOYHOST" "systemctl --user daemon-reload && systemctl --user restart $service_name_app"
+ssh appfree@"$DEPLOYHOST" "systemctl --user enable $service_name_cleaner"
 

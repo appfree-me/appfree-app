@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+cd "$(dirname "$0")"/.. || exit 1
+
+if [ "$1" != "-y" ]; then
+    echo Potentially destructive action, please start with -y to execute.
+    exit 1
+fi
+
+php artisan app:run-cleaning
