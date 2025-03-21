@@ -42,7 +42,8 @@ class AppController implements StatefulInterface, EventReceiverInterface
         public Logger                          $logger,
         protected Client                       $client,
         private readonly WatchdogController    $watchdogController
-    ) {}
+    ) {
+    }
 
     /**
      * @throws ApiException

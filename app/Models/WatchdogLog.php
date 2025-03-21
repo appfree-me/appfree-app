@@ -20,7 +20,8 @@ class WatchdogLog extends Model
         'seconds_to_processing'
     ];
 
-    public function augment(PingPongDto $dto): void {
+    public function augment(PingPongDto $dto): void
+    {
         $this->fill(array_filter($dto->toArray()));
     }
 

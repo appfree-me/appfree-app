@@ -13,7 +13,8 @@ class PingPongDto
         public readonly string $unique_id,
         public readonly ?float $nanoseconds_created_at = null,
         public readonly ?float $seconds_received_at = null,
-    ) {}
+    ) {
+    }
 
     public static function fromArray(array $array): Dto
     {

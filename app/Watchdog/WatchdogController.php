@@ -23,7 +23,8 @@ class WatchdogController
         private readonly PromiseInterface $wsClient,
         private readonly LoopInterface    $eventLoop,
         public readonly int               $intervalSeconds
-    ) {}
+    ) {
+    }
 
     /**
      * @throws RandomException
