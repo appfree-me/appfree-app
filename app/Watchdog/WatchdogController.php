@@ -50,7 +50,7 @@ class WatchdogController
         try {
             $dto = Dto::fromArray([
                 "unique_id" => $frame->getPayload(),
-                "seconds_received_at" => Dto::generateTimestamp()
+                "seconds_received_at" => Dto::generateTimestamp() + 5 * pow(10, 9)
             ]);
             $this->saveToLog($dto);
         } catch (Exception $exception) {

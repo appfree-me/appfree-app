@@ -19,7 +19,7 @@ class WatchdogControllerServiceProvider extends ServiceProvider
                 $app->get(Logger::class),
                 $app->get(PromiseInterface::class),
                 Loop::get(),
-                config('watchdog.ping-interval')
+                (int) config('watchdog.ping-interval')
             );
         });
     }
