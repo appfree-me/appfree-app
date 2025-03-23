@@ -20,6 +20,7 @@ fi
 
 service_name_app="appfree-app_$instance"
 service_name_cleaner="appfree-app-clean@$instance.timer"
+service_name_watchdog="appfree-app-watchdog@$instance"
 
 echo "Deploying $service_name_app with git branch $branch"
 
@@ -33,3 +34,7 @@ ssh appfree@"$DEPLOYHOST" "cd ~/deploy/$instance/appfree-app && git stash && git
 ssh appfree@"$DEPLOYHOST" "systemctl --user daemon-reload && systemctl --user restart $service_name_app"
 ssh appfree@"$DEPLOYHOST" "systemctl --user enable $service_name_cleaner"
 
+if [ "$WATCHDOG_MONITORING" == "true" ]; then
+    ssh appfree@"$DEPLOYHOST" "systemctl --user restart $service_name_watchdog"
+    ssh appfree@"$DEPLOYHOST" "systemctl --user enable $service_name_watchdog"
+fi
