@@ -17,7 +17,7 @@ class LoggerServiceProvider extends ServiceProvider
         $this->app->singleton(Logger::class, function (Application $app) {
             $configAsterisk = $app->get(PhpAriConfig::class);
 
-            $logger = new Logger("appfree-" . config("app.env"));
+            $logger = new Logger("appfree-app_" . config("app.env"));
 
             if ($configAsterisk->general['logfile'] == "console") {
                 $logWriter = new StreamHandler("php://stdout");

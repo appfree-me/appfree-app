@@ -2,8 +2,8 @@
 
 namespace AppFree\Console\Commands;
 
-use AppFree\AppFreeCommands\AppFree\Commands\StateMachine\V1\WatchdogExecuteApiCall;
 use AppFree\Models\WatchdogLog;
+use DateMalformedStringException;
 use DateTime;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -11,7 +11,6 @@ use Monolog\Logger;
 
 class Watchdog extends Command
 {
-    public const CHECK_INTERVAL_SECONDS = 5 * 60;
     public const int LATE_PONG_THRESHOLD_SECONDS = 2;
     /**
      * The name and signature of the console command.
@@ -26,7 +25,7 @@ class Watchdog extends Command
      */
     protected $description = 'Appfree watchdog background process';
 
-    public function __construct(private Logger $logger)
+    public function __construct(private readonly Logger $logger)
     {
         parent::__construct();
     }
@@ -48,19 +47,19 @@ class Watchdog extends Command
         return $result;
     }
 
-    private function systemctlShowCommand(string $serviceName)
+    private function systemctlShowCommand(string $serviceName): string
     {
         return "systemctl --user show --no-pager '$serviceName'";
     }
 
     /**
-     * @throws \DateMalformedStringException
+     * @throws DateMalformedStringException
      */
     public function handle(): void
     {
         $lastId = 0;
 
-        while (sleep(self::CHECK_INTERVAL_SECONDS) === 0) {
+        while (sleep(config('watchdog.check-interval')) === 0) {
             list($results, $lastId) = $this->checkForViolations($lastId);
             foreach ($results["violations"] as $name => $count) {
                 $this->logger->info("Watchdog detected violation: $name, count: $count");
@@ -69,19 +68,19 @@ class Watchdog extends Command
     }
 
     /**
-     * @throws \DateMalformedStringException
+     * @throws DateMalformedStringException
      */
     private function atLeastCheckIntervalAgo(string $datestr): bool
     {
         $dateTime = (new DateTime($datestr))->getTimestamp();
         $now = (new DateTime('now'))->getTimestamp();
 
-        return ($now - $dateTime > self::CHECK_INTERVAL_SECONDS);
+        return ($now - $dateTime > config('watchdog.check-interval'));
     }
 
     /**
      * Regularly check if the required DB entries are being created
-     * @throws \DateMalformedStringException
+     * @throws DateMalformedStringException
      */
     public function checkForViolations(int $lastId = 0): array
     {
@@ -96,12 +95,11 @@ class Watchdog extends Command
         }
 
 
-        // Check if required DB entries are being created
-        // Last DB entry should not be older than 2*WATCHDOG_PING_INTERVAL
-
+        // Get log records newer than check interval not yet processed
+        // fixme: only make this dependent on lastId, save lastId to database
         $records = DB::select(
             'SELECT * FROM watchdog_logs WHERE unix_timestamp(now()) - unix_timestamp(created_at) <= ? and id > ? order by id',
-            [self::CHECK_INTERVAL_SECONDS, $lastId]
+            [config('watchdog.check-interval'), $lastId]
         );
 
         $recentLogEntries = WatchdogLog::hydrate($records);

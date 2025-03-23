@@ -1,0 +1,14 @@
+[Unit]
+Description="appfree-app_%i watchdog process"
+StartLimitBurst=10
+StartLimitIntervalSec=20
+
+[Service]
+Environment=LANG=en_US.UTF-8,LC_ALL=en_US.UTF-8
+ExecStart=/home/appfree/deploy/%i/appfree-app/bin/run-watchdog
+RestartSec=10
+RestartMaxDelaySec=5m
+RestartSteps=10
+
+[Install]
+WantedBy=default.target

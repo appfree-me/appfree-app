@@ -13,7 +13,7 @@
         "ergebnis/composer-normalize": "^2.45",
         "evenement/evenement": "^3.0",
         "guzzlehttp/guzzle": "^7.9",
-        "laravel/framework": "^11.9",
+        "laravel/framework": "12.1.1.0",
         "laravel/tinker": "^2.9",
         "lelaurent/php-asterisk-swagger-api": "dev-master",
         "ratchet/pawl": "^0.4.1",
@@ -85,7 +85,7 @@
             "@php artisan package:discover --ansi"
         ],
         "post-root-package-install": [
-            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+            "@php -r \"file_exists('.env') || copy('.env.dist', '.env');\""
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi",
