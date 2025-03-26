@@ -1,4 +1,6 @@
-# Appfree: A framework to provide smartphone-only services to the smartphone-less masses
+![](appfree.png)
+# Appfree: A framework to provide smartphone-only services to the smartphone-less masses!
+
 
 Appfree is a framework allowing you to easily create IVR apps, e. g. apps which can be interacted with from a normal telephone or featurephone. It is based on a modern tech stack: PHP 8 and Laravel.
 
@@ -59,6 +61,6 @@ See README-architecture.md
 See README-apps.md
 
 
-
-
+This project was funded by the Prototype Fund of the German Federal Ministry of Education and Research (BMBF) and the Open Knowledge Foundation Germany.
+![](bmbf.jpg)
 
