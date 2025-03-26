@@ -2,7 +2,6 @@
 
 #todo
 
-
 ### Audio Alerts
 
 Alerts in the Demo app are currently static and generated with https://ttsmaker.com/.
