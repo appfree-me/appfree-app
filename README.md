@@ -1,5 +1,5 @@
 ![](appfree.png)
-<div align="center"><h1>Appfree
+<div align="center"><h1>Appfree<br>
 A framework to provide smartphone-only services to the smartphone-less masses</h1></div>
 
 Appfree is a framework allowing you to easily create Interactive Voice Response apps, e. g. apps which can be interacted with from a normal telephone or featurephone. It is based on a modern tech stack: PHP 8 and Laravel.
