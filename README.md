@@ -1,5 +1,5 @@
 ![](appfree.png)
-## Appfree
+## <center>Appfree</center>
 
 **A framework to provide smartphone-only services to the smartphone-less masses**
 
