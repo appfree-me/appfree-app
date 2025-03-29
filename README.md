@@ -1,11 +1,11 @@
-![](appfree.png)
-<div align="center"><h1>Appfree<h1><br>
-<h2>A framework to provide smartphone-only services to the smartphone-less masses</h2></div>
+<div align="center"><a href="https://www.appfree.me/"><img src="https://github.com/appfree-me/appfree-app/raw/main/appfree.png"></img></a></div>
 
+
+### About Appfree
+**A framework to provide smartphone-only services to the smartphone-less masses**
+
+[TODO: kürzen und mehr auf die Technik eingehen]
 Appfree is a framework allowing you to easily create Interactive Voice Response apps, e. g. apps which can be interacted with from a normal telephone or featurephone. It is based on a modern tech stack: PHP 8 and Laravel.
-
-### Project Description
-[TODO bisschen kürzen]
 
 Are you feeling anxious when you notice you forgot your smartphone?
 Are you feeling frustrated having to constantly update apps or having to reenter a password at the worst possible moment?
@@ -41,7 +41,9 @@ Phone server backend providing connectivity to the phone network via Asterisk ap
 
 #### System requirements [TODO ggf. dann in install-readme auslagern]
 
-64-bit Linux with `apt` and `git` installed, tested on Ubuntu 24.04. All filesystem paths mentioned here are relative to the project root unless otherwise indicated.
+* 64-bit Linux
+* Required packages: `apt` and `git` 
+* Note: All filesystem paths mentioned here are relative to the project root unless otherwise indicated.
 
 #### Install steps 
 See [Installation](/README-install.md)
