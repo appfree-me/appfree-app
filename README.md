@@ -8,7 +8,7 @@
 ### About Appfree
  ☎️ **A framework to provide smartphone-only services to the smartphone-less masses** ☎️
 
-[TODO: kürzen und mehr auf die Technik eingehen]
+- [ ] Kürzen  und auf die Technik eingehen!
 Appfree is a framework allowing you to easily create Interactive Voice Response apps, e. g. apps which can be interacted with from a normal telephone or featurephone. It is based on a modern tech stack: PHP 8 and Laravel.
 
 Are you feeling anxious when you notice you forgot your smartphone?
