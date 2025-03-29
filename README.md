@@ -1,8 +1,13 @@
-<div align="center"><a href="https://www.appfree.me/"><img src="https://github.com/appfree-me/appfree-app/raw/main/appfree.png"></img></a></div>
+<div align="center">
+    <a href="https://www.appfree.me/"><img src="https://github.com/appfree-me/appfree-app/raw/main/appfree.png"></img></a>
+</div>
+
+![Static Badge](https://img.shields.io/badge/Laravel-12-blue?link=https%3A%2F%2Flaravel.com%2Fdocs%2F12.x%2Freleases)
+
 
 
 ### About Appfree
-**A framework to provide smartphone-only services to the smartphone-less masses**
+ ☎️ **A framework to provide smartphone-only services to the smartphone-less masses** ☎️
 
 [TODO: kürzen und mehr auf die Technik eingehen]
 Appfree is a framework allowing you to easily create Interactive Voice Response apps, e. g. apps which can be interacted with from a normal telephone or featurephone. It is based on a modern tech stack: PHP 8 and Laravel.
