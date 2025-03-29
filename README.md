@@ -65,5 +65,6 @@ See README-apps.md
 
 
 This project was funded by the Prototype Fund of the German Federal Ministry of Education and Research (BMBF) and the Open Knowledge Foundation Germany.
+
 ![](bmbf.jpg)
 
