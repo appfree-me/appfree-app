@@ -55,7 +55,7 @@ See [architecture](/README-architecture.md)
 ### MVG Rad example app
 
 See [example app](/README-apps.md)
-- [ ] TODO hier ist kein Inhalt
+- [ ] TODO Inhalt ergänzen
 
 ### License
 
