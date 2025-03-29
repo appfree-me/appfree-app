@@ -46,20 +46,20 @@ Phone server backend providing connectivity to the phone network via Asterisk ap
 
 ### Installation 
 
-See [Installation](/README-install.md)
+See [Installation](./README-install.md)
 
 ### Architecture
 
-See [architecture](/README-architecture.md)
+See [architecture](./README-architecture.md)
 
 ### MVG Rad example app
 
-See [example app](/README-apps.md)
+See [example app](./README-apps.md)
 - [ ] TODO Inhalt ergänzen
 
 ### License
 
-[MIT License](/LICENSE.MD)
+[MIT License](./LICENSE.MD)
 
 ### Funding
 
