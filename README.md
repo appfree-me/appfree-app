@@ -18,13 +18,7 @@ The framework comes with a fully functional sample application for the city of M
 With appfree, it is usable from every telephone.
 
 
-## Preliminaries
 
-All filesystem paths mentioned here are relative to the project root unless otherwise indicated.
-
-## System requirements
-
-64-bit Linux, tested on Ubuntu 24.04.
 
 ## Project components
 
@@ -60,6 +54,12 @@ See README-architecture.md
 See README-apps.md
 
 
-This project was funded by the Prototype Fund of the German Federal Ministry of Education and Research (BMBF) and the Open Knowledge Foundation Germany.
-![](bmbf.jpg)
+## Supported by
+
+<a href="https://prototypefund.de/">
+  <img class="logo-other" src="images/logos/ptf.png" height="150"/>
+</a>
+<a href="https://www.bmbf.en/">
+  <img src="images/logos/bmbf_de.jpg" height="150"/>
+</a>
 

@@ -1,12 +1,18 @@
-## How to deploy
+# Deployment
 
-Tested on Ubuntu 24.04.2 LTS
+All filesystem paths mentioned here are relative to the project root unless otherwise indicated.
+
+## System requirements
+
+- 64-bit Linux, tested on Ubuntu 24.04.2 LTS.  
+
+- You need a telephone trunk accessible via SIP. Currently sipgate.de provider is supported out of the box.
+
+## How to deploy
 
 Appfree consists of two repositories: `phone-server` and `appfree-app`. To have a working appfree installation, we have to provision and deploy both repositories. `appfree-app` depends on `phone-server`, so we setup `phone-server` first.
 
-## Prerequisites
 
-You need a telephone trunk accessible via SIP. Currently sipgate.de provider is supported out of the box.
 ## phone-server
 
 phone-server provides the configured asterisk instance which appfree-app connects to.

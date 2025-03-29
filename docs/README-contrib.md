@@ -13,7 +13,7 @@ Without this line, type annotations in PHP source files will not be processed co
 ## Commit rules
 
 - Before committing, please make sure that you...
-  - ... execute `composer lint:fix` to adjust code style and formatting to the project
+  - execute `composer lint:fix` to adjust code style and formatting to the project
   - execute `composer lint` to perform static checks. 
   - execute `composer test` to execute the tests. These also include some code quality tests, e. g. type safety/rules for how DTOs. 
 
