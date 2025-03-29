@@ -59,7 +59,7 @@ See [example app](./README-apps.md)
 
 ### License
 
-[MIT License](./LICENSE.MD)
+[MIT License](LICENSE.MD)
 
 ### Funding
 
