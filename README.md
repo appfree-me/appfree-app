@@ -2,7 +2,7 @@
     <a href="https://www.appfree.me/"><img src="https://github.com/appfree-me/appfree-app/raw/main/appfree.png"></img></a>
 </div>
 
-<img alt="Static Badge" src="https://img.shields.io/badge/Laravel-12-red?link=https%3A%2F%2Flaravel.com%2F&link=https%3A%2F%2Flaravel.com%2F"></img>
+<!--<img alt="Static Badge" src="https://img.shields.io/badge/Laravel-12-red?link=https%3A%2F%2Flaravel.com%2F&link=https%3A%2F%2Flaravel.com%2F"></img>-->
 
 
 ### About Appfree
@@ -28,6 +28,8 @@ With appfree, it is usable from every telephone.
 
 #### appfree-connector
 
+- [ ] Repoistory verlinken!
+
 Main repository for the appfree-connector. Contains the framework and application logic for IVR apps.
 
 #### appfree-phone-server
@@ -46,7 +48,6 @@ Phone server backend providing connectivity to the phone network via Asterisk ap
 
 See [Installation](/README-install.md)
 
- 
 ### Architecture
 
 See [architecture](./README-Architecture.md)
