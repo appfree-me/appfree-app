@@ -17,7 +17,9 @@ cd phone-server
 
 Set Variables necessary for provisioning and deploy in .env:
 
-`cp .env.dist .env`
+```bash
+cp .env.dist .env
+```
 
 For the purpose of this tutorial, we are assuming you are working on the server you want to provision, so we set DEPLOYHOST=localhost:
 ```  
