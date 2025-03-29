@@ -61,7 +61,7 @@ See README-architecture.md
 
 ## MVG Rad example app, or: How to write an appfree module
 
-See README-apps.md
+See [example app](./README-apps.md)
 
 
 This project was funded by the Prototype Fund of the German Federal Ministry of Education and Research (BMBF) and the Open Knowledge Foundation Germany.
