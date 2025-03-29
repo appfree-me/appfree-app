@@ -43,13 +43,6 @@ Phone server backend providing connectivity to the phone network via Asterisk ap
 
 ### Installation 
 
-#### System requirements [TODO ggf. dann in install-readme auslagern]
-
-* 64-bit Linux
-* Required packages: `apt` and `git` 
-* Note: All filesystem paths mentioned here are relative to the project root unless otherwise indicated.
-
-#### Install steps 
 See [Installation](/README-install.md)
 
 #### Watchdog 
