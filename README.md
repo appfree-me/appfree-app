@@ -54,15 +54,12 @@ See [architecture](./README-architecture.md)
 ### MVG Rad example app
 
 See [example app](./README-apps.md)
-- [ ] TODO Inhalt ergänzen
 
 ### License
 
 [MIT License](LICENSE.md)
 
-### Funding
-
-## Supported by
+### Supported by
 
 <a href="https://prototypefund.de/">
   <img class="logo-other" src="images/logos/ptf.png" height="150"/>
