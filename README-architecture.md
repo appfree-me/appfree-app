@@ -26,14 +26,13 @@ Forked from phpari project by ... (link: ...)
 
 Every appfree app is backed by a state machine governing allowed inputs/outputs for every state.
 
-### Modules
+#### Modules
 
 
-### Module States
+#### Module States
 
 
 ### Coroutines
-
 
 
 Each `appfree-app` state has a central coroutine called `run` which governs its part of the logic flow of the call. When the state is done, it can hangup the call (for end states) or transition away to a new state.
