@@ -1,7 +1,5 @@
 ![](appfree.png)
-<center>Appfree</center>
-
-**A framework to provide smartphone-only services to the smartphone-less masses**
+<div align="center"><h1>Appfree: A framework to provide smartphone-only services to the smartphone-less masses</h1></div>
 
 Appfree is a framework allowing you to easily create Interactive Voice Response apps, e. g. apps which can be interacted with from a normal telephone or featurephone. It is based on a modern tech stack: PHP 8 and Laravel.
 
@@ -23,11 +21,11 @@ With appfree, it is usable from every telephone.
 
 ### Project components
 
-- #### appfree-connector
+#### appfree-connector
 
 Main repository for the appfree-connector. Contains the framework and application logic for IVR apps.
 
-- #### appfree-phone-server
+#### appfree-phone-server
 
 Phone server backend providing connectivity to the phone network via Asterisk application. One instance of `appfree-phone-server` support connections by multiple appfree-app instances.
 
@@ -44,25 +42,24 @@ Phone server backend providing connectivity to the phone network via Asterisk ap
 
 64-bit Linux with `apt` and `git` installed, tested on Ubuntu 24.04. All filesystem paths mentioned here are relative to the project root unless otherwise indicated.
 
+#### Install steps 
 See [Installation](/README-install.md)
- 
 
-### Watchdog 
+#### Watchdog 
 
 A watchdog process regularly tests if the app is still available to users and writes system log messages on error. It is part of the normal deploy process. Start it with 
 
 ```bash
 systemctl --user start appfree-app-watchdog@{prod,staging,local}
 ```
-
+ 
 ### Architecture
 
 See [architecture](./README-Architecture.md)
 
-## MVG Rad example app
+### MVG Rad example app
 
 See [example app](./README-apps.md)
-
 
 ### License
 
