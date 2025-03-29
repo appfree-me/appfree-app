@@ -49,7 +49,10 @@ See file README-install.md
 ## Watchdog 
 
 A watchdog process regularly tests if the app is still available to users and writes system log messages on error. It is part of the normal deploy process. Start it with 
-`systemctl --user start appfree-app-watchdog@{prod,staging,local}`
+
+```bash
+systemctl --user start appfree-app-watchdog@{prod,staging,local}
+```
 
 ## appfree-app Architecture
 
