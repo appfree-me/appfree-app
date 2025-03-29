@@ -45,13 +45,6 @@ Phone server backend providing connectivity to the phone network via Asterisk ap
 
 See [Installation](/README-install.md)
 
-#### Watchdog 
-
-A watchdog process regularly tests if the app is still available to users and writes system log messages on error. It is part of the normal deploy process. Start it with 
-
-```bash
-systemctl --user start appfree-app-watchdog@{prod,staging,local}
-```
  
 ### Architecture
 
