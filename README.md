@@ -50,16 +50,16 @@ See [Installation](/README-install.md)
 
 ### Architecture
 
-See [architecture](./README-Architecture.md)
+See [architecture](/README-architecture.md)
 
 ### MVG Rad example app
 
-See [example app](./README-apps.md)
+See [example app](/README-apps.md)
 - [ ] TODO hier ist kein Inhalt
 
 ### License
 
-[MIT License](./LICENSE.MD)
+[MIT License](/LICENSE.MD)
 
 ### Funding
 
