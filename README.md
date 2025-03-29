@@ -9,43 +9,39 @@
 Appfree is a framework allowing you to easily create IVR apps, e. g. apps which can be interacted with from a normal telephone or featurephone. It is based on a modern tech stack: PHP 8 and Laravel.
 
 ### About Appfree
- ☎️ **A framework to provide smartphone-only services to the smartphone-less masses** ☎️
+ ☎️ **A framework to provide smartphone-only services via plain old telephone service** ☎️
 
-- [ ] Kürzen  und auf die Technik eingehen!
-Appfree is a framework allowing you to easily create Interactive Voice Response apps, e. g. apps which can be interacted with from a normal telephone or featurephone. It is based on a modern tech stack: PHP 8 and Laravel.
+Appfree is a framework allowing you to easily create Interactive Voice Response apps, e. g. apps which can be interacted with from a normal telephone or featurephone. 
 
-Are you feeling anxious when you notice you forgot your smartphone?
-Are you feeling frustrated having to constantly update apps or having to reenter a password at the worst possible moment?
+Based on Asterisk PBX and ReactPHP, you can develop apps which allow callers to interact with your service. Instead of a smartphone app users can call your telephone number and interact with your app written in Appfree.
 
-More and more things in daily life depend upon you having constant access to a charged, working smartphone with high speed data allowance.
 
-Appfree is a project designed to relieve these feelings of frustration and anxiety and to deliver empowerment to everyday citizens.
+The framework comes with a fully functional application for the city of Munich bike sharing service "MVG Rad", which is normally usable only via an Android/iOS app.  
 
-Using appfree, you as a developer can create simple frontends for app only services which are normally usable only via a classic telephone or dumbphone.
-
-The framework comes with a fully functional sample application for the city of Munich bike sharing service "MVG Rad", which is normally usable only via an Android/iOS app.  
-With appfree, it is usable from every telephone.
+With appfree, it is usable from every plain old telephone.
 
 
 ### Project components
 
 #### appfree-connector
 
-- [ ] Repoistory verlinken!
+- https://github.com/appfree-me/appfree-app
 
 Main repository for the appfree-connector. Contains the framework and application logic for IVR apps.
 
 #### appfree-phone-server
 
-- [ ] Repoistory verlinken!
+- https://github.com/appfree-me/phone-server
 
-Phone server backend providing connectivity to the phone network via Asterisk application. One instance of `appfree-phone-server` support connections by multiple appfree-app instances.
+Phone server backend providing connectivity to the phone network via Asterisk application. One instance of `phone-server` supports connections by multiple `appfree-`app instances.
 
 ### Features
 
-  - Basic framework for implementing IVR apps
+  - Framework for implementing IVR apps
+  - Define state machines to process call flows
+  - Call flows are defined based on event sequences
+  - Build integration tests based on synthesized event flows
   - MVG Rad sample app
-  - [ ] ##todo ausführlicher!
 
 ### Installation 
 
