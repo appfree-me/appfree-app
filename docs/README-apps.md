@@ -1,6 +1,6 @@
 ## MVG Rad example app, or: How to write an appfree module
 
-#todo
+- [ ] TODO ergänzen
 
 ### Audio Alerts
 

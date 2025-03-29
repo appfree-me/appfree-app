@@ -1,11 +1,18 @@
-![](appfree.png)
-# Appfree: A framework to provide smartphone-only services to the smartphone-less masses
+<div align="center">
+    <a href="https://www.appfree.me/"><img src="https://github.com/appfree-me/appfree-app/raw/main/appfree.png"></img></a>
+</div>
+
+<!--<img alt="Static Badge" src="https://img.shields.io/badge/Laravel-12-red?link=https%3A%2F%2Flaravel.com%2F&link=https%3A%2F%2Flaravel.com%2F"></img>-->
 
 <img alt="Static Badge" src="https://img.shields.io/badge/Laravel-12-blue?link=https%3A%2F%2Flaravel.com%2Fdocs%2F12.x%2Freleases">
 
 Appfree is a framework allowing you to easily create IVR apps, e. g. apps which can be interacted with from a normal telephone or featurephone. It is based on a modern tech stack: PHP 8 and Laravel.
 
-## Project Description
+### About Appfree
+ ☎️ **A framework to provide smartphone-only services to the smartphone-less masses** ☎️
+
+- [ ] Kürzen  und auf die Technik eingehen!
+Appfree is a framework allowing you to easily create Interactive Voice Response apps, e. g. apps which can be interacted with from a normal telephone or featurephone. It is based on a modern tech stack: PHP 8 and Laravel.
 
 Are you feeling anxious when you notice you forgot your smartphone?
 Are you feeling frustrated having to constantly update apps or having to reenter a password at the worst possible moment?
@@ -20,41 +27,44 @@ The framework comes with a fully functional sample application for the city of M
 With appfree, it is usable from every telephone.
 
 
+### Project components
 
+#### appfree-connector
 
-## Project components
+- [ ] Repoistory verlinken!
 
-- ### appfree-app
+Main repository for the appfree-connector. Contains the framework and application logic for IVR apps.
 
-Main repository for the app. Contains the framework and application logic for IVR apps.
+#### appfree-phone-server
 
-- ### appfree-phone-server
+- [ ] Repoistory verlinken!
 
 Phone server backend providing connectivity to the phone network via Asterisk application. One instance of `appfree-phone-server` support connections by multiple appfree-app instances.
 
-## Features
+### Features
 
   - Basic framework for implementing IVR apps
   - MVG Rad sample app
-  - (##todo)
+  - [ ] ##todo ausführlicher!
 
-## How to install/deploy/run
+### Installation 
 
-See file README-install.md
+See [Installation](./README-install.md)
 
-## Watchdog 
+### Architecture
 
-A watchdog process regularly tests if the app is still available to users and writes system log messages on error. It is part of the normal deploy process. Start it with 
-`systemctl --user start appfree-app-watchdog@{prod,staging,local}`
+See [architecture](./README-architecture.md)
 
-## appfree-app Architecture
+### MVG Rad example app
 
-See README-architecture.md
+See [example app](./README-apps.md)
+- [ ] TODO Inhalt ergänzen
 
-## MVG Rad example app, or: How to write an appfree module
+### License
 
-See README-apps.md
+[MIT License](LICENSE.md)
 
+### Funding
 
 ## Supported by
 
