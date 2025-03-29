@@ -153,7 +153,7 @@ Run ```bin/deploy prod|staging```  to deploy your work to the other instances.
 
 Appfree uses Mariadb as a database. Fill in _DB_PASSWORD_ variable from .env.dist to configure access.
 
-### [Systemd]
+### Systemd
 
 appfree is backed by systemd unit files which restart it automatically should the app crash.
 
