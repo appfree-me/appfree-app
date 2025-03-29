@@ -32,14 +32,15 @@ Main repository for the appfree-connector. Contains the framework and applicatio
 
 #### appfree-phone-server
 
+- [ ] Repoistory verlinken!
+
 Phone server backend providing connectivity to the phone network via Asterisk application. One instance of `appfree-phone-server` support connections by multiple appfree-app instances.
 
 ### Features
 
   - Basic framework for implementing IVR apps
   - MVG Rad sample app
-  - (##todo)
-[TODO]
+  - [ ] ##todo ausführlicher!
 
 ### Installation 
 
