@@ -44,7 +44,7 @@ Phone server backend providing connectivity to the phone network via Asterisk ap
 
 ## How to install/deploy/run
 
-See [Installation](/.README-install.md)
+See [Installation](/README-install.md)
  
 
 ## Watchdog 
