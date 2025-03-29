@@ -2,8 +2,7 @@
     <a href="https://www.appfree.me/"><img src="https://github.com/appfree-me/appfree-app/raw/main/appfree.png"></img></a>
 </div>
 
-![Static Badge](https://img.shields.io/badge/Laravel-12-blue?link=https%3A%2F%2Flaravel.com%2Fdocs%2F12.x%2Freleases)
-
+<img alt="Static Badge" src="https://img.shields.io/badge/Laravel-12-red?link=https%3A%2F%2Flaravel.com%2F&link=https%3A%2F%2Flaravel.com%2F"></img>
 
 
 ### About Appfree
