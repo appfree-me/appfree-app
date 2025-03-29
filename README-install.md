@@ -169,3 +169,11 @@ systemctl --user start appfree-app_local.service
 
 Appfree provisioning will create a user `appfree` in your system. Appfree doesn't need special privileges to run: it will run under the `appfree` user account.
 Appfree doesn't need special privileges to run: Systemd unit files are installed in the `appfree` user home directory and a separate systemd instance running under the same user is used to manage the instance. 
+
+### Watchdog 
+
+A watchdog process regularly tests if the app is still available to users and writes system log messages on error. It is part of the normal deploy process. Start it with 
+
+```bash
+systemctl --user start appfree-app-watchdog@{prod,staging,local}
+```
