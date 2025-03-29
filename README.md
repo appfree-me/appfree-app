@@ -1,9 +1,11 @@
 ![](appfree.png)
-# Appfree: A framework to provide smartphone-only services to the smartphone-less masses
+## Appfree
+
+**A framework to provide smartphone-only services to the smartphone-less masses**
 
 Appfree is a framework allowing you to easily create Interactive Voice Response apps, e. g. apps which can be interacted with from a normal telephone or featurephone. It is based on a modern tech stack: PHP 8 and Laravel.
 
-## Project Description
+### Project Description
 [TODO bisschen kürzen]
 
 Are you feeling anxious when you notice you forgot your smartphone?
@@ -19,37 +21,33 @@ The framework comes with a fully functional sample application for the city of M
 With appfree, it is usable from every telephone.
 
 
-## Preliminaries
+### Project components
 
-All filesystem paths mentioned here are relative to the project root unless otherwise indicated.
+- #### appfree-connector
 
-## System requirements
+Main repository for the appfree-connector. Contains the framework and application logic for IVR apps.
 
-64-bit Linux, tested on Ubuntu 24.04.
-
-## Project components
-
-- ### appfree-connector
-
-Main repository for the app. Contains the framework and application logic for IVR apps.
-
-- ### appfree-phone-server
+- #### appfree-phone-server
 
 Phone server backend providing connectivity to the phone network via Asterisk application. One instance of `appfree-phone-server` support connections by multiple appfree-app instances.
 
-## Features
+### Features
 
   - Basic framework for implementing IVR apps
   - MVG Rad sample app
   - (##todo)
 [TODO]
 
-## How to install/deploy/run
+### Installation 
+
+#### System requirements [TODO ggf. dann in install-readme auslagern]
+
+64-bit Linux with `apt` and `git` installed, tested on Ubuntu 24.04. All filesystem paths mentioned here are relative to the project root unless otherwise indicated.
 
 See [Installation](/README-install.md)
  
 
-## Watchdog 
+### Watchdog 
 
 A watchdog process regularly tests if the app is still available to users and writes system log messages on error. It is part of the normal deploy process. Start it with 
 
@@ -57,7 +55,7 @@ A watchdog process regularly tests if the app is still available to users and wr
 systemctl --user start appfree-app-watchdog@{prod,staging,local}
 ```
 
-## Architecture
+### Architecture
 
 See [architecture](./README-Architecture.md)
 
@@ -65,6 +63,12 @@ See [architecture](./README-Architecture.md)
 
 See [example app](./README-apps.md)
 
+
+### License
+
+[MIT License](./LICENSE.MD)
+
+### Funding
 
 This project was funded by the Prototype Fund of the German Federal Ministry of Education and Research (BMBF) and the Open Knowledge Foundation Germany.
 
