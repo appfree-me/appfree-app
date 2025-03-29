@@ -6,7 +6,10 @@ Appfree consists of two repositories: `phone-server` and `appfree-app`. To have 
 
 ## Prerequisites
 
-You need a telephone trunk accessible via SIP. Currently sipgate.de provider is supported out of the box.
+* You need a telephone trunk accessible via SIP. Currently sipgate.de provider is supported out of the box.
+* 64-bit Linux with `apt` and `git' installed
+* Note: All filesystem paths mentioned here are relative to the project root unless otherwise indicated.
+
 ## phone-server
 
 phone-server provides the configured asterisk instance which appfree-app connects to.
