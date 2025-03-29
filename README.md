@@ -4,6 +4,7 @@
 Appfree is a framework allowing you to easily create IVR apps, e. g. apps which can be interacted with from a normal telephone or featurephone. It is based on a modern tech stack: PHP 8 and Laravel.
 
 ## Project Description
+[TODO bisschen kürzen]
 
 Are you feeling anxious when you notice you forgot your smartphone?
 Are you feeling frustrated having to constantly update apps or having to reenter a password at the worst possible moment?
@@ -58,7 +59,7 @@ systemctl --user start appfree-app-watchdog@{prod,staging,local}
 
 ## appfree-app Architecture
 
-See [architecture](./README-architecture.md)
+See [architecture](./README-Architecture.md)
 
 ## MVG Rad example app, or: How to write an appfree module
 
