@@ -57,7 +57,7 @@ systemctl --user start appfree-app-watchdog@{prod,staging,local}
 
 ## appfree-app Architecture
 
-See README-architecture.md
+See [architecture](./README-architecture.md)
 
 ## MVG Rad example app, or: How to write an appfree module
 
