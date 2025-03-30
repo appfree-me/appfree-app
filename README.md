@@ -6,7 +6,7 @@
 
 <img alt="Static Badge" src="https://img.shields.io/badge/Laravel-12-blue?link=https%3A%2F%2Flaravel.com%2Fdocs%2F12.x%2Freleases">
 
-Appfree is a framework allowing you to easily create IVR apps, e. g. apps which can be interacted with from a normal telephone or featurephone. It is based on a modern tech stack: PHP 8 and Laravel.
+Appfree is a framework allowing you to easily create IVR apps, e. g. apps which can be interacted with from a normal telephone or featurephone. Based on PHP 8, ReactPHP and Laravel.
 
 ### About Appfree
  ☎️ **A framework to provide smartphone-only services via plain old telephone service** ☎️
@@ -33,7 +33,7 @@ Main repository for the appfree-connector. Contains the framework and applicatio
 
 - https://github.com/appfree-me/phone-server
 
-Phone server backend providing connectivity to the phone network via Asterisk application. One instance of `phone-server` supports connections by multiple `appfree-`app instances.
+Phone server backend providing connectivity to the phone network via Asterisk application. One instance of `phone-server` supports connections by multiple `appfree-app` instances.
 
 ### Features
 
@@ -49,11 +49,11 @@ See [Installation](./README-install.md)
 
 ### Architecture
 
-See [architecture](./README-architecture.md)
+See [Architecture](./README-architecture.md)
 
 ### MVG Rad example app
 
-See [example app](./README-apps.md)
+See [Example App](./README-apps.md)
 
 ### License
 
