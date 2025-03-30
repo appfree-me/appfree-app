@@ -7,6 +7,9 @@ All filesystem paths mentioned here are relative to the project root unless othe
 - 64-bit Linux, tested on Ubuntu 24.04.2 LTS.  
 
 - You need a telephone trunk accessible via SIP. Currently sipgate.de provider is supported out of the box.
+* You need a telephone trunk accessible via SIP. Currently sipgate.de provider is supported out of the box.
+* 64-bit Linux with `apt` and `git' installed
+* Note: All filesystem paths mentioned here are relative to the project root unless otherwise indicated.
 
 ## How to deploy
 
@@ -23,10 +26,12 @@ cd phone-server
 
 Set Variables necessary for provisioning and deploy in .env:
 
-`cp .env.dist .env`
+```bash
+cp .env.dist .env
+```
 
 For the purpose of this tutorial, we are assuming you are working on the server you want to provision, so we set DEPLOYHOST=localhost:
-```  
+```bash
 # SSH Host to deploy to  
 DEPLOYHOST=localhost  
 ```  
@@ -35,7 +40,7 @@ Currently, username for deployment & execution is hardcoded to `appfree`.
 Enter your SIP credentials in .env:  
 Right now, only sipgate.de provider is supported out of the box.
 
-```  
+```bash
 SIP_SECRET=rEdactEd  
 SIP_USERNAME=123456t0  
 SIP_HOST=sipconnect.sipgate.de  
@@ -47,23 +52,28 @@ There are three instances (prod, staging, local) pre-configured in asterisk, you
 
 For e. g. german number 0176123456, this should read in .env:
 
-`PHONE_NUMBER_APPFREE_PROD=49176123456`
+```bash
+PHONE_NUMBER_APPFREE_PROD=49176123456
+```
 
 
 Now, on to provisioning:
 
-`bin/provision`
+```bash
+bin/provision
+```
 
 This will install required packages, e. g. php, composer, asterisk.
 
 UFW Firewall rules will be overwritten with provided firewall rules. These open necessary ports for inbound connections to appfree-app and outbound connections to Sipgate SIP API.
 
 
-
 Now, deploy the project to your target server:
 
-`composer install`  
-`bin/deploy`
+```
+composer install
+bin/deploy
+````
 
 User `appfree` must have ssh access for this to work.
 
@@ -73,28 +83,31 @@ Deployment of phone-server completed.
 Now we install the actual PHP app:
 
 Checkout the repository:
-```
+
+```bash
 git clone appfree@laurentpichler.com:appfree-app  
-cd appfree-app  
+cd appfree-app
+
+cp .env.dist .env
 ```
 
+Set DEPLOYHOST in .env:
 
-`cp .env.dist .env`
-
-```  
+```bash
 # SSH Host to deploy to  
 DEPLOYHOST=localhost  
 ```  
 
-
 Install Systemd Unit Files for user appfree, create `appfree` user account, password and database for mariadb:
 
-`bin/provision`
+```bash
+bin/provision
+```
 
 Take note of the mariadb password you set here and enter it in the .env file!
 
 
-```  
+```bash
 DB_CONNECTION=mariadb  
 DB_HOST=127.0.0.1 
 DB_PORT=3306  
@@ -109,7 +122,9 @@ Before deploying, add your ssh key to appfree User account on DEPLOYHOST.
 
 Deploy app to your server:
 
-`bin/deploy prod main`
+```bash
+bin/deploy prod main
+```
 
 This deploys the latest branch `main` of the repository to `/home/appfree/deploy/prod/appfree-app` on DEPLOYHOST configured in .env
 
@@ -117,13 +132,13 @@ This deploys the latest branch `main` of the repository to `/home/appfree/deploy
 
 #### Run as a system service
 
-Use the systemctl commands provided in this document.
+Use the systemctl commands explained [here](#Systemd)
 
 #### Run standalone  (for development)
 
 To run the app locally on your development machine and connect to `phone-server` running on your server, checkout the repository locally and set the appropriate variables in .env:
 
-```
+```bash
 DEPLOYHOST=your-server.example
 APP_ENV=local
 
@@ -131,21 +146,21 @@ APP_ENV=local
 ```
 
 To set up secure communication tunnels with the phone-server, first start
-`phone-server/bin/enable-forwarding`
-
+```bash
+phone-server/bin/enable-forwarding
+```
 
 Then, run the app with
-`./bin/run-app`  
+```
+./bin/run-app
+```  
 This runs appfree with Xdebug enabled. Use only for development.
 
-
-Run `bin/deploy prod|staging`  to deploy your work to the other instances. 
-
-
+Run ```bin/deploy prod|staging```  to deploy your work to the other instances. 
 
 ### Database setup
 
-Appfree uses Mariadb as a database. Fill in DB_PASSWORD variable from .env.skel to configure access.
+Appfree uses Mariadb as a database. Fill in _DB_PASSWORD_ variable from .env.dist to configure access.
 
 ### Systemd
 
@@ -153,8 +168,18 @@ appfree is backed by systemd unit files which restart it automatically should th
 
 Enable and start appfree with these commands after installing the debian packages:
 
-`systemctl --user enable appfree-app_local.service`
-`systemctl --user start appfree-app_local.service`
+```bash
+systemctl --user enable appfree-app_local.service
+systemctl --user start appfree-app_local.service
+```
 
 Appfree provisioning will create a user `appfree` in your system. Appfree doesn't need special privileges to run: it will run under the `appfree` user account.
 Appfree doesn't need special privileges to run: Systemd unit files are installed in the `appfree` user home directory and a separate systemd instance running under the same user is used to manage the instance. 
+
+### Watchdog 
+
+A watchdog process regularly tests if the app is still available to users and writes system log messages on error. It is part of the normal deploy process. Start it with 
+
+```bash
+systemctl --user start appfree-app-watchdog@{prod,staging,local}
+```
