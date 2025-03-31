@@ -17,12 +17,11 @@ describe("appfree-mvgrad sample flow", function () {
         //todo should be beforeAll
         config()->set("app.authenticate", false);
         config()->set("app.mvg-rad-api", "prod");
-        //        require_once(__DIR__ . "/../../app/appfree/modules/MvgRad/Api/MvgRadApiInterface.php");
     });
 
     //    it('state advances until OutputPin State', function () {
     it('state Begin plays greeting, last pin and pin prompt and transitions to ReadBikeNumber, receives Bike Number, repeats it and does ausleihe and plays pin', function () {
-        $channel = new Channel("testchannel", new Caller("017662328758", "017662328758"));
+        $channel = new Channel("testchannel", new Caller("0890000", "0890000"));
         $pinPromptPlaybackId = "xid";
         $lastOutputDigitPlaybackId = "xid2";
 

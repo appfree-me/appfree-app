@@ -22,7 +22,7 @@ use Monolog\Logger;
 class MakeDto
 {
     /*todo test schreiben der korrektheit eingabe=> ausgabe prüft */
-    public const LAURENT_NUMBER = "017662328758";
+    public const SPECIAL_NUMBER = "0890000";
 
     public static function make(\stdClass $data): AppFreeDto
     {
@@ -42,7 +42,7 @@ class MakeDto
             $caller = null;
 
             if ($data->channel) {
-                $caller = new Caller($data->channel->caller->name, config('mvg.video_dreh') && $data->channel->caller->number !== self::LAURENT_NUMBER ? 'videodreh' : $data->channel->caller->number);
+                $caller = new Caller($data->channel->caller->name, config('mvg.video_dreh') && $data->channel->caller->number !== self::SPECIAL_NUMBER ? 'videodreh' : $data->channel->caller->number);
                 $channel = new Channel($data->channel->id, $caller);
             }
 
