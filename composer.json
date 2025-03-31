@@ -1,5 +1,5 @@
 {
-    "name": "lelaurent/appfree",
+    "name": "appfree-me/appfree-app",
     "description": "AppFree main Laravel application",
     "license": "MIT",
     "type": "project",
@@ -10,12 +10,12 @@
     "require": {
         "php": "^8.3",
         "ext-pcntl": "*",
+        "appfree-me/php-asterisk-swagger-api": "0.1",
         "ergebnis/composer-normalize": "^2.45",
         "evenement/evenement": "^3.0",
         "guzzlehttp/guzzle": "^7.9",
         "laravel/framework": "12.1.1.0",
         "laravel/tinker": "^2.9",
-        "lelaurent/php-asterisk-swagger-api": "dev-master",
         "ratchet/pawl": "^0.4.1",
         "react/async": "^4.3",
         "yohang/finite": "^1.3"
@@ -34,16 +34,17 @@
         "phpstan/phpstan": "^2.1"
     },
     "repositories": {
-        "local-libs": {
-            "type": "path",
-            "url": "/home/kali/proto/repos/lelaurent/php-asterisk-swagger-api",
-            "options": {
-                "symlink": true
+        "php-asterisk-swagger-api": {
+            "type": "package",
+            "package": {
+                "name": "appfree-me/php-asterisk-swagger-api",
+                "version": "0.1",
+                "source": {
+                    "type": "git",
+                    "url": "https://github.com/appfree-me/php-asterisk-swagger-api.git",
+                    "reference": "origin/master"
+                }
             }
-        },
-        "lelaurent/php-asterisk-swagger-api": {
-            "type": "vcs",
-            "url": "appfree@laurentpichler.com:repos/lelaurent/php-asterisk-swagger-api"
         }
     },
     "minimum-stability": "dev",
@@ -53,7 +54,8 @@
             "AppFree\\": "app/",
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
-            "Database\\Seeders\\": "database/seeders/"
+            "Database\\Seeders\\": "database/seeders/",
+            "Swagger\\Client\\": "vendor/appfree-me/php-asterisk-swagger-api/lib/"
         }
     },
     "autoload-dev": {

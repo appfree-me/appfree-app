@@ -34,6 +34,7 @@ use Swagger\Client\Api\SoundsApi;
 class PhpAri
 {
     private PhpAriConfig $config;
+
     public Logger $logger;
     public LoopInterface $stasisLoop;
     public PromiseInterface $stasisClient;
