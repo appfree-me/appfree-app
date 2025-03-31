@@ -64,7 +64,7 @@ See [Example App](./README-apps.md)
 <a href="https://prototypefund.de/">
   <img class="logo-other" src="images/logos/ptf.png" height="150"/>
 </a>
-<a href="https://www.bmbf.en/">
+<a href="https://www.bmbf.de/">
   <img src="images/logos/bmbf_de.jpg" height="150"/>
 </a>
 
