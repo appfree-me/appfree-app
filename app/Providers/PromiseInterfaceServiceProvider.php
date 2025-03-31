@@ -16,7 +16,7 @@ class PromiseInterfaceServiceProvider extends ServiceProvider
     {
         $this->app->singleton(PromiseInterface::class, function ($app) {
             $configAsterisk = $app->get(PhpAriConfig::class)->asterisk_ari;
-//fixme parameterized urlencode
+            //fixme parameterized urlencode
             return \Ratchet\Client\connect($configAsterisk["transport"] . "://" .
                 $configAsterisk["host"] . ":" . $configAsterisk["port"] .
                 $configAsterisk["endpoint"] . "/events?api_key=" . $configAsterisk["username"] .
