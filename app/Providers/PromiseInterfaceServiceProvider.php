@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace AppFree\Providers;
 
+use App\ReactWebsocketInterface;
 use AppFree\Ari\PhpAriConfig;
 use AppFree\Constants\App;
 use Illuminate\Support\ServiceProvider;
@@ -14,7 +15,7 @@ class PromiseInterfaceServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->app->singleton(PromiseInterface::class, function ($app) {
+        $this->app->singleton(ReactWebsocketInterface::class, function ($app) {
             $configAsterisk = $app->get(PhpAriConfig::class)->asterisk_ari;
             //fixme parameterized urlencode
             return \Ratchet\Client\connect($configAsterisk["transport"] . "://" .

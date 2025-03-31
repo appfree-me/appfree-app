@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace AppFree;
 
 use App\Models\User;
+use App\ReactWebsocketInterface;
 use AppFree\appfree\modules\MvgRad\MvgRadStateMachine;
 use AppFree\appfree\StateMachineContext;
 use AppFree\AppFreeCommands\AppFreeDto;
@@ -82,8 +83,7 @@ class AppController implements StatefulInterface, EventReceiverInterface
 
     public function start(): void
     {
-        $this->wsClient = resolve(PromiseInterface::class);
-
+        $this->wsClient = resolve(ReactWebsocketInterface::class);
         $this->setupAsteriskEvents();
 
         if (config('watchdog.internal')) {

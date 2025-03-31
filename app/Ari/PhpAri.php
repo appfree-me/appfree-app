@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace AppFree\Ari;
 
+use App\ReactWebsocketInterface;
 use AppFree\Constants\EventEmitterMessageTypes;
 use AppFree\MakeDto;
 use Evenement\EventEmitterInterface;
@@ -80,7 +81,7 @@ class PhpAri
         }
 
         //todo more specific argument to resolve
-        $promise = resolve(PromiseInterface::class);
+        $promise = resolve(ReactWebsocketInterface::class);
         $promise->catch(function (Exception $err) {
             $this->logger->error($err->getCode() . $err->getMessage());
         });

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace AppFree\Watchdog;
 
+use App\ReactWebsocketInterface;
 use AppFree\AppFreeCommands\Watchdog\V1\PingPongDto as Dto;
 use AppFree\ErrorHandling\Constants\Errors;
 use AppFree\Models\WatchdogLog;
@@ -14,13 +15,14 @@ use Ratchet\Client\WebSocket;
 use Ratchet\RFC6455\Messaging\Frame;
 use Ratchet\RFC6455\Messaging\FrameInterface;
 use React\EventLoop\LoopInterface;
+use React\Promise\Promise;
 use React\Promise\PromiseInterface;
 
 class WatchdogController
 {
     public function __construct(
         private readonly Logger           $logger,
-        private readonly PromiseInterface $wsClient,
+        private readonly Promise $wsClient,
         private readonly LoopInterface    $eventLoop,
         public readonly int               $intervalSeconds
     ) {
