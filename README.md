@@ -45,15 +45,15 @@ Phone server backend providing connectivity to the phone network via Asterisk ap
 
 ### Installation 
 
-See [Installation](./README-install.md)
+See [Installation](./docs/README-install.md)
 
 ### Architecture
 
-See [Architecture](./README-architecture.md)
+See [Architecture](./docs/README-architecture.md)
 
 ### MVG Rad example app
 
-See [Example App](./README-apps.md)
+See [Example App](./docs/README-apps.md)
 
 ### License
 
