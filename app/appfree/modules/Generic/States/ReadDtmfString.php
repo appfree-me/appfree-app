@@ -31,4 +31,8 @@ class ReadDtmfString extends GenericState
         };
 
     }
+
+    public static function dto(int $length, \Closure $callback): ReadDtmfStringFunctionCommand {
+        return new ReadDtmfStringFunctionCommand($length, $callback);
+    }
 }

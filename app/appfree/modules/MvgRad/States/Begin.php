@@ -39,7 +39,7 @@ class Begin extends MvgRadState
             yield "call" => function () use ($ctx) {
                 $this->sm->done(
                     ReadDtmfString::class,
-                    new ReadDtmfStringFunctionCommand(4, function (array $setPin) use ($ctx) {
+                    ReadDtmfString::dto(4, function (array $setPin) use ($ctx) {
                         DB::table("mvgrad_feature_flags")->updateOrInsert(
                             [
                                 'feature' => 'video_dreh'
