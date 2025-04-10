@@ -4,6 +4,7 @@ declare (strict_types=1);
 
 namespace AppFree\appfree\modules\Generic\States;
 
+use AppFree\appfree\modules\MvgRad\States\AppFreeState;
 use AppFree\AppFreeCommands\AppFree\Commands\StateMachine\V1\ReadDtmfStringFunctionCommand;
 use AppFree\AppFreeCommands\Stasis\Events\V1\ChannelDtmfReceived;
 
@@ -25,7 +26,7 @@ class ReadDtmfString extends GenericState
             $this->dtmfSequence[] = $dto->digit;
         }
 
-        yield "call" => function () use ($command) {
+        yield AppFreeState::KEY_CALLBACK => function () use ($command) {
             $callback = $command->callback;
             $callback($this->dtmfSequence);
         };

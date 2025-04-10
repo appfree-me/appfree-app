@@ -14,8 +14,8 @@ use Monolog\Logger;
 abstract class AppFreeState extends State implements AppFreeStateInterface
 {
     public const KEY_EXPECT = "expect";
-    public const KEY_CALL = "call";
-    public const VALID_KEYS = [self::KEY_CALL, self::KEY_EXPECT];
+    public const KEY_CALLBACK = "callback";
+    public const VALID_KEYS = [self::KEY_CALLBACK, self::KEY_EXPECT];
     protected ?\Generator $generator = null;
     /**
      * @var true
@@ -60,7 +60,7 @@ abstract class AppFreeState extends State implements AppFreeStateInterface
             list($sent, $skip) = $this->handleExpect($dto);
         }
 
-        if ($this->generator->key() === self::KEY_CALL) {
+        if ($this->generator->key() === self::KEY_CALLBACK) {
             $this->handleCall();
         }
 

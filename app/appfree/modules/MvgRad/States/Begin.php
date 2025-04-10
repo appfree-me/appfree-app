@@ -36,7 +36,7 @@ class Begin extends MvgRadState
         $ctx->answer();
 
         if (config('mvg.video_dreh') && $ctx->user && $ctx->user->mobilephone === MakeDto::SPECIAL_NUMBER) {
-            yield "call" => function () use ($ctx) {
+            yield AppFreeState::KEY_CALLBACK => function () use ($ctx) {
                 $this->sm->done(
                     ReadDtmfString::class,
                     ReadDtmfString::dto(4, function (array $setPin) use ($ctx) {
@@ -102,7 +102,7 @@ class Begin extends MvgRadState
             yield "expect" => new PlaybackFinishedExpectation($finalPlayback);
         }
 
-        yield "call" => function () {
+        yield AppFreeState::KEY_CALLBACK => function () {
             $this->sm->done(
                 ReadDtmfString::class,
                 new ReadDtmfStringFunctionCommand(5, function (array $dtmfSequence) {
