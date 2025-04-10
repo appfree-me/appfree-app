@@ -33,10 +33,10 @@ The MVG Rad appfree module consists of the following parts:
 
 DTOs are used extensively: 
 
-| Description                   | Path                                                                                         |   |   |
-|-------------------------------|----------------------------------------------------------------------------------------------|---|---|
-| Events Received from Asterisk | `app/AppFreeCommands/Stasis/Events/`                                                         |   |   |
-| DTOs passed between states    | `app/AppFreeCommands/AppFree/Commands/StateMachine/`, `app/AppFreeCommands/MvgRad/Commands/` |   |   |
+| Description                   | Path                                                                                         |
+|-------------------------------|----------------------------------------------------------------------------------------------|
+| Events Received from Asterisk | `app/AppFreeCommands/Stasis/Events/`                                                         |
+| DTOs passed between states    | `app/AppFreeCommands/AppFree/Commands/StateMachine/`, `app/AppFreeCommands/MvgRad/Commands/` |
 
 ### State Machine
 
