@@ -7,12 +7,12 @@ namespace AppFree\AppFreeCommands\Watchdog\V1;
 use AppFree\AppFreeCommands\Watchdog\V1\PingPongDto as Dto;
 use Random\RandomException;
 
-class PingPongDto
+readonly class PingPongDto
 {
     public function __construct(
-        public readonly string $unique_id,
-        public readonly ?float $nanoseconds_created_at = null,
-        public readonly ?float $seconds_received_at = null,
+        public string $unique_id,
+        public ?float $nanoseconds_created_at = null,
+        public ?float $seconds_received_at = null,
     ) {
     }
 

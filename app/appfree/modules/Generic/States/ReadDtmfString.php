@@ -19,7 +19,7 @@ class ReadDtmfString extends GenericState
         // *irgendein* nächstes
         $command = yield "expect" => ReadDtmfStringFunctionCommand::class;
 
-        for ($i = 0; $i < $command->dtmfLength; $i++) {
+        for ($i = 0; $i < $command->length; $i++) {
             /** @var ChannelDtmfReceived $dto */
             $dto = yield "expect" => ChannelDtmfReceived::class;
             $this->dtmfSequence[] = $dto->digit;

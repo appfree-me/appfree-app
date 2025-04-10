@@ -23,7 +23,7 @@ class Begin extends MvgRadState
     public const SOUND_MVG_MOCK_RUECKGABE_PROMPT = 'sound:mvg-rueckgabe-prompt';
     public const SOUND_MVG_MOCK_RUECKGABE_BESTAETIGUNG = 'sound:mvg-rueckgabe-bestaetigung';
     public const SOUND_PIN_IS = 'sound:mvg-pin-is';
-    public const SOUND_MVG_PROD_RUECKGABE_ALERT = 'sound:mvg-rad-rueckgabe-impossible-alert' ;
+    public const SOUND_MVG_PROD_RUECKGABE_ALERT = 'sound:mvg-rad-rueckgabe-impossible-alert';
 
     public function run(): Generator
     {
