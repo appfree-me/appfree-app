@@ -102,12 +102,12 @@
             "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"npm run dev\" --names=server,queue,logs,vite"
         ],
         "lint": [
-            "@php ./vendor/bin/php-cs-fixer fix --verbose --dry-run --diff",
+            "@php ./vendor/bin/php-cs-fixer fix --verbose --dry-run --diff --allow-risky=yes",
             "@php ./vendor/bin/phpmd app text ruleset.xml",
             "@php ./vendor/bin/phpstan analyse app"
         ],
         "lint:fix": [
-            "@php ./vendor/bin/php-cs-fixer fix --diff",
+            "@php ./vendor/bin/php-cs-fixer fix --diff --allow-risky=yes",
             "@composer normalize"
         ],
         "test": [

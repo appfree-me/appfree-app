@@ -11,6 +11,7 @@ return (new PhpCsFixer\Config())
         'array_syntax' => ['syntax' => 'short'],
         'yoda_style' => false,
         'single_line_throw' => false,
+        'declare_strict_types' => true,
     ])
     ->setFinder($finder)
 ;
