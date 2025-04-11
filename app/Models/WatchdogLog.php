@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AppFree\Models;
 
 use AppFree\AppFreeCommands\Watchdog\V1\PingPongDto;

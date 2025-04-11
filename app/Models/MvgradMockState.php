@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AppFree\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;

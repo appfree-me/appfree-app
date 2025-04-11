@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     AppFree\Providers\AppControllerServiceProvider::class,
     AppFree\Providers\EventEmitterServiceProvider::class,

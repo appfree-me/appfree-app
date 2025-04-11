@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use AppFree\appfree\modules\MvgRad\States\AppFreeState;
 use AppFree\AppFreeCommands\AppFree\Expectations\PlaybackFinishedExpectation;
 use AppFree\AppFreeCommands\Stasis\Events\V1\ChannelDtmfReceived;

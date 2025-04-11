@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AppFree\Console\Commands;
 
 use Illuminate\Console\Command;
