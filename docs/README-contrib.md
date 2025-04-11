@@ -8,12 +8,12 @@ Every PHP source file has to include the following directive as a first line:
 `declare(strict_types=1);`
 
 Without this line, type annotations in PHP source files will not be processed correctly.
-(##todo add test for this? - welches tool macht das automatisch?)
+
 
 
 ### .env files
 
-.env files also get used directly by bash at the moment. Environment variables only support strings.
+.env files also get sourced directly by bash scripts at the moment. Environment variables only support strings.
 If you want to represent a boolean value, please only use the strings "false" and "true" as values so these can be consistently interpreted by bash.
 For usage inside of the Laravel app, some more types and conventions are documented under https://laravel.com/docs/12.x/configuration#environment-variable-types
 
