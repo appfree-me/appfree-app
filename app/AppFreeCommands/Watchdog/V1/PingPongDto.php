@@ -7,6 +7,11 @@ namespace AppFree\AppFreeCommands\Watchdog\V1;
 use AppFree\AppFreeCommands\Watchdog\V1\PingPongDto as Dto;
 use Random\RandomException;
 
+/**
+ * Suppress all warnings from these two rules.
+ *
+ * @SuppressWarnings(PHPMD.CamelCaseParameterName)
+ */
 readonly class PingPongDto
 {
     public function __construct(

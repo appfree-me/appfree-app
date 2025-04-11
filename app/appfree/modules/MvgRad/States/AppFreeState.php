@@ -22,6 +22,12 @@ abstract class AppFreeState extends State implements AppFreeStateInterface
      */
     private bool $disable = false;
 
+    /**
+     * Suppress all warnings from these rules.
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
     public function onEvent(AppFreeDto $dto): void
     {
         $logger = resolve(Logger::class);

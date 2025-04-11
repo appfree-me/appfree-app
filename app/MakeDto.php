@@ -24,6 +24,11 @@ class MakeDto
     /*todo test schreiben der korrektheit eingabe=> ausgabe prüft */
     public const SPECIAL_NUMBER = "0890000";
 
+    /**
+     * Suppress all warnings from these rules.
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
     public static function make(\stdClass $data): AppFreeDto
     {
         $mapping = [
