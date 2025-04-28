@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     // Enable internal generation / saving of monitoring events?
     'internal' => env('WATCHDOG_MONITORING', false),

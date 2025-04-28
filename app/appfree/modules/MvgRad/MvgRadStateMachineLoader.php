@@ -13,7 +13,7 @@ use AppFree\appfree\modules\MvgRad\States\Begin;
 use Finite\State\StateInterface;
 use Finite\StateMachine\StateMachineInterface;
 
-class MvgRadStateMachineLoader
+class MvgRadStateMachineLoader extends AppFreeStateMachineLoader
 {
     public const  DTO = "dto";
 

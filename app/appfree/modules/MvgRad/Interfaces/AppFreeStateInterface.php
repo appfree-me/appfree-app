@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AppFree\appfree\modules\MvgRad\Interfaces;
 
 use AppFree\AppFreeCommands\AppFreeDto;

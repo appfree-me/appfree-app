@@ -18,13 +18,13 @@ use React\EventLoop\LoopInterface;
 use React\Promise\Promise;
 use React\Promise\PromiseInterface;
 
-class WatchdogController
+readonly class WatchdogController
 {
     public function __construct(
-        private readonly Logger           $logger,
-        private readonly Promise $wsClient,
-        private readonly LoopInterface    $eventLoop,
-        public readonly int               $intervalSeconds
+        private Logger        $logger,
+        private Promise       $wsClient,
+        private LoopInterface $eventLoop,
+        public int            $intervalSeconds
     ) {
     }
 

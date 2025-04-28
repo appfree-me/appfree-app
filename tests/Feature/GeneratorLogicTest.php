@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use AppFree\appfree\modules\MvgRad\States\AppFreeState;
 use AppFree\AppFreeCommands\AppFree\Expectations\PlaybackFinishedExpectation;
 use AppFree\AppFreeCommands\Stasis\Events\V1\ChannelDtmfReceived;
@@ -18,7 +20,7 @@ describe("appfree generator logic", function () {
         $this->channel = new Channel("testchannel", $this->caller);
     });
     //    it('state advances until OutputPin State', function () {
-    it('expect works as first statement and yield "call" works as last statement', function () {
+    it('expect works as first statement and yield "callback" works as last statement', function () {
         global $calledProvidedFn;
         $calledProvidedFn = false;
 
@@ -27,7 +29,7 @@ describe("appfree generator logic", function () {
             {
                 $dto = yield "expect" => StasisEnd::class;
                 expect($dto)->toBeInstanceOf(StasisEnd::class);
-                $dto = yield "call" => function () {
+                $dto = yield AppFreeState::KEY_CALLBACK => function () {
                     global $calledProvidedFn;
                     $calledProvidedFn = true;
                 };
@@ -53,7 +55,7 @@ describe("appfree generator logic", function () {
             public function run(): \Generator
             {
                 $dto = yield "expect" => StasisEnd::class;
-                $dto = yield "call" => function () {
+                $dto = yield AppFreeState::KEY_CALLBACK => function () {
                 };
                 expect($dto)->toBeInstanceOf(ChannelDtmfReceived::class);
             }

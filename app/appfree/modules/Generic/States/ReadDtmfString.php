@@ -4,6 +4,7 @@ declare (strict_types=1);
 
 namespace AppFree\appfree\modules\Generic\States;
 
+use AppFree\appfree\modules\MvgRad\States\AppFreeState;
 use AppFree\AppFreeCommands\AppFree\Commands\StateMachine\V1\ReadDtmfStringFunctionCommand;
 use AppFree\AppFreeCommands\Stasis\Events\V1\ChannelDtmfReceived;
 
@@ -19,16 +20,21 @@ class ReadDtmfString extends GenericState
         // *irgendein* nächstes
         $command = yield "expect" => ReadDtmfStringFunctionCommand::class;
 
-        for ($i = 0; $i < $command->dtmfLength; $i++) {
+        for ($i = 0; $i < $command->length; $i++) {
             /** @var ChannelDtmfReceived $dto */
             $dto = yield "expect" => ChannelDtmfReceived::class;
             $this->dtmfSequence[] = $dto->digit;
         }
 
-        yield "call" => function () use ($command) {
+        yield AppFreeState::KEY_CALLBACK => function () use ($command) {
             $callback = $command->callback;
             $callback($this->dtmfSequence);
         };
 
+    }
+
+    public static function dto(int $length, \Closure $callback): ReadDtmfStringFunctionCommand
+    {
+        return new ReadDtmfStringFunctionCommand($length, $callback);
     }
 }

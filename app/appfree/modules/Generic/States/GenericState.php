@@ -12,8 +12,8 @@ abstract class GenericState extends AppFreeState implements AppFreeStateInterfac
 {
     protected StateMachineInterface $sm;
 
-    public function init(StateMachineInterface $stateMachineSample): void
+    public function init(StateMachineInterface $stateMachine): void
     {
-        $this->sm = $stateMachineSample;
+        $this->sm = $stateMachine;
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AppFree\appfree\modules\MvgRad\Api\Prod;
 
 use AppFree\appfree\modules\MvgRad\Api\MvgRadApiInterface;

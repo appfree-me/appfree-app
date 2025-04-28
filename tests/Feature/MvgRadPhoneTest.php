@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use AppFree\AppController;
 use AppFree\appfree\modules\MvgRad\Api\Prod\MvgRadApi;
 use AppFree\appfree\modules\MvgRad\States\Begin;
