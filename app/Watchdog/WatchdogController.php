@@ -15,18 +15,16 @@ use Ratchet\Client\WebSocket;
 use Ratchet\RFC6455\Messaging\Frame;
 use Ratchet\RFC6455\Messaging\FrameInterface;
 use React\EventLoop\LoopInterface;
-use React\Promise\Promise;
 use React\Promise\PromiseInterface;
 
 readonly class WatchdogController
 {
     public function __construct(
-        private Logger        $logger,
-        private Promise       $wsClient,
-        private LoopInterface $eventLoop,
-        public int            $intervalSeconds
-    ) {
-    }
+        private Logger           $logger,
+        private PromiseInterface|ReactWebsocketInterface $wsClient, //fixme typehint
+        private ?LoopInterface    $eventLoop,
+        public int               $intervalSeconds
+    ) {}
 
     /**
      * @throws RandomException

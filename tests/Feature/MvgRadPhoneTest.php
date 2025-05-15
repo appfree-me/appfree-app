@@ -18,7 +18,8 @@ describe("appfree-mvgrad sample flow", function () {
     beforeEach(function () {
         //todo should be beforeAll
         config()->set("app.authenticate", false);
-        config()->set("app.mvg-rad-api", "prod");
+        config()->set("app.mvg-rad-api", "mock");
+        config()->set("watchdog.internal", false);
     });
 
     //    it('state advances until OutputPin State', function () {
@@ -56,8 +57,8 @@ describe("appfree-mvgrad sample flow", function () {
         $mvgRadModuleMock = Mockery::mock(\AppFree\appfree\modules\MvgRad\Api\MvgRadModule::class);
         $phpAriMock = Mockery::mock(PhpAri::class);
         $channelsApiMock = Mockery::mock(ChannelsApi::class);
-        $loopMock = Mockery::mock('overload:React\EventLoop\Loop')->shouldIgnoreMissing();
-        $promiseMock = Mockery::mock('overload:React\Promise\PromiseInterface')->shouldIgnoreMissing();
+        $loopMock = Mockery::mock('overload:React\EventLoop\Loop')->shouldReceive('get')->andReturn(null);//->shouldIgnoreMissing();
+        $promiseMock = Mockery::mock('overload:App\ReactWebsocketInterface')->shouldIgnoreMissing();
         $conApiMock = Mockery::mock('overload:AppFree\appfree\ConvenienceApi')->makePartial();
         $conApiMock->shouldReceive("play")->andReturn($pinPromptPlaybackId);
         $conApiMock->shouldReceive("sayDigits")
@@ -81,7 +82,7 @@ describe("appfree-mvgrad sample flow", function () {
 
         $this->instance(ChannelsApi::class, $channelsApiMock);
         $this->instance(\AppFree\appfree\modules\MvgRad\Api\MvgRadModule::class, $mvgRadModuleMock);
-        $this->instance(\React\Promise\PromiseInterface::class, $promiseMock);
+        $this->instance(\App\ReactWebsocketInterface::class, $promiseMock);
         $this->instance(Loop::class, $loopMock);
         //        $this->instance(MvgRadApi::class, $mvgRadApiMock);
         $this->instance(PhpAri::class, $phpAriMock);

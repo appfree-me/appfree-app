@@ -18,10 +18,12 @@ class PromiseInterfaceServiceProvider extends ServiceProvider
         $this->app->singleton(ReactWebsocketInterface::class, function ($app) {
             $configAsterisk = $app->get(PhpAriConfig::class)->asterisk_ari;
             //fixme parameterized urlencode
+            $loop = Loop::get();
+            $name = App::name();
             return \Ratchet\Client\connect($configAsterisk["transport"] . "://" .
                 $configAsterisk["host"] . ":" . $configAsterisk["port"] .
                 $configAsterisk["endpoint"] . "/events?api_key=" . $configAsterisk["username"] .
-                ":" . $configAsterisk["password"] . "&app=" . App::name(), [], [], Loop::get()); //fixme
+                ":" . $configAsterisk["password"] . "&app=" . $name, [], [], $loop); //fixme
         });
     }
 }
