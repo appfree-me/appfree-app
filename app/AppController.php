@@ -33,7 +33,7 @@ use Swagger\Client\ApiException;
  */
 class AppController implements StatefulInterface, EventReceiverInterface
 {
-    public PromiseInterface $wsClient;
+    public PromiseInterface|ReactWebsocketInterface $wsClient; //fixme typehint
     private array $stateMachines = [];
     private ?string $state = null;
 
@@ -228,7 +228,7 @@ class AppController implements StatefulInterface, EventReceiverInterface
     {
         if (!$dto->getChannel() || !isset($this->stateMachines[$dto->getChannel()->id])) {
             // this should probably be handled in a better way
-            $this->logger->notice(sprintf("Could not determine which state machine to pass event to, so passing to all %s, event:" . serialize($dto), count($this->stateMachines)));
+            $this->logger->notice(sprintf("Could not determine which state machine to pass event to, so passing to all %s, event:" . var_export($dto, true), count($this->stateMachines)));
             return $this->stateMachines;
         }
 
