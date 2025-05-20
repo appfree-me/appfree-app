@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "153569ad70c2f574917c593d0ab2e9fe",
+    "content-hash": "2c41e3070a643137c3e829edde96a1ed",
     "packages": [
         {
             "name": "appfree-me/php-asterisk-swagger-api",
