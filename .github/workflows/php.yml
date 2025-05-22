@@ -41,7 +41,7 @@ jobs:
       run: composer install --prefer-dist --no-progress
 
     - name: Prepare DB
-      run: APP_ENV=ci composer migrate
+      run: APP_ENV=ci composer migrate -n
       env:
         APP_ENV: CI
 
