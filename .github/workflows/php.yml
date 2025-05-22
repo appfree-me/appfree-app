@@ -43,7 +43,7 @@ jobs:
     - name: Prepare DB
       run: APP_ENV=ci composer migrate -n
       env:
-        APP_ENV: CI
+        APP_ENV: ci
 
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # Docs: https://getcomposer.org/doc/articles/scripts.md
@@ -51,5 +51,5 @@ jobs:
     - name: Run test suite
       run: composer test
       env:
-        APP_ENV: CI
+        APP_ENV: ci
 
