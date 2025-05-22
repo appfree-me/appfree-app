@@ -10,6 +10,8 @@ permissions:
 
 jobs:
   test:
+    env:
+      APP_ENV: CI
 
     runs-on: ubuntu-latest
     services:
@@ -46,5 +48,4 @@ jobs:
 
     - name: Run test suite
       run: composer test
-      env:
-        APP_ENV: CI
+
