@@ -112,6 +112,9 @@
         ],
         "test": [
             "@php ./vendor/bin/pest"
+        ],
+        "migrate": [
+            "@php artisan migrate"
         ]
     }
 }
