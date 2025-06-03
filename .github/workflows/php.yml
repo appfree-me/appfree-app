@@ -2,7 +2,6 @@ name: PHP Composer
 
 on:
   push:
-    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
@@ -10,9 +9,18 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  test:
+    env:
+      APP_ENV: CI
 
     runs-on: ubuntu-latest
+    services:
+      mariadb:
+        image: mariadb
+        ports:
+          - 3306:3306
+        env:
+          MARIADB_ROOT_PASSWORD: rADy8}25+2m=Ef&
 
     steps:
     - uses: actions/checkout@v4
@@ -32,8 +40,22 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
 
+    - name: Prepare DB
+      run: APP_ENV=ci composer migrate -n
+      env:
+        APP_ENV: ci
+
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # Docs: https://getcomposer.org/doc/articles/scripts.md
 
     - name: Run test suite
       run: composer test
+      env:
+        APP_ENV: ci
+
+    - name: Breakpoint if tests failed
+      if: failure()
+      uses: namespacelabs/breakpoint-action@v0
+      with:
+        duration: 60m
+        authorized-users: appfree-me

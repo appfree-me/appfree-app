@@ -14,7 +14,7 @@
         "ergebnis/composer-normalize": "^2.45",
         "evenement/evenement": "^3.0",
         "guzzlehttp/guzzle": "^7.9",
-        "laravel/framework": "12.1.1.0",
+        "laravel/framework": "12.1.1.*",
         "laravel/tinker": "^2.9",
         "ratchet/pawl": "^0.4.1",
         "react/async": "^4.3",
@@ -112,6 +112,9 @@
         ],
         "test": [
             "@php ./vendor/bin/pest"
+        ],
+        "migrate": [
+            "@php artisan migrate"
         ]
     }
 }
