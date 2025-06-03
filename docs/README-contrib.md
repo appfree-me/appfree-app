@@ -14,7 +14,7 @@ Without this line, type annotations in PHP source files will not be processed co
 ### .env files
 
 .env files also get sourced directly by bash scripts at the moment. Environment variables only support strings.
-If you want to represent a boolean value, please only use the strings "false" and "true" as values so these can be consistently interpreted by bash.
+If you want to represent a boolean value, please only use the strings "false" and "true" as values so these can be consistently interpreted by bash scripts.
 For usage inside of the Laravel app, some more types and conventions are documented under https://laravel.com/docs/12.x/configuration#environment-variable-types
 
 
