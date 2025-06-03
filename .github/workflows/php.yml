@@ -40,6 +40,9 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
 
+    - name: Wait for DB
+      run: /bin/sleep 10
+
     - name: Prepare DB
       run: APP_ENV=ci composer migrate -n
       env:
